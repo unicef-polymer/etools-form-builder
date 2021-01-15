@@ -5,7 +5,6 @@ import {InputStyles} from '../lib/styles/input-styles';
 
 export class WideField extends BaseField<string> {
   @property() label: string = '';
-  @property() placeholder: string = '';
   protected render(): TemplateResult {
     return html`
       ${InputStyles}

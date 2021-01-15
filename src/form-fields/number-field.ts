@@ -10,6 +10,7 @@ export class NumberField extends BaseField<number> {
       <paper-input
         class="without-border no-padding-left form-control"
         no-label-float
+        placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
         placeholder="&#8212;"

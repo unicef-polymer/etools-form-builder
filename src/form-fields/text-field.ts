@@ -11,6 +11,7 @@ export class TextField extends BaseField<string> {
         id="textarea"
         class="no-padding-left form-control"
         no-label-float
+        placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
         placeholder="&#8212;"

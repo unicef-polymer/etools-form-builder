@@ -133,7 +133,8 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     help_text,
     options_key,
     required,
-    validations
+    validations,
+    placeholder
   }: BlueprintField): TemplateResult {
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
@@ -141,6 +142,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           <text-field
             ?is-readonly="${this.readonly}"
             ?required="${required}"
+            .placeholder="${placeholder}"
             .value="${this.value && this.value[name]}"
             .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
             .errorMessage="${this.getErrorMessage(name)}"
@@ -157,6 +159,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           <number-field
             ?is-readonly="${this.readonly}"
             ?required="${required}"
+            .placeholder="${placeholder}"
             .value="${this.value && this.value[name]}"
             .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
             .errorMessage="${this.getErrorMessage(name)}"
@@ -173,6 +176,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
             .options="${this.metadata.options[options_key || '']?.values || []}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
+            .placeholder="${placeholder}"
             .value="${this.value && this.value[name]}"
             .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
             .errorMessage="${this.getErrorMessage(name)}"
