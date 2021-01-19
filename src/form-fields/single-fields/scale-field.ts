@@ -4,7 +4,7 @@ import {repeat} from 'lit-html/directives/repeat';
 import '@polymer/paper-radio-group/paper-radio-group';
 import '@polymer/paper-radio-button/paper-radio-button';
 import {PaperRadioButtonElement} from '@polymer/paper-radio-button/paper-radio-button';
-import {InputStyles} from '../lib/styles/input-styles';
+import {InputStyles} from '../../lib/styles/input-styles';
 
 export type FieldOption = {
   value: any;

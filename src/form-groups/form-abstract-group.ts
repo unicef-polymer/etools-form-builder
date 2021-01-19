@@ -1,8 +1,8 @@
 import {LitElement, property, TemplateResult, html, CSSResultArray, css} from 'lit-element';
-import '../form-fields/text-field';
-import '../form-fields/number-field';
-import '../form-fields/scale-field';
-import '../form-fields/wide-field';
+import '../form-fields/single-fields/text-field';
+import '../form-fields/single-fields/number-field';
+import '../form-fields/single-fields/scale-field';
+import '../form-fields/single-fields/wide-field';
 import '@polymer/paper-input/paper-textarea';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
@@ -95,109 +95,17 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   }
 
   renderField(blueprintField: BlueprintField): TemplateResult {
-    const isWide: boolean = blueprintField.styling.includes(StructureTypes.WIDE);
-    const isAdditional: boolean = blueprintField.styling.includes(StructureTypes.ADDITIONAL);
-    if (isWide) {
-      return html`
-        <div class="${isAdditional ? 'additional-field' : ''}">${this.renderWideField(blueprintField)}</div>
-      `;
-    } else {
-      return html`
-        <div class="${isAdditional ? 'additional-field finding-container' : 'finding-container'}">
-          ${this.renderStandardField(blueprintField)}
-        </div>
-      `;
-    }
-  }
-
-  renderWideField({name, label, placeholder, required, validations}: BlueprintField): TemplateResult {
     return html`
-      <wide-field
-        ?is-readonly="${this.readonly}"
-        ?required="${required}"
-        .value="${this.value && this.value[name]}"
-        label="${label}"
-        placeholder="${placeholder}"
-        .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-        .errorMessage="${this.getErrorMessage(name)}"
-        @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-        @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-      ></wide-field>
-    `;
-  }
-
-  renderStandardField({
-    input_type,
-    name,
-    label,
-    help_text,
-    options_key,
-    required,
-    validations,
-    placeholder
-  }: BlueprintField): TemplateResult {
-    switch (input_type) {
-      case FieldTypes.TEXT_TYPE:
-        return html`
-          <text-field
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .placeholder="${placeholder}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </text-field>
-        `;
-      case FieldTypes.NUMBER_TYPE:
-      case FieldTypes.NUMBER_FLOAT_TYPE:
-      case FieldTypes.NUMBER_INTEGER_TYPE:
-        return html`
-          <number-field
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .placeholder="${placeholder}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </number-field>
-        `;
-      case FieldTypes.BOOL_TYPE:
-      case FieldTypes.SCALE_TYPE:
-        return html`
-          <scale-field
-            .options="${this.metadata.options[options_key || '']?.values || []}"
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .placeholder="${placeholder}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </scale-field>
-        `;
-      default:
-        console.warn(`FormBuilderGroup: Unknown field type: ${input_type}`);
-        return html``;
-    }
-  }
-
-  renderFieldLabel(label: string, helperText: string): TemplateResult {
-    return html`
-      <div class="layout vertical question-container">
-        <div class="question-text">${label}</div>
-        <div class="question-details">${helperText}</div>
-      </div>
+      <field-renderer
+        .field="${blueprintField}"
+        ?readonly="${this.readonly}"
+        .value="${this.value && this.value[blueprintField.name]}"
+        .validators="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
+        .errorMessage="${this.getErrorMessage(blueprintField.name)}"
+        .options="${this.metadata.options[blueprintField.options_key || '']?.values || []}"
+        @value-changed="${(event: CustomEvent) => this.valueChanged(event, blueprintField.name)}"
+        @error-changed="${(event: CustomEvent) => this.errorChanged(event, blueprintField.name)}"
+      ></field-renderer>
     `;
   }
 

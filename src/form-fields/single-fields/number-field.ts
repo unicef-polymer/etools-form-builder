@@ -1,7 +1,7 @@
 import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
 import {BaseField} from './base-field';
 import '@polymer/paper-input/paper-input';
-import {InputStyles} from '../lib/styles/input-styles';
+import {InputStyles} from '../../lib/styles/input-styles';
 
 export class NumberField extends BaseField<number> {
   protected controlTemplate(): TemplateResult {

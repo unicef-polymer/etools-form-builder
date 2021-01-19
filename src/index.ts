@@ -12,7 +12,7 @@ import './form-groups/custom-elements.define';
  * Form field elements
  */
 import './form-fields/custom-elements.define';
-export * from './form-fields/base-field';
+export * from './form-fields/single-fields/base-field';
 
 /**
  * Attachments Popup

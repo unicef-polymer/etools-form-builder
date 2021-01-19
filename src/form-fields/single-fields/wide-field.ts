@@ -1,7 +1,7 @@
 import {html, TemplateResult, property, CSSResultArray} from 'lit-element';
 import {BaseField} from './base-field';
 import '@polymer/paper-input/paper-textarea';
-import {InputStyles} from '../lib/styles/input-styles';
+import {InputStyles} from '../../lib/styles/input-styles';
 
 export class WideField extends BaseField<string> {
   @property() label: string = '';
