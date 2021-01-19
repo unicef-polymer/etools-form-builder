@@ -88,9 +88,9 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
 
   private getValues(): (T | null)[] {
     if (this.isReadonly) {
-      this.editedValues = this.value;
+      this.editedValues = Array.isArray(this.value) && this.value.length ? this.value : [null];
     } else if (!this.editedValues) {
-      this.editedValues = this.value?.length ? this.value : [null];
+      this.editedValues = Array.isArray(this.value) && this.value.length ? this.value : [null];
     }
 
     return this.editedValues || [null];
