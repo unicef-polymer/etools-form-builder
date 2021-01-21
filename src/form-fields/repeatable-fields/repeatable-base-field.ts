@@ -1,4 +1,4 @@
-import {html, property, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, html, property, TemplateResult} from 'lit-element';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 
@@ -18,7 +18,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     return html`
       <div class="finding-container">
         <div class="question layout start"><slot>${this.questionTemplate()}</slot></div>
-        <div class="question-control layout vertical end">
+        <div class="question-control layout vertical center-justified start">
           ${values.map(
             (value: T | null, index: number) =>
               html`<div class="layout horizontal center full-width">
@@ -86,7 +86,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     this.requestUpdate();
   }
 
-  private getValues(): (T | null)[] {
+  protected getValues(): (T | null)[] {
     if (this.isReadonly) {
       this.editedValues = Array.isArray(this.value) && this.value.length ? this.value : [null];
     } else if (!this.editedValues) {
@@ -97,4 +97,17 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
   }
 
   protected abstract controlTemplate(value: T | null, index: number): TemplateResult;
+
+  static get styles(): CSSResultArray {
+    // language=CSS
+    return [
+      ...AbstractFieldBaseClass.styles,
+      css`
+        :host(:not([is-readonly])) .question-control,
+        :host(:not([is-readonly])) .question {
+          padding-bottom: 10px;
+        }
+      `
+    ];
+  }
 }

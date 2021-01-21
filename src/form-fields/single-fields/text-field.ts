@@ -32,6 +32,9 @@ export class TextField extends BaseField<string> {
     return [
       ...BaseField.styles,
       css`
+        :host(.wide) paper-textarea {
+          padding-left: 0;
+        }
         @media (max-width: 380px) {
           .no-padding-left {
             padding-left: 0;

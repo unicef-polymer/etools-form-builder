@@ -6,11 +6,7 @@ import {PaperRadioButtonElement} from '@polymer/paper-radio-button/paper-radio-b
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
-
-export type FieldOption = {
-  value: any;
-  label: string;
-};
+import {FieldOption} from '..';
 
 export class RepeatableScaleField extends RepeatableBaseField<string | null> {
   @property({type: Array}) options: FieldOption[] = [];

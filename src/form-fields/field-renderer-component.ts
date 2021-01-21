@@ -1,8 +1,10 @@
-import {html, LitElement, property, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, html, LitElement, property, TemplateResult} from 'lit-element';
 import {BlueprintField} from '../lib/types/form-builder.types';
 import {FieldTypes, StructureTypes} from '../form-groups';
 import {FieldValidator} from '../lib/utils/validations.helper';
 import {FieldOption} from './single-fields/scale-field';
+import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
+import {FormBuilderCardStyles} from '..';
 
 export class FieldRendererComponent extends LitElement {
   @property() field!: BlueprintField;
@@ -21,42 +23,26 @@ export class FieldRendererComponent extends LitElement {
   }
 
   renderField(blueprintField: BlueprintField): TemplateResult {
-    const isWide: boolean = blueprintField.styling.includes(StructureTypes.WIDE);
-    const isAdditional: boolean = blueprintField.styling.includes(StructureTypes.ADDITIONAL);
-    if (isWide) {
-      return html`
-        <div class="${isAdditional ? 'additional-field' : ''}">${this.renderWideField(blueprintField)}</div>
-      `;
-    } else {
-      return html`
-        <div class="${isAdditional ? 'additional-field finding-container' : 'finding-container'}">
-          ${blueprintField.repeatable
-            ? this.renderRepeatableField(blueprintField)
-            : this.renderStandardField(blueprintField)}
-        </div>
-      `;
-    }
-  }
-
-  renderWideField({label, placeholder, required}: BlueprintField): TemplateResult {
+    const additionalClass: string = blueprintField.styling.includes(StructureTypes.ADDITIONAL)
+      ? 'additional-field '
+      : '';
+    const wideClass: string = blueprintField.styling.includes(StructureTypes.WIDE) ? 'wide-field-container ' : '';
     return html`
-      <wide-field
-        ?is-readonly="${this.readonly}"
-        ?required="${required}"
-        .value="${this.value}"
-        label="${label}"
-        placeholder="${placeholder}"
-        .validators="${this.validations}"
-        .errorMessage="${this.errorMessage}"
-      ></wide-field>
+      <div class="${`${additionalClass}${wideClass}finding-container`}">
+        ${blueprintField.repeatable
+          ? this.renderRepeatableField(blueprintField)
+          : this.renderStandardField(blueprintField)}
+      </div>
     `;
   }
 
-  renderStandardField({input_type, label, help_text, required, placeholder}: BlueprintField): TemplateResult {
+  renderStandardField({input_type, label, help_text, required, placeholder, styling}: BlueprintField): TemplateResult {
+    const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
         return html`
           <text-field
+            class="${isWide ? 'wide' : ''}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
             .placeholder="${placeholder}"
@@ -103,11 +89,20 @@ export class FieldRendererComponent extends LitElement {
     }
   }
 
-  renderRepeatableField({input_type, label, help_text, required, placeholder}: BlueprintField): TemplateResult {
+  renderRepeatableField({
+    input_type,
+    label,
+    help_text,
+    required,
+    placeholder,
+    styling
+  }: BlueprintField): TemplateResult {
+    const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
         return html`
           <repeatable-text-field
+            class="${isWide ? 'wide' : ''}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
             .placeholder="${placeholder}"
@@ -123,6 +118,7 @@ export class FieldRendererComponent extends LitElement {
       case FieldTypes.NUMBER_INTEGER_TYPE:
         return html`
           <repeatable-number-field
+            class="${isWide ? 'wide' : ''}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
             .placeholder="${placeholder}"
@@ -137,6 +133,7 @@ export class FieldRendererComponent extends LitElement {
       case FieldTypes.SCALE_TYPE:
         return html`
           <repeatable-scale-field
+            class="${isWide ? 'wide' : ''}"
             .options="${this.options}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
@@ -161,5 +158,30 @@ export class FieldRendererComponent extends LitElement {
         <div class="question-details">${helperText}</div>
       </div>
     `;
+  }
+  static get styles(): CSSResultArray {
+    // language=CSS
+    return [
+      FlexLayoutClasses,
+      FormBuilderCardStyles,
+      css`
+        .additional-field {
+          padding-top: 15px;
+          padding-bottom: 20px;
+          background-color: var(--secondary-background-color);
+        }
+        .wide-field-container {
+          padding-bottom: 10px;
+        }
+        .wide-field-container .question-container {
+          min-height: 0;
+          padding: 7px 0 0;
+        }
+        .wide-field-container .question-text {
+          color: var(--secondary-text-color);
+          font-weight: 400;
+        }
+      `
+    ];
   }
 }

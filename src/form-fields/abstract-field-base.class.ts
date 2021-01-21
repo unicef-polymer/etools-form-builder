@@ -57,6 +57,15 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
           flex-wrap: wrap;
         }
 
+        :host(.wide) .finding-container {
+          flex-direction: column;
+        }
+
+        :host(.wide) .question {
+          margin-bottom: -8px;
+          min-height: 0;
+        }
+
         .question-control,
         .question {
           min-height: 57px;
@@ -71,7 +80,8 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
         }
         .add-button {
           padding: 3px;
-          background: var(--primary-background-color);
+          margin: 10px;
+          background: transparent;
           color: var(--primary-color);
           border: 1px solid;
         }

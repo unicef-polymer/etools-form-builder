@@ -26,6 +26,9 @@ export const FormBuilderCardStyles: CSSResult = css`
   .question-container {
     padding: 7px 0;
     width: 100%;
+    min-height: 57px;
+    box-sizing: border-box;
+    justify-content: center;
   }
   .question-text {
     font-weight: 500;

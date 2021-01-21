@@ -32,6 +32,9 @@ export class RepeatableTextField extends RepeatableBaseField<string> {
     return [
       ...AbstractFieldBaseClass.styles,
       css`
+        :host(.wide) paper-textarea {
+          padding-left: 0;
+        }
         @media (max-width: 380px) {
           .no-padding-left {
             padding-left: 0;
