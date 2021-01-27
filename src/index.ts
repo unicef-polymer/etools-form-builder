@@ -19,3 +19,9 @@ export * from './form-fields/single-fields/base-field';
  */
 import {FormAttachmentsPopup} from './form-attachments-popup';
 window.customElements.define('form-attachments-popup', FormAttachmentsPopup);
+
+/**
+ * Confirmation Popup
+ */
+import {ConfirmationDialog} from './lib/additional-components/confirmation-dialog';
+window.customElements.define('confirmation-popup', ConfirmationDialog);

@@ -8,6 +8,7 @@ import '../lib/additional-components/etools-fb-card';
 import {BlueprintField, BlueprintGroup} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
+import '../lib/additional-components/confirmation-dialog';
 
 const PARTNER_KEY: string = 'partner';
 const OUTPUT_KEY: string = 'output';
@@ -81,6 +82,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         >
           <!-- Open Attachments popup button -->
           <div slot="actions" class="layout horizontal center">${this.getAdditionalButtons()}</div>
+          <div slot="postfix" class="layout horizontal center" ?hidden="${!this.groupStructure.repeatable}">
+            <paper-icon-button
+              icon="close"
+              class="attachments-warning"
+              @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+            ></paper-icon-button>
+          </div>
           <div slot="content">${this.renderGroupChildren()}</div>
         </etools-fb-card>
       </section>
@@ -91,7 +99,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * Filters StructureTypes.ATTACHMENTS_BUTTON type. It will be rendered as button,
    * allows parent renderChild method to render other types
    */
-  renderGroupChildren(): TemplateResult[] {
+  renderGroupChildren(): (TemplateResult | TemplateResult[])[] {
     return this.groupStructure.children
       .filter(({styling}: BlueprintGroup | BlueprintField) => !styling.includes(StructureTypes.ATTACHMENTS_BUTTON))
       .map((child: BlueprintGroup | BlueprintField) => super.renderChild(child));
@@ -212,6 +220,19 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         this.saveChanges();
       }
       this.requestUpdate();
+    });
+  }
+
+  confirmRemove(groupName: string): void {
+    openDialog<{text: string}>({
+      dialog: 'confirmation-popup',
+      dialogData: {
+        text: `Are you sure you want to delete ${groupName}`
+      }
+    }).then((response: GenericObject) => {
+      if (response.confirmed) {
+        fireEvent(this, 'remove-group');
+      }
     });
   }
 

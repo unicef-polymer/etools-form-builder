@@ -13,9 +13,9 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
   @property() protected _errorMessage: string | null = null;
 
   protected valueChanged(newValue: T): void {
-    if (!this.isReadonly) {
+    if (!this.isReadonly && newValue !== this.value && this.touched) {
       this.validateField(newValue);
-    } else {
+    } else if (this.isReadonly || !this.touched) {
       this._errorMessage = null;
     }
     if (newValue !== this.value) {
@@ -26,7 +26,7 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
 
   protected validateField(value: T): void {
     let errorMessage: string | null;
-    if (this.required && !value) {
+    if (this.required && !value && typeof value !== 'number') {
       errorMessage = 'This field is required!';
     } else {
       errorMessage = this.metaValidation(value);
@@ -34,7 +34,7 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
     if (this._errorMessage !== errorMessage) {
       fireEvent(this, 'error-changed', {error: errorMessage});
       this._errorMessage = errorMessage;
-      this.performUpdate();
+      this.requestUpdate();
     }
   }
 

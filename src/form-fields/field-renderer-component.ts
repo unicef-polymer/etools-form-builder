@@ -11,7 +11,7 @@ export class FieldRendererComponent extends LitElement {
   @property() value: any;
   @property() errorMessage: string | null = null;
   @property() validations: FieldValidator[] = [];
-  @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly: boolean = true;
+  @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property({type: Array}) options: FieldOption[] = [];
 
   render(): TemplateResult {

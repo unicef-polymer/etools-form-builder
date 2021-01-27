@@ -34,11 +34,15 @@ export class ScaleField extends BaseField<string | null> {
           <iron-icon icon="clear"></iron-icon>Clear
         </paper-button>
       </div>
+      <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>
     `;
   }
 
   protected onSelect(item: PaperRadioButtonElement): void {
     const newValue: string = item.get('name');
+    if (newValue !== this.value) {
+      this.touched = true;
+    }
     this.valueChanged(newValue);
   }
 
@@ -68,6 +72,10 @@ export class ScaleField extends BaseField<string | null> {
         :host([is-readonly]) paper-radio-group {
           pointer-events: none;
           opacity: 0.55;
+        }
+        .error-text {
+          color: var(--error-color);
+          font-size: 12px;
         }
 
         @media (max-width: 1080px) {

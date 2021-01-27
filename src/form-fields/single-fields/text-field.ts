@@ -14,6 +14,7 @@ export class TextField extends BaseField<string> {
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
+        @focus="${() => (this.touched = true)}"
         placeholder="&#8212;"
         ?disabled="${this.isReadonly}"
         ?invalid="${this.errorMessage}"

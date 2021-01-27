@@ -2,7 +2,6 @@ import {LitElement, property, TemplateResult, html, CSSResultArray, css} from 'l
 import '../form-fields/single-fields/text-field';
 import '../form-fields/single-fields/number-field';
 import '../form-fields/single-fields/scale-field';
-import '../form-fields/single-fields/wide-field';
 import '@polymer/paper-input/paper-textarea';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
@@ -15,6 +14,7 @@ import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
 import {BlueprintField, BlueprintGroup, BlueprintMetadata} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
+import {live} from 'lit-html/directives/live';
 
 export enum FieldTypes {
   FILE_TYPE = 'file',
@@ -39,7 +39,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
   @property({type: String}) parentGroupName: string = '';
-  @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly: boolean = true;
+  @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property() protected _errors: GenericObject = {};
   @property() protected _value: GenericObject = {};
   computedPath: string[] = [];
@@ -81,7 +81,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     `;
   }
 
-  renderChild(child: BlueprintGroup | BlueprintField): TemplateResult {
+  renderChild(child: BlueprintGroup | BlueprintField): TemplateResult | TemplateResult[] {
     const type: string = child.type;
     switch (child.type) {
       case 'field':
@@ -98,7 +98,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       <field-renderer
         .field="${blueprintField}"
-        ?readonly="${this.readonly}"
+        ?readonly="${live(this.readonly)}"
         .value="${this.value && this.value[blueprintField.name]}"
         .validators="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
         .errorMessage="${this.getErrorMessage(blueprintField.name)}"
@@ -109,56 +109,79 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     `;
   }
 
-  renderGroup(groupStructure: BlueprintGroup): TemplateResult {
+  renderGroup(groupStructure: BlueprintGroup): TemplateResult | TemplateResult[] {
+    if (!groupStructure.repeatable) {
+      return this.getGroupTemplate(groupStructure);
+    }
+    const value: GenericObject[] = (this.value && this.value[groupStructure.name]) || [{}];
+    return html`
+      ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
+      <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
+        Add ${groupStructure.title}
+      </paper-button>
+    `;
+  }
+
+  getGroupTemplate(groupStructure: BlueprintGroup, index?: number): TemplateResult {
     const isAbstract: boolean = groupStructure.styling.includes(StructureTypes.ABSTRACT);
     const isCard: boolean = groupStructure.styling.includes(StructureTypes.CARD);
     const isCollapsed: boolean = groupStructure.styling.includes(StructureTypes.COLLAPSED);
+    let value: GenericObject | GenericObject[] = this.value && this.value[groupStructure.name];
+    if (typeof index === 'number') {
+      value = value && (value as GenericObject[])[index];
+    }
+    let errors: GenericObject | GenericObject[] = this._errors[groupStructure.name];
+    if (typeof index === 'number') {
+      errors = errors && (errors as GenericObject[])[index];
+    }
     if (isAbstract) {
       return html`
         <form-abstract-group
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-abstract-group>
       `;
     } else if (isCard && isCollapsed) {
       return html`
         <form-collapsed-card
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @remove-group="${() => this.removeGroup(groupStructure.name, index)}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-collapsed-card>
       `;
     } else if (isCard) {
       return html`
         <form-card
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @remove-group="${() => this.removeGroup(groupStructure.name, index)}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-card>
       `;
     } else {
@@ -167,19 +190,32 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     }
   }
 
-  valueChanged(event: CustomEvent, name: string): void {
+  valueChanged(event: CustomEvent, name: string, index?: number): void {
     if (!this.value) {
       this.value = {};
     }
-    this.value[name] = event.detail.value;
-    event.stopPropagation();
+    if (typeof index === 'number') {
+      const value: GenericObject[] = this.value[name] || [];
+      value[index] = event.detail.value;
+      this.value[name] = value;
+    } else {
+      this.value[name] = event.detail.value;
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
     fireEvent(this, 'value-changed', {value: this.value});
     this.requestUpdate();
   }
 
-  errorChanged(event: CustomEvent, name: string): void {
+  errorChanged(event: CustomEvent, name: string, index?: number): void {
     const errorMessage: string | null = event.detail.error;
-    if (errorMessage) {
+    if (typeof index === 'number') {
+      const errors: (string | null)[] = this._errors[name] || new Array(this.value[name].length).fill(null);
+      errors.splice(index, 1, errorMessage);
+      const hasErrors: boolean = errors.some((error: null | string) => error !== null);
+      this._errors[name] = hasErrors ? errors : null;
+    } else if (errorMessage) {
       this._errors[name] = errorMessage;
     } else {
       delete this._errors[name];
@@ -187,6 +223,21 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     event.stopPropagation();
     const errors: GenericObject | null = Object.keys(this._errors).length ? this._errors : null;
     fireEvent(this, 'error-changed', {error: errors});
+  }
+
+  addGroup(name: string): void {
+    const value: GenericObject[] = this.value[name] || [];
+    value.push({});
+    this.valueChanged({detail: {value}} as CustomEvent, name);
+  }
+
+  removeGroup(name: string, index?: number): void {
+    if (typeof index !== 'number') {
+      return;
+    }
+    const value: GenericObject[] = (this.value && this.value[name]) || [];
+    value.splice(index, 1);
+    this.valueChanged({detail: {value}} as CustomEvent, name);
   }
 
   protected getErrorMessage(fieldName: string): string | null {
@@ -204,6 +255,26 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       FlexLayoutClasses,
       FormBuilderCardStyles,
       css`
+        :host {
+          display: flex;
+          flex-direction: column;
+        }
+        .add-group {
+          align-self: flex-end;
+          margin-right: 23px;
+          box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+            0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        }
+        .remove-group {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0 10px 8px;
+          cursor: pointer;
+          width: min-content;
+          white-space: nowrap;
+          margin-left: auto;
+        }
         .save-button {
           margin-top: 8px;
           color: var(--primary-background-color);
@@ -231,6 +302,10 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
 
         .attachments-warning {
           color: red;
+        }
+        paper-icon-button[icon='close'] {
+          cursor: pointer;
+          color: var(--primary-text-color);
         }
       `
     ];

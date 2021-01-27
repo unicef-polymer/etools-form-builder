@@ -57,7 +57,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
 
   protected validateField(value: T, index: number): void {
     let errorMessage: string | null;
-    if (this.required && !value && value !== null) {
+    if (this.required && !value && value !== null && typeof value !== 'number') {
       errorMessage = 'This field is required!';
     } else {
       errorMessage = this.metaValidation(value);
