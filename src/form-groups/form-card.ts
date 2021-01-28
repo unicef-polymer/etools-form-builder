@@ -37,13 +37,16 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   render(): TemplateResult {
     return html`
       <section class="elevation page-content card-container form-card" elevation="1">
-        <div
-          class="remove-group"
-          ?hidden="${!this.groupStructure.repeatable}"
-          @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
-        >
-          Remove ${this.groupStructure.title}
-          <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
+        <div class="card-header">
+          <div class="title">${this.groupStructure.title}</div>
+          <div
+            class="remove-group"
+            ?hidden="${!this.groupStructure.repeatable}"
+            @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+          >
+            Remove ${this.groupStructure.title}
+            <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
+          </div>
         </div>
         ${super.render()}
 

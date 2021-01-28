@@ -265,7 +265,12 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
             0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }
-        .remove-group {
+        .card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .card-header .remove-group {
           display: flex;
           align-items: center;
           justify-content: flex-end;
@@ -273,14 +278,17 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           cursor: pointer;
           width: min-content;
           white-space: nowrap;
-          margin-left: auto;
+        }
+        .card-header .title {
+          padding: 0 24px 8px;
+          font-size: 18px;
+          font-weight: bold;
         }
         .save-button {
           margin-top: 8px;
           color: var(--primary-background-color);
           background-color: var(--primary-color);
         }
-
         .information-source {
           padding: 0.5% 2% 0.5% 1%;
         }
