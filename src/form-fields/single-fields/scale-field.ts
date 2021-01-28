@@ -11,8 +11,8 @@ export type FieldOption = {
   label: string;
 };
 
-export class ScaleField extends BaseField<string | null> {
-  @property({type: Array}) options: FieldOption[] = [];
+export class ScaleField extends BaseField<string | number | null> {
+  @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(): TemplateResult {
     return html`
       ${InputStyles}
@@ -24,8 +24,8 @@ export class ScaleField extends BaseField<string | null> {
         >
           ${repeat(
             this.options,
-            (option: FieldOption) => html`
-              <paper-radio-button class="radio-button" name="${option.value}"> ${option.label} </paper-radio-button>
+            (option: FieldOption | string | number) => html`
+              <paper-radio-button class="radio-button" name="${this.getValue(option)}"> ${this.getLabel(option)} </paper-radio-button>
             `
           )}
         </paper-radio-group>
@@ -36,6 +36,14 @@ export class ScaleField extends BaseField<string | null> {
       </div>
       <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>
     `;
+  }
+
+  protected getLabel(option: FieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.label : option;
+  }
+
+  protected getValue(option: FieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.value : option;
   }
 
   protected onSelect(item: PaperRadioButtonElement): void {

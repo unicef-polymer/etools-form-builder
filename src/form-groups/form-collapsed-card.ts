@@ -72,7 +72,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     return html`
       <section class="elevation page-content card-container" elevation="1">
         <etools-fb-card
-          card-title="${this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title}"
+          card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
           is-collapsible
           ?is-editable="${!this._readonly}"
           ?edit="${this.isEditMode}"
@@ -129,11 +129,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   retrieveTitle(target: string): string {
     switch (target) {
       case PARTNER_KEY:
-        return `Partner`;
+        return `Partner: `;
       case OUTPUT_KEY:
-        return `Output`;
+        return `Output: `;
       case INTERVENTION_KEY:
-        return `PD/SSFA`;
+        return `PD/SSFA: `;
       default:
         return '';
     }

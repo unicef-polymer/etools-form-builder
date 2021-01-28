@@ -8,8 +8,8 @@ import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {FieldOption} from '..';
 
-export class RepeatableScaleField extends RepeatableBaseField<string | null> {
-  @property({type: Array}) options: FieldOption[] = [];
+export class RepeatableScaleField extends RepeatableBaseField<string | number | null> {
+  @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(value: string | null, index: number): TemplateResult {
     return html`
       ${InputStyles}
@@ -21,8 +21,10 @@ export class RepeatableScaleField extends RepeatableBaseField<string | null> {
         >
           ${repeat(
             this.options,
-            (option: FieldOption) => html`
-              <paper-radio-button class="radio-button" name="${option.value}"> ${option.label} </paper-radio-button>
+            (option: FieldOption | string | number) => html`
+              <paper-radio-button class="radio-button" name="${this.getValue(option)}">
+                ${this.getLabel(option)}
+              </paper-radio-button>
             `
           )}
         </paper-radio-group>
@@ -41,6 +43,14 @@ export class RepeatableScaleField extends RepeatableBaseField<string | null> {
   protected onSelect(item: PaperRadioButtonElement, index: number): void {
     const newValue: string = item.get('name');
     this.valueChanged(newValue, index);
+  }
+
+  protected getLabel(option: FieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.label : option;
+  }
+
+  protected getValue(option: FieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.value : option;
   }
 
   protected customValidation(): string | null {

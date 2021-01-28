@@ -12,7 +12,7 @@ export class FieldRendererComponent extends LitElement {
   @property() errorMessage: string | null = null;
   @property() validations: FieldValidator[] = [];
   @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
-  @property({type: Array}) options: FieldOption[] = [];
+  @property({type: Array}) options: (FieldOption | string | number)[] = [];
 
   render(): TemplateResult {
     if (!this.field) {
