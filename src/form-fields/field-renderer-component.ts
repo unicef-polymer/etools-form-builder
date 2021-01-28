@@ -64,6 +64,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </number-field>
@@ -125,6 +126,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-number-field>

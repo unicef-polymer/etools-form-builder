@@ -5,6 +5,7 @@ import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 
 export class RepeatableNumberField extends RepeatableBaseField<number> {
+  isInteger: boolean = false;
   protected controlTemplate(value: number | null, index: number): TemplateResult {
     return html`
       ${InputStyles}
@@ -30,7 +31,14 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
   }
 
   protected customValidation(value: number): string | null {
-    return value && isNaN(value) ? 'Must be a number' : null;
+    if (!value) {
+      return null;
+    }
+    if (isNaN(value)) {
+      return 'Must be a number';
+    }
+    const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
+    return integerValidation ? null : 'Must be an integer';
   }
 
   static get styles(): CSSResultArray {

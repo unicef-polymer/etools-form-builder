@@ -4,6 +4,7 @@ import '@polymer/paper-input/paper-input';
 import {InputStyles} from '../../lib/styles/input-styles';
 
 export class NumberField extends BaseField<number> {
+  isInteger: boolean = false;
   protected controlTemplate(): TemplateResult {
     return html`
       ${InputStyles}
@@ -30,7 +31,14 @@ export class NumberField extends BaseField<number> {
   }
 
   protected customValidation(value: number): string | null {
-    return value && isNaN(value) ? 'Must be a number' : null;
+    if (!value) {
+      return null;
+    }
+    if (isNaN(value)) {
+      return 'Must be a number';
+    }
+    const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
+    return integerValidation ? null : 'Must be an integer';
   }
 
   static get styles(): CSSResultArray {
