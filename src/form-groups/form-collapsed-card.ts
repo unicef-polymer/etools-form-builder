@@ -5,7 +5,7 @@ import {openDialog} from '../lib/utils/dialog';
 import {IFormBuilderCard, IFormBuilderCollapsedCard} from '../lib/types/form-builder.interfaces';
 import {FormAbstractGroup, StructureTypes} from './form-abstract-group';
 import '../lib/additional-components/etools-fb-card';
-import {BlueprintField, BlueprintGroup} from '../lib/types/form-builder.types';
+import {BlueprintField, BlueprintGroup, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
 import '../lib/additional-components/confirmation-dialog';
@@ -101,8 +101,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    */
   renderGroupChildren(): (TemplateResult | TemplateResult[])[] {
     return this.groupStructure.children
-      .filter(({styling}: BlueprintGroup | BlueprintField) => !styling.includes(StructureTypes.ATTACHMENTS_BUTTON))
-      .map((child: BlueprintGroup | BlueprintField) => super.renderChild(child));
+      .filter(
+        ({styling}: BlueprintGroup | BlueprintField | Information) =>
+          !styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
+      )
+      .map((child: BlueprintGroup | BlueprintField | Information) => super.renderChild(child));
   }
 
   /**
@@ -112,7 +115,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
       (this._readonly && !this.value?.attachments?.length) ||
-      !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField) =>
+      !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField | Information) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
     return hideAttachmentsButton

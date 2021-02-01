@@ -11,7 +11,7 @@ import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
 import {FormBuilderCardStyles} from '..';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
-import {BlueprintField, BlueprintGroup, BlueprintMetadata} from '../lib/types/form-builder.types';
+import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
 import {live} from 'lit-html/directives/live';
@@ -77,17 +77,21 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     }
 
     return html`
-      ${this.groupStructure.children.map((child: BlueprintGroup | BlueprintField) => this.renderChild(child))}
+      ${this.groupStructure.children.map((child: BlueprintGroup | BlueprintField | Information) =>
+        this.renderChild(child)
+      )}
     `;
   }
 
-  renderChild(child: BlueprintGroup | BlueprintField): TemplateResult | TemplateResult[] {
+  renderChild(child: BlueprintGroup | BlueprintField | Information): TemplateResult | TemplateResult[] {
     const type: string = child.type;
     switch (child.type) {
       case 'field':
         return this.renderField(child);
       case 'group':
         return this.renderGroup(child);
+      case 'information':
+        return this.renderInformation(child);
       default:
         console.warn(`FormBuilderGroup: Unknown group type ${type}. Please, specify rendering method`);
         return html``;
@@ -107,6 +111,10 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         @error-changed="${(event: CustomEvent) => this.errorChanged(event, blueprintField.name)}"
       ></field-renderer>
     `;
+  }
+
+  renderInformation(information: Information): TemplateResult {
+    return html`<section class="elevation page-content" elevation="1">${information.text}</section>`;
   }
 
   renderGroup(groupStructure: BlueprintGroup): TemplateResult | TemplateResult[] {
@@ -262,6 +270,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         .add-group {
           align-self: flex-end;
           margin-right: 23px;
+          margin-top: 20px;
           box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
             0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }

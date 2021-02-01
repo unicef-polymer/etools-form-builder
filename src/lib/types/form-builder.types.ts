@@ -21,7 +21,7 @@ export type BlueprintGroup = {
   repeatable: boolean;
   required: boolean;
   title: string | null;
-  children: (BlueprintGroup | BlueprintField)[];
+  children: (BlueprintGroup | BlueprintField | Information)[];
 };
 
 export type BlueprintField = {
@@ -38,6 +38,13 @@ export type BlueprintField = {
   placeholder: string;
   default_value: null;
   options_key: null;
+};
+
+export type Information = {
+  type: 'information';
+  extra: GenericObject;
+  styling: string[];
+  text: string;
 };
 
 /** Metadata for blueprint structure */
