@@ -70,6 +70,17 @@ export class FieldRendererComponent extends LitElement {
           </number-field>
         `;
       case FieldTypes.BOOL_TYPE:
+        return html`
+          <boolean-field
+            ?is-readonly="${this.readonly}"
+            ?required="${required}"
+            .value="${this.value}"
+            .validators="${this.validations}"
+            .errorMessage="${this.errorMessage}"
+          >
+            ${this.renderFieldLabel(label, help_text)}
+          </boolean-field>
+        `;
       case FieldTypes.SCALE_TYPE:
         return html`
           <scale-field
@@ -131,7 +142,6 @@ export class FieldRendererComponent extends LitElement {
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-number-field>
         `;
-      case FieldTypes.BOOL_TYPE:
       case FieldTypes.SCALE_TYPE:
         return html`
           <repeatable-scale-field

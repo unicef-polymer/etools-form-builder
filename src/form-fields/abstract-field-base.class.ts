@@ -120,6 +120,11 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
           cursor: pointer;
         }
 
+        .error-text {
+          color: var(--error-color);
+          font-size: 12px;
+        }
+
         @media (max-width: 1080px) {
           :host {
             padding: 0 15px;

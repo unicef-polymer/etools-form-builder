@@ -81,10 +81,6 @@ export class ScaleField extends BaseField<string | number | null> {
           pointer-events: none;
           opacity: 0.55;
         }
-        .error-text {
-          color: var(--error-color);
-          font-size: 12px;
-        }
 
         @media (max-width: 1080px) {
           .container {
