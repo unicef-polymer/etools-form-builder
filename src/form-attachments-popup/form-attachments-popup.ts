@@ -114,7 +114,7 @@ export class FormAttachmentsPopup extends LitElement {
     fireEvent(this, 'response', {confirmed: false});
   }
 
-  async saveChanges(): void {
+  async saveChanges(): Promise<void> {
     let fileTypeNotSelected: boolean = false;
     this.attachments.forEach((attachment: GenericObject, index: number) => {
       if (!attachment.file_type) {
@@ -131,8 +131,8 @@ export class FormAttachmentsPopup extends LitElement {
 
     if (this.filesForRemove.length) {
       for (const fileId of this.filesForRemove) {
-        await deleteFileFromDexie(fileId);                
-      }      
+        await deleteFileFromDexie(fileId);
+      }
     }
 
     /**
