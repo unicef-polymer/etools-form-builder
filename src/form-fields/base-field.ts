@@ -8,6 +8,7 @@ export abstract class BaseField<T> extends LitElement {
   @property({type: Boolean, attribute: 'is-readonly'}) isReadonly: boolean = false;
   @property({type: Boolean, attribute: 'required', reflect: true}) required: boolean = false;
   @property() value: T | null = null;
+  @property() protected _errorMessage: string | null = null;
   validators: FieldValidator[] = [];
   set errorMessage(message: string | null) {
     this._errorMessage = message;
@@ -15,8 +16,6 @@ export abstract class BaseField<T> extends LitElement {
   get errorMessage(): string | null {
     return this.isReadonly ? null : this._errorMessage;
   }
-
-  @property() protected _errorMessage: string | null = null;
 
   protected render(): TemplateResult {
     return html`
@@ -28,9 +27,7 @@ export abstract class BaseField<T> extends LitElement {
   }
 
   protected questionTemplate(): TemplateResult {
-    return html`
-      <span class="question-text">${this.questionText}</span>
-    `;
+    return html` <span class="question-text">${this.questionText}</span> `;
   }
 
   protected valueChanged(newValue: T): void {

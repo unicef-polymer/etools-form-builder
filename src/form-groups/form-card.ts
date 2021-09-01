@@ -7,6 +7,12 @@ import {GenericObject} from '../lib/types/global.types';
 import '@polymer/iron-collapse';
 
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
+  @property() protected _value: GenericObject = {};
+  /**
+   * Show save button only if value was changed by user
+   */
+  @property() private showSaveButton: boolean = false;
+
   /**
    * Overrides value property. Saves originalValue.
    * We need to update inner _value only if it wasn't change
@@ -21,13 +27,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   get value(): GenericObject {
     return this._value;
   }
-  @property() protected _value: GenericObject = {};
   protected originalValue: GenericObject = {};
-
-  /**
-   * Show save button only if value was changed by user
-   */
-  @property() private showSaveButton: boolean = false;
 
   /**
    * Extends parent render method,
