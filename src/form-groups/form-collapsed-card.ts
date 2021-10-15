@@ -80,12 +80,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
           @cancel="${() => this.cancelEdit()}"
         >
           <!-- Open Attachments popup button -->
-          <div slot="actions" class="layout horizontal center">
-            ${this.getAdditionalButtons()}
-          </div>
-          <div slot="content">
-            ${this.renderGroupChildren()}
-          </div>
+          <div slot="actions" class="layout horizontal center">${this.getAdditionalButtons()}</div>
+          <div slot="content">${this.renderGroupChildren()}</div>
         </etools-fb-card>
       </section>
     `;

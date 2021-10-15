@@ -55,12 +55,11 @@ export class FormAttachmentsPopup extends LitElement {
   @property() saveBtnClicked: boolean = false;
   @property() attachments: StoredAttachment[] = [];
   @property() metadata!: BlueprintMetadata;
+  @query('#link') link!: HTMLLinkElement;
   readonly: boolean = false;
   popupTitle: string = '';
   computedPath: string[] = [];
   errors: GenericObject = [];
-
-  @query('#link') link!: HTMLLinkElement;
 
   /**
    * Array of offline saved fileIds that was remove from popup.

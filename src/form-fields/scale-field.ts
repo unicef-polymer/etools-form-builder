@@ -25,9 +25,7 @@ export class ScaleField extends BaseField<string | null> {
           ${repeat(
             this.options,
             (option: FieldOption) => html`
-              <paper-radio-button class="radio-button" name="${option.value}">
-                ${option.label}
-              </paper-radio-button>
+              <paper-radio-button class="radio-button" name="${option.value}"> ${option.label} </paper-radio-button>
             `
           )}
         </paper-radio-group>
