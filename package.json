@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-form-builder",
   "description": "Etools FM Form Builder components",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "contributors": [
     "eTools Team"
   ],
@@ -16,7 +16,7 @@
     "build": "tsc --skipLibCheck",
     "lint": "./node_modules/eslint/bin/eslint.js 'src/**'",
     "prepare": "rm -rf ./dist && npm run build",
-    "preversion": "npm run lint"
+    "prepublishOnly": "npm run lint"
   },
   "dependencies": {
     "@polymer/iron-collapse": "^3.0.1",

@@ -40,6 +40,8 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   @property({type: Object}) metadata!: BlueprintMetadata;
   @property({type: String}) parentGroupName: string = '';
   @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly: boolean = true;
+  @property() protected _errors: GenericObject = {};
+  @property() protected _value: GenericObject = {};
   computedPath: string[] = [];
 
   /**
@@ -68,8 +70,6 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       this._errors = errors;
     }
   }
-  @property() protected _errors: GenericObject = {};
-  @property() protected _value: GenericObject = {};
 
   render(): TemplateResult {
     if (!this.groupStructure || !this.metadata) {
@@ -99,9 +99,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     const isAdditional: boolean = blueprintField.styling.includes(StructureTypes.ADDITIONAL);
     if (isWide) {
       return html`
-        <div class="${isAdditional ? 'additional-field' : ''}">
-          ${this.renderWideField(blueprintField)}
-        </div>
+        <div class="${isAdditional ? 'additional-field' : ''}">${this.renderWideField(blueprintField)}</div>
       `;
     } else {
       return html`
