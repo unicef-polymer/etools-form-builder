@@ -15,6 +15,11 @@ export const FormBuilderCardStyles: CSSResult = css`
     color: var(--primary-color);
     font-weight: 500;
   }
+  .attachments-button:focus {
+    outline: 0;
+    box-shadow: 0 0 5px 5px rgb(170 165 165 / 20%);
+    background-color: rgba(170, 165, 165, 0.2);
+  }
   .attachments-button iron-icon {
     margin-right: 8px;
   }
