@@ -102,18 +102,20 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * It is hidden if tab is readonly and no attachments uploaded
    */
   getAdditionalButtons(): TemplateResult {
-    const showAttachmentsButton: boolean = this.groupStructure.children.some(
-      ({styling}: BlueprintGroup | BlueprintField) => styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
-    );
-    return showAttachmentsButton
-      ? html`
+    const hideAttachmentsButton: boolean =
+      (this._readonly && !this.value.attachments.length) ||
+      !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField) =>
+        styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
+      );
+    return hideAttachmentsButton
+      ? html``
+      : html`
           <iron-icon icon="warning" class="attachments-warning" ?hidden="${!this._errors.attachments}"></iron-icon>
           <paper-button @click="${() => this.openAttachmentsPopup()}" class="attachments-button">
             <iron-icon icon="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"></iron-icon>
             ${this.getAttachmentsBtnText(this.value?.attachments?.length)}
           </paper-button>
-        `
-      : html``;
+        `;
   }
 
   retrieveTitle(target: string): string {
