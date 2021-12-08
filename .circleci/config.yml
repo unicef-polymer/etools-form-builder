@@ -60,7 +60,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-       - publish:
+      - publish:
           requires:
             - lint
           filters:
