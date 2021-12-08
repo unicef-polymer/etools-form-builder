@@ -93,8 +93,8 @@ export const InputStyles: TemplateResult = html`
         opacity: 1 !important;
       }
       --paper-input-container-underline: {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
-        display: block !important;
+        border-bottom: none !important;
+        display: none !important;
       }
       --paper-input-container-underline-focus: {
         display: none;
