@@ -103,7 +103,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    */
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
-      (this._readonly && !this.value.attachments.length) ||
+      (this._readonly && !this.value?.attachments?.length) ||
       !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
