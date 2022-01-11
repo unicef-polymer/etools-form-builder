@@ -95,6 +95,19 @@ export class FieldRendererComponent extends LitElement {
             ${this.renderFieldLabel(label, help_text)}
           </scale-field>
         `;
+      case FieldTypes.FILE_TYPE:
+        return html`
+          <attachments-field
+            ?is-readonly="${this.readonly}"
+            ?required="${required}"
+            .placeholder="${placeholder}"
+            .value="${this.value}"
+            .validators="${this.validations}"
+            .errorMessage="${this.errorMessage}"
+          >
+            ${this.renderFieldLabel(label, help_text)}
+          </attachments-field>
+        `;
       default:
         console.warn(`FormBuilderGroup: Unknown field type: ${input_type}`);
         return html``;
@@ -156,6 +169,19 @@ export class FieldRendererComponent extends LitElement {
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-scale-field>
+        `;
+      case FieldTypes.FILE_TYPE:
+        return html`
+          <repeatable-attachments-field
+            ?is-readonly="${this.readonly}"
+            ?required="${required}"
+            .placeholder="${placeholder}"
+            .value="${this.value}"
+            .validators="${this.validations}"
+            .errorMessage="${this.errorMessage}"
+          >
+            ${this.renderFieldLabel(label, help_text)}
+          </repeatable-attachments-field>
         `;
       default:
         console.warn(`FormBuilderGroup: Unknown field type: ${input_type}`);

@@ -1,10 +1,5 @@
 import {FormAttachmentsPopup} from './form-attachments-popup';
 import {html, TemplateResult} from 'lit-html';
-import '@unicef-polymer/etools-upload/etools-upload-multi';
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
-import '@polymer/paper-button/paper-button';
-import '@polymer/iron-icons/iron-icons';
 import {GenericObject} from '../lib/types/global.types';
 import {InputStyles} from '../lib/styles/input-styles';
 import {DialogStyles} from '../lib/styles/dialog.styles';
