@@ -12,10 +12,13 @@ export const AttachmentsStyles: CSSResult = css`
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--secondary-text-color, rgba(0, 0, 0, 0.54));
-    margin: 0 14px;
+    margin: 0 14px 0 0;
     min-width: 145px;
     overflow-wrap: break-word;
     font-size: 16px;
+  }
+  :host([is-readonly]) .filename-container {
+    border-bottom-color: transparent;
   }
   .filename {
     overflow: hidden;
@@ -64,7 +67,7 @@ export const AttachmentsStyles: CSSResult = css`
     margin-top: 15px;
   }
   etools-upload-multi.with-padding {
-    padding: 12px 9px;
+    padding: 12px 9px 12px 0;
     box-sizing: border-box;
   }
 `;

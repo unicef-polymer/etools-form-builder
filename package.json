@@ -30,7 +30,7 @@
     "@types/ramda": "^0.26.43",
     "@unicef-polymer/etools-dialog": "5.0.0-rc.2",
     "@unicef-polymer/etools-dropdown": "^3.7.6",
-    "@unicef-polymer/etools-upload": "^4.2.4-rc.1",
+    "@unicef-polymer/etools-upload": "^4.2.0-rc.3",
     "@webcomponents/webcomponentsjs": "^2.6.0",
     "lit-element": "^2.4.0",
     "lit-translate": "^1.2.1",

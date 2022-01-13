@@ -21,6 +21,8 @@ export class AttachmentField extends BaseField<StoredAttachment | null> {
     return AttachmentsHelper.jwtLocalStorageKey!;
   }
 
+  computedPath: string[] = [];
+
   protected controlTemplate(): TemplateResult {
     return html`
       <!--     Upload button     -->
@@ -31,7 +33,7 @@ export class AttachmentField extends BaseField<StoredAttachment | null> {
         ?readonly="${this.isReadonly}"
         @upload-finished="${({detail}: CustomEvent) => this.attachmentsUploaded(detail)}"
         @delete-file="${() => this.valueChanged(null)}"
-        .endpointInfo="${{endpoint: this.uploadUrl}}"
+        .endpointInfo="${{endpoint: this.uploadUrl, extraInfo: {composedPath: this.computedPath}}}"
         .jwtLocalStorageKey="${this.jwtLocalStorageKey}"
       >
       </etools-upload>

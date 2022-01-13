@@ -69,6 +69,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
 
         .question-control,
         .question {
+          min-width: 0;
           min-height: 57px;
           display: flex;
           align-items: center;

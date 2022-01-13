@@ -107,6 +107,9 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         .validations="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
         .errorMessage="${this.getErrorMessage(blueprintField.name)}"
         .options="${this.metadata.options[blueprintField.options_key || '']?.values || []}"
+        .computedPath="${this.computedPath.concat(
+          this.groupStructure.name === 'root' ? [blueprintField.name] : [this.groupStructure.name, blueprintField.name]
+        )}"
         @value-changed="${(event: CustomEvent) => this.valueChanged(event, blueprintField.name)}"
         @error-changed="${(event: CustomEvent) => this.errorChanged(event, blueprintField.name)}"
       ></field-renderer>

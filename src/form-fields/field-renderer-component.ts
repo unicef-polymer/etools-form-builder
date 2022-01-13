@@ -13,6 +13,7 @@ export class FieldRendererComponent extends LitElement {
   @property() validations: FieldValidator[] = [];
   @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
+  computedPath: string[] = [];
 
   render(): TemplateResult {
     if (!this.field) {
@@ -104,6 +105,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .computedPath="${this.computedPath}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </attachments-field>
@@ -179,6 +181,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .computedPath="${this.computedPath}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-attachments-field>

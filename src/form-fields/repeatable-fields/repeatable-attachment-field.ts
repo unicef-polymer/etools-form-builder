@@ -21,6 +21,8 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
     return AttachmentsHelper.jwtLocalStorageKey!;
   }
 
+  computedPath: string[] = [];
+
   protected render(): TemplateResult {
     const values: (StoredAttachment | null)[] = this.getValues();
     return html`
@@ -65,10 +67,11 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
             activate-offline
             ?hidden="${this.isReadonly}"
             @upload-finished="${({detail}: CustomEvent) => this.attachmentsUploaded(detail)}"
-            .endpointInfo="${{endpoint: this.uploadUrl}}"
+            .endpointInfo="${{endpoint: this.uploadUrl, extraInfo: {composedPath: this.computedPath}}}"
             .jwtLocalStorageKey="${this.jwtLocalStorageKey}"
           >
           </etools-upload-multi>
+          <div ?hidden="${!this.isReadonly || this.value?.length}">—</div>
         </div>
       </div>
     `;
@@ -84,6 +87,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
   protected attachmentsUploaded({success, error}: UploadFinishedDetails): void {
     success?.forEach((file: UploadedAttachment | OfflineSavedAttachment, index: number) => {
+      const newIndex: number = (Number(this.editedValues?.length) ?? 0) + index;
       if (this.isUploadedAttachment(file)) {
         this.valueChanged(
           {
@@ -92,7 +96,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
             filename: file.filename,
             file_type: null
           },
-          (this.value?.length || 1) + index
+          newIndex
         );
       } else if (this.isOfflineSavedAttachment(file)) {
         this.valueChanged(
@@ -102,7 +106,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
             composedPath: [],
             file_type: null
           },
-          (this.value?.length || 1) + index
+          newIndex
         );
       } else {
         console.warn('Missing fields in parsed attachment');

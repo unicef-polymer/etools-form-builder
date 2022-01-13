@@ -11,7 +11,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
   }
 
   @property() protected _errorMessage: (string | null)[] = [];
-  @property() private editedValues: (T | null)[] | null = null;
+  @property() protected editedValues: (T | null)[] | null = null;
 
   protected render(): TemplateResult {
     const values: (T | null)[] = this.getValues();
