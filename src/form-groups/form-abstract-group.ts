@@ -15,6 +15,7 @@ import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '..
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
 import {live} from 'lit-html/directives/live';
+import {openDialog} from '../lib/utils/dialog';
 
 export enum FieldTypes {
   FILE_TYPE = 'file',
@@ -128,7 +129,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
       <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
-        Add ${groupStructure.title}
+        Add ${!groupStructure.title || groupStructure.title.length > 15 ? 'group' : groupStructure.title}
       </paper-button>
     `;
   }
@@ -173,7 +174,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           )}"
           .readonly="${this.readonly}"
           .errors="${errors || null}"
-          @remove-group="${() => this.removeGroup(groupStructure.name, index)}"
+          @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
           @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-collapsed-card>
@@ -190,7 +191,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           )}"
           .readonly="${this.readonly}"
           .errors="${errors || null}"
-          @remove-group="${() => this.removeGroup(groupStructure.name, index)}"
+          @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
           @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-card>
@@ -222,7 +223,8 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   errorChanged(event: CustomEvent, name: string, index?: number): void {
     const errorMessage: string | null = event.detail.error;
     if (typeof index === 'number') {
-      const errors: (string | null)[] = this._errors[name] || new Array(this.value[name].length).fill(null);
+      const errors: (string | null)[] =
+        this._errors[name] || (this.value && new Array(this.value[name].length).fill(null)) || [];
       errors.splice(index, 1, errorMessage);
       const hasErrors: boolean = errors.some((error: null | string) => error !== null);
       this._errors[name] = hasErrors ? errors : null;
@@ -242,13 +244,28 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     this.valueChanged({detail: {value}} as CustomEvent, name);
   }
 
-  removeGroup(name: string, index?: number): void {
+  removeGroup(group: BlueprintGroup, index?: number): void {
     if (typeof index !== 'number') {
       return;
     }
-    const value: GenericObject[] = (this.value && this.value[name]) || [];
+    const value: GenericObject[] = (this.value && this.value[group.name]) || [];
+    if (group.required && value.length < 2) {
+      openDialog<{
+        text: string;
+        dialogTitle: string;
+        hideConfirmBtn: boolean;
+      }>({
+        dialog: 'confirmation-popup',
+        dialogData: {
+          text: `Group is required. At least one group must exist`,
+          hideConfirmBtn: true,
+          dialogTitle: ''
+        }
+      });
+      return;
+    }
     value.splice(index, 1);
-    this.valueChanged({detail: {value}} as CustomEvent, name);
+    this.valueChanged({detail: {value}} as CustomEvent, group.name);
   }
 
   protected getErrorMessage(fieldName: string): string | null {

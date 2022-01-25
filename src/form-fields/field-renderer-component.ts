@@ -14,6 +14,7 @@ export class FieldRendererComponent extends LitElement {
   @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
   computedPath: string[] = [];
+  defaultValue: any;
 
   render(): TemplateResult {
     if (!this.field) {
@@ -50,6 +51,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </text-field>
@@ -66,6 +68,7 @@ export class FieldRendererComponent extends LitElement {
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </number-field>
@@ -78,6 +81,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </boolean-field>
@@ -92,6 +96,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </scale-field>
@@ -136,6 +141,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-text-field>
@@ -153,6 +159,7 @@ export class FieldRendererComponent extends LitElement {
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-number-field>
@@ -168,6 +175,7 @@ export class FieldRendererComponent extends LitElement {
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
           >
             ${this.renderFieldLabel(label, help_text)}
           </repeatable-scale-field>

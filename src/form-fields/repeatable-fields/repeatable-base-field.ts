@@ -6,6 +6,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
   set errorMessage(messages: (string | null)[]) {
     this._errorMessage = messages || [];
   }
+
   get errorMessage(): (string | null)[] {
     return this.isReadonly ? [] : this._errorMessage;
   }
@@ -50,24 +51,34 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     }
     if (this.editedValues && newValue !== this.editedValues[index]) {
       this.editedValues[index] = newValue;
-      this.value = this.editedValues.filter((value: T | null) => Boolean(value)) as T[];
-      fireEvent(this, 'value-changed', {value: this.value});
+      this.setValue(this.editedValues);
     }
   }
 
-  protected validateField(value: T, index: number): void {
+  protected setValue(value: (T | null)[]): void {
+    this.editedValues = value;
+    this.value = value.filter((value: T | null): value is T => Boolean(value));
+    fireEvent(this, 'value-changed', {value: this.value});
+  }
+
+  protected validateField(value: T[]): void;
+  protected validateField(value: T, index: number): void;
+  protected validateField(value: T | T[], index?: number): void {
+    if (this.isArrayData(value)) {
+      return value.forEach((item: T, index: number) => this.validateField(item, index));
+    }
     let errorMessage: string | null;
     if (this.required && !value && value !== null && typeof value !== 'number') {
       errorMessage = 'This field is required!';
     } else {
       errorMessage = this.metaValidation(value);
     }
-    const oldError: string | null = (this._errorMessage || [])[index] || null;
+    const oldError: string | null = (this._errorMessage || [])[index as number] || null;
     if (oldError !== errorMessage) {
       const errors: (string | null)[] = this.editedValues!.map(
         (_: T | null, index: number) => (this._errorMessage && this._errorMessage[index]) || null
       );
-      errors.splice(index, 1, errorMessage as string);
+      errors.splice(index as number, 1, errorMessage as string);
       const newErrors: (string | null)[] | null = errors.some((error: string | null) => error !== null) ? errors : null;
       fireEvent(this, 'error-changed', {error: newErrors});
       this._errorMessage = errors;
@@ -94,6 +105,10 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     }
 
     return this.editedValues || [null];
+  }
+
+  private isArrayData(value: T | T[]): value is T[] {
+    return Array.isArray(value);
   }
 
   protected abstract controlTemplate(value: T | null, index: number): TemplateResult;

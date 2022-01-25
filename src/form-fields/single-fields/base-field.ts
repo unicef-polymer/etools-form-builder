@@ -13,6 +13,9 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
   @property() protected _errorMessage: string | null = null;
 
   protected valueChanged(newValue: T): void {
+    if (!newValue && this.value === undefined) {
+      return;
+    }
     if (!this.isReadonly && newValue !== this.value && this.touched) {
       this.validateField(newValue);
     } else if (this.isReadonly || !this.touched) {
@@ -22,6 +25,11 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
       this.value = newValue;
       fireEvent(this, 'value-changed', {value: newValue});
     }
+  }
+
+  protected setValue(newValue: T | null): void {
+    this.value = newValue;
+    fireEvent(this, 'value-changed', {value: newValue});
   }
 
   protected validateField(value: T): void {

@@ -3,10 +3,23 @@ import {fireEvent} from '../utils/fire-custom-event';
 
 export class ConfirmationDialog extends LitElement {
   @property() dialogOpened: boolean = true;
-  @property() text: string = '';
+  text: string = '';
+  dialogTitle: string = '';
+  hideConfirmBtn: boolean = false;
 
-  set dialogData({text}: {text: string}) {
+  set dialogData({
+    text,
+    dialogTitle = 'Are you',
+    hideConfirmBtn = false
+  }: {
+    text: string;
+    dialogTitle: string;
+    hideConfirmBtn: boolean;
+  }) {
     this.text = text;
+    this.dialogTitle = dialogTitle;
+    this.hideConfirmBtn = hideConfirmBtn;
+    this.requestUpdate();
   }
 
   render(): unknown {
@@ -16,9 +29,11 @@ export class ConfirmationDialog extends LitElement {
         size="md"
         no-padding
         keep-dialog-open
+        ?hide-confirm-btn="${this.hideConfirmBtn}"
+        cancel-btn-text="${this.hideConfirmBtn ? 'Ok' : 'Cancel'}"
         ?opened="${this.dialogOpened}"
         theme="confirmation"
-        dialog-title="Are you"
+        dialog-title="${this.dialogTitle}"
         @close="${this.onClose}"
         @confirm-btn-clicked="${() => this.confirm()}"
       >

@@ -44,7 +44,8 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
             ?hidden="${!this.groupStructure.repeatable}"
             @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
           >
-            Remove ${this.groupStructure.title}
+            Remove
+            ${!this.groupStructure.title || this.groupStructure.title.length > 15 ? 'group' : this.groupStructure.title}
             <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
           </div>
         </div>

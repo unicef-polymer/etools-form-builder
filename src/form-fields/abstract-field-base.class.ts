@@ -7,12 +7,25 @@ import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
  */
 export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property({type: String}) questionText: string = '';
-  @property({type: Boolean, attribute: 'is-readonly'}) isReadonly: boolean = false;
+  @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
+    this._readonly = readonly;
+    this.setDefaultValue(readonly, this._defaultValue);
+  }
+  get isReadonly(): boolean {
+    return this._readonly;
+  }
   @property({type: Boolean, attribute: 'required'}) required: boolean = false;
   @property() placeholder: string = '';
   @property() value: T | null = null;
   validators: FieldValidator[] = [];
   touched: boolean = false;
+  set defaultValue(value: any) {
+    this._defaultValue = value;
+    this.setDefaultValue(this._readonly, value);
+    this.requestUpdate();
+  }
+  private _defaultValue: any;
+  private _readonly: boolean = false;
 
   protected render(): TemplateResult {
     return html`
@@ -32,11 +45,27 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
     return message ? message : this.customValidation(value);
   }
 
+  private setDefaultValue(readonly: boolean, defaultValue: any): void {
+    if (readonly || (!defaultValue && defaultValue !== 0) || this.value !== undefined) {
+      return;
+    }
+    this.getUpdateComplete().then(() => {
+      if (defaultValue === this._defaultValue && readonly === this._readonly && this.value === undefined) {
+        this.setValue(defaultValue);
+        this.validateField(defaultValue);
+      }
+    });
+  }
+
   protected abstract valueChanged(...args: any): void;
 
   protected abstract customValidation(value: unknown): string | null;
 
   protected abstract controlTemplate(...args: any): TemplateResult;
+
+  protected abstract setValue(value: T): void;
+
+  protected abstract validateField(value: T): void;
 
   static get styles(): CSSResultArray {
     // language=CSS
