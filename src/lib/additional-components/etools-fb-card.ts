@@ -159,6 +159,7 @@ export class EtoolsFbCard extends LitElement {
               `
             : ''}
           <div class="flex-header__title">${this.cardTitle}</div>
+          <div class="flex-header__actions"><slot name="actions"></slot></div>
           <div class="layout horizontal center flex-header__edit">
             ${this.isEditable
               ? html`
@@ -172,7 +173,6 @@ export class EtoolsFbCard extends LitElement {
                 `
               : ''}
           </div>
-          <div class="flex-header__actions"><slot name="actions"></slot></div>
         </header>
         <iron-collapse ?opened="${!this.collapsed}">
           <section class="card-content-block">
