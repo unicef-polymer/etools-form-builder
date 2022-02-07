@@ -10,13 +10,13 @@ export class WideField extends BaseField<string> {
     return html`
       ${InputStyles}
       <paper-textarea
-        class="wide-input disabled-as-readonly form-control"
+        class="wide-input"
         always-float-label
         .value="${this.value}"
         label="${this.label}"
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         ?required="${this.required}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"

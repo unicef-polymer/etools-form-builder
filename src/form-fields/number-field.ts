@@ -8,14 +8,14 @@ export class NumberField extends BaseField<number> {
     return html`
       ${InputStyles}
       <paper-input
-        class="without-border no-padding-left form-control"
+        class="no-padding-left"
         no-label-float
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
         placeholder="&#8212;"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
       >
       </paper-input>
     `;

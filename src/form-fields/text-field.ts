@@ -9,12 +9,12 @@ export class TextField extends BaseField<string> {
       ${InputStyles}
       <paper-textarea
         id="textarea"
-        class="no-padding-left form-control"
+        class="no-padding-left"
         no-label-float
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
         placeholder="&#8212;"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
       >

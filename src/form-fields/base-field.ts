@@ -105,23 +105,18 @@ export abstract class BaseField<T> extends LitElement {
           color: var(--primary-text-color);
         }
 
-        paper-input.form-control,
-        paper-textarea.form-control {
+        paper-input,
+        paper-textarea {
           outline: none !important;
         }
-        paper-input[required].form-control,
-        paper-textarea[required].form-control {
+        paper-input[required],
+        paper-textarea[required] {
           --paper-input-container-label_-_background: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221235%22%20height%3D%221175%22%3E%3Cpath%20fill%3D%22%23de0000%22%20d%3D%22M0%2C449h1235l-999%2C726%20382-1175%20382%2C1175z%22%2F%3E%3C%2Fsvg%3E')
             no-repeat 98% 14%/7px;
           --paper-input-container-label_-_max-width: max-content;
           --paper-input-container-label_-_padding-right: 15px;
         }
-        paper-input[disabled].form-control,
-        paper-textarea[disabled].form-control {
-          --paper-input-container-underline_-_border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
-          --paper-input-container-underline_-_border-color: rgba(0, 0, 0, 0.2) !important;
-        }
-
+        
         @media (max-width: 1080px) {
           :host {
             padding: 0 15px;
