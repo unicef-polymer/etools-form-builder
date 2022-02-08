@@ -68,13 +68,16 @@ export const InputStyles = html`
       }
     }
 
-    paper-input-container,
     etools-dropdown-multi[disabled],
     etools-dropdown[disabled],
     paper-textarea[disabled],
     paper-dropdown-menu[disabled],
     paper-input[disabled],
     datepicker-lite[disabled] {
+      --paper-input-container-focus-color: var(
+        --paper-input-container-label_-_color,
+        var(--paper-input-container-color, var(--secondary-text-color))
+      );
       --paper-input-container: {
         opacity: 1 !important;
       }
@@ -87,22 +90,24 @@ export const InputStyles = html`
       }
     }
 
-
-    paper-input-container,
     etools-dropdown-multi[readonly],
     etools-dropdown[readonly],
     paper-textarea[readonly],
     paper-dropdown-menu[readonly],
     paper-input[readonly],
     datepicker-lite[readonly] {
+      --paper-input-container-focus-color: var(
+        --paper-input-container-label_-_color,
+        var(--paper-input-container-color, var(--secondary-text-color))
+      );
       --paper-input-container-label: {
         color: var(--gray-50, rgba(0, 0, 0, 0.5)) !important;
       }
       --paper-input-container-input: {
-        var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
+        color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
       }
-      --esmm-placeholder-color: rgba(0, 0, 0, 0.2) !important;
-      --esmm-multi-placeholder-color: rgba(0, 0, 0, 0.2) !important;
+      --esmm-placeholder-color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
+      --esmm-multi-placeholder-color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
       --paper-input-container: {
         opacity: 1 !important;
       }
