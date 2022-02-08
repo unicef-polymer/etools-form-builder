@@ -1,6 +1,6 @@
-import {html} from 'lit-element';
+import {html, TemplateResult} from 'lit-element';
 // language=HTML
-export const InputStyles = html`
+export const InputStyles: TemplateResult = html`
   <style>
     etools-dropdown,
     etools-dropdown-multi,

@@ -116,7 +116,7 @@ export abstract class BaseField<T> extends LitElement {
           --paper-input-container-label_-_max-width: max-content;
           --paper-input-container-label_-_padding-right: 15px;
         }
-        
+
         @media (max-width: 1080px) {
           :host {
             padding: 0 15px;
