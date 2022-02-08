@@ -11,12 +11,15 @@ export const InputStyles = html`
     datepicker-lite {
       outline: none !important;
       padding: 0 12px;
-      color: var(--gray-mid, rgba(0, 0, 0, 0.54));
+      color: var(--gray-dark, rgba(0, 0, 0, 0.87));
       box-sizing: border-box;
+
+      --paper-input-container-input-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
+      --esmm-placeholder-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
+      --esmm-multi-placeholder-color: var(--gray-dark, rgba(0, 0, 0, 0.87));
+
       --paper-input-container-focus-color: var(--primary-color, #0099ff);
-      --paper-input-container-input: {
-        font-size: 16px;
-      }
+
       --paper-input-container-label: {
         color: var(--gray-50, rgba(0, 0, 0, 0.5));
       }
@@ -56,7 +59,7 @@ export const InputStyles = html`
 
       --paper-input-prefix: {
         margin-right: 10px;
-        color: var(--gray-mid, rgba(0, 0, 0, 0.54));
+        color: var(--gray-dark, rgba(0, 0, 0, 0.87));
       }
 
       --paper-input-error: {
@@ -100,14 +103,6 @@ export const InputStyles = html`
         --paper-input-container-label_-_color,
         var(--paper-input-container-color, var(--secondary-text-color))
       );
-      --paper-input-container-label: {
-        color: var(--gray-50, rgba(0, 0, 0, 0.5)) !important;
-      }
-      --paper-input-container-input: {
-        color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
-      }
-      --esmm-placeholder-color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
-      --esmm-multi-placeholder-color: var(--gray-mid-dark, rgba(0, 0, 0, 0.87));
       --paper-input-container: {
         opacity: 1 !important;
       }
