@@ -10,6 +10,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
     this._readonly = readonly;
     this.setDefaultValue(readonly, this._defaultValue);
+    this.requestUpdate();
   }
   get isReadonly(): boolean {
     return this._readonly;
