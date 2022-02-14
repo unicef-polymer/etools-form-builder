@@ -5,9 +5,10 @@ import {openDialog} from '../lib/utils/dialog';
 import {IFormBuilderCard, IFormBuilderCollapsedCard} from '../lib/types/form-builder.interfaces';
 import {FormAbstractGroup, StructureTypes} from './form-abstract-group';
 import '../lib/additional-components/etools-fb-card';
-import {BlueprintField, BlueprintGroup} from '../lib/types/form-builder.types';
+import {BlueprintField, BlueprintGroup, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
+import '../lib/additional-components/confirmation-dialog';
 
 const PARTNER_KEY: string = 'partner';
 const OUTPUT_KEY: string = 'output';
@@ -71,7 +72,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     return html`
       <section class="elevation page-content card-container" elevation="1">
         <etools-fb-card
-          card-title="${this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title}"
+          card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
           is-collapsible
           ?is-editable="${!this._readonly}"
           ?edit="${this.isEditMode}"
@@ -81,6 +82,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         >
           <!-- Open Attachments popup button -->
           <div slot="actions" class="layout horizontal center">${this.getAdditionalButtons()}</div>
+          <div slot="postfix" class="layout horizontal center" ?hidden="${!this.groupStructure.repeatable}">
+            <paper-icon-button
+              icon="close"
+              class="attachments-warning"
+              @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+            ></paper-icon-button>
+          </div>
           <div slot="content">${this.renderGroupChildren()}</div>
         </etools-fb-card>
       </section>
@@ -91,10 +99,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * Filters StructureTypes.ATTACHMENTS_BUTTON type. It will be rendered as button,
    * allows parent renderChild method to render other types
    */
-  renderGroupChildren(): TemplateResult[] {
+  renderGroupChildren(): (TemplateResult | TemplateResult[])[] {
     return this.groupStructure.children
-      .filter(({styling}: BlueprintGroup | BlueprintField) => !styling.includes(StructureTypes.ATTACHMENTS_BUTTON))
-      .map((child: BlueprintGroup | BlueprintField) => super.renderChild(child));
+      .filter(
+        ({styling}: BlueprintGroup | BlueprintField | Information) =>
+          !styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
+      )
+      .map((child: BlueprintGroup | BlueprintField | Information) => super.renderChild(child));
   }
 
   /**
@@ -104,7 +115,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
       (this._readonly && !this.value?.attachments?.length) ||
-      !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField) =>
+      !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField | Information) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
     return hideAttachmentsButton
@@ -121,11 +132,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   retrieveTitle(target: string): string {
     switch (target) {
       case PARTNER_KEY:
-        return `Partner`;
+        return `Partner: `;
       case OUTPUT_KEY:
-        return `Output`;
+        return `Output: `;
       case INTERVENTION_KEY:
-        return `PD/SSFA`;
+        return `PD/SSFA: `;
       default:
         return '';
     }
@@ -212,6 +223,19 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         this.saveChanges();
       }
       this.requestUpdate();
+    });
+  }
+
+  confirmRemove(groupName: string): void {
+    openDialog<{text: string}>({
+      dialog: 'confirmation-popup',
+      dialogData: {
+        text: `Are you sure you want to delete ${groupName}`
+      }
+    }).then((response: GenericObject) => {
+      if (response.confirmed) {
+        fireEvent(this, 'remove-group');
+      }
     });
   }
 

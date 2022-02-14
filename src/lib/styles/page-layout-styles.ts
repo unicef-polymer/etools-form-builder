@@ -2,7 +2,7 @@ import {css, CSSResult} from 'lit-element';
 // language=CSS
 export const pageLayoutStyles: CSSResult = css`
   .page-content {
-    margin: 24px;
+    margin: 24px 24px 0;
   }
 
   .page-content.filters {

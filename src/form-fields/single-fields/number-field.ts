@@ -1,17 +1,20 @@
 import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
 import {BaseField} from './base-field';
 import '@polymer/paper-input/paper-input';
-import {InputStyles} from '../lib/styles/input-styles';
+import {InputStyles} from '../../lib/styles/input-styles';
 
 export class NumberField extends BaseField<number> {
+  isInteger: boolean = false;
   protected controlTemplate(): TemplateResult {
     return html`
       ${InputStyles}
       <paper-input
         class="no-padding-left"
         no-label-float
+        placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
+        @focus="${() => (this.touched = true)}"
         placeholder="&#8212;"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
@@ -28,7 +31,14 @@ export class NumberField extends BaseField<number> {
   }
 
   protected customValidation(value: number): string | null {
-    return value && isNaN(value) ? 'Must be a number' : null;
+    if (!value) {
+      return null;
+    }
+    if (isNaN(value)) {
+      return 'Must be a number';
+    }
+    const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
+    return integerValidation ? null : 'Must be an integer';
   }
 
   static get styles(): CSSResultArray {

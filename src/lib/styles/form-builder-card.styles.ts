@@ -5,11 +5,13 @@ export const FormBuilderCardStyles: CSSResult = css`
     padding: 15px 25px 20px 45px;
     background-color: var(--secondary-background-color);
   }
-  .finding-container {
+  field-renderer {
+    position: relative;
+    display: block;
     border-bottom: 1px solid var(--light-divider-color);
   }
-  .finding-container:last-child {
-    /*border-bottom: none;*/
+  field-renderer:last-of-type {
+    border-bottom: none;
   }
   .attachments-button {
     color: var(--primary-color);
@@ -26,6 +28,9 @@ export const FormBuilderCardStyles: CSSResult = css`
   .question-container {
     padding: 7px 0;
     width: 100%;
+    min-height: 57px;
+    box-sizing: border-box;
+    justify-content: center;
   }
   .question-text {
     font-weight: 500;

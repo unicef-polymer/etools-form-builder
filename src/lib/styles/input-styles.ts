@@ -91,6 +91,7 @@ export const InputStyles: TemplateResult = html`
       --paper-input-container-underline-focus: {
         display: none;
       }
+      --esmm-select-cursor: initial;
     }
 
     etools-dropdown-multi[readonly],
@@ -116,6 +117,7 @@ export const InputStyles: TemplateResult = html`
       --paper-input-container-underline-disabled: {
         display: none;
       }
+      --esmm-select-cursor: initial;
     }
 
     etools-dropdown-multi.required:not([disabled]),
