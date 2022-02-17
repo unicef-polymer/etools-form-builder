@@ -1,4 +1,9 @@
-import {css, CSSResultArray, LitElement, property, query, TemplateResult} from 'lit-element';
+import '@unicef-polymer/etools-dialog/etools-dialog';
+import '@unicef-polymer/etools-upload/etools-upload-multi';
+import '@unicef-polymer/etools-dropdown/etools-dropdown';
+import '@polymer/paper-button/paper-button';
+import '@polymer/iron-icons/iron-icons';
+import {css, CSSResultArray, customElement, LitElement, property, query, TemplateResult} from 'lit-element';
 import {GenericObject} from '../lib/types/global.types';
 import {BlueprintMetadata} from '../lib/types/form-builder.types';
 import {clone, equals} from 'ramda';
@@ -45,11 +50,17 @@ export type OfflineSavedAttachment = {
   unsynced: boolean;
 };
 
-type UploadFinishedDetails = {
+export type UploadFinishedDetails = {
   success: (UploadedAttachment | OfflineSavedAttachment)[];
   error: any[];
 };
 
+export type SingleUploadFinishedDetails = {
+  success: UploadedAttachment | OfflineSavedAttachment;
+  error: any[];
+};
+
+@customElement('form-attachments-popup')
 export class FormAttachmentsPopup extends LitElement {
   @property() dialogOpened: boolean = true;
   @property() saveBtnClicked: boolean = false;

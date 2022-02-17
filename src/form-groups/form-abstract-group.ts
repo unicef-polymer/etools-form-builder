@@ -1,20 +1,21 @@
-import {LitElement, property, TemplateResult, html, CSSResultArray, css} from 'lit-element';
-import '../form-fields/text-field';
-import '../form-fields/number-field';
-import '../form-fields/scale-field';
-import '../form-fields/wide-field';
+import {LitElement, property, TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
+import '../form-fields/single-fields/text-field';
+import '../form-fields/single-fields/number-field';
+import '../form-fields/single-fields/scale-field';
 import '@polymer/paper-input/paper-textarea';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
 import {CardStyles} from '../lib/styles/card-styles';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
-import {FormBuilderCardStyles} from '..';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
-import {BlueprintField, BlueprintGroup, BlueprintMetadata} from '../lib/types/form-builder.types';
+import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
+import {live} from 'lit-html/directives/live';
+import {openDialog} from '../lib/utils/dialog';
+import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 
 export enum FieldTypes {
   FILE_TYPE = 'file',
@@ -35,11 +36,12 @@ export enum StructureTypes {
   ATTACHMENTS_BUTTON = 'floating_attachments'
 }
 
+@customElement('form-abstract-group')
 export class FormAbstractGroup extends LitElement implements IFormBuilderAbstractGroup {
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
   @property({type: String}) parentGroupName: string = '';
-  @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly: boolean = true;
+  @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property() protected _errors: GenericObject = {};
   @property() protected _value: GenericObject = {};
   computedPath: string[] = [];
@@ -77,17 +79,21 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     }
 
     return html`
-      ${this.groupStructure.children.map((child: BlueprintGroup | BlueprintField) => this.renderChild(child))}
+      ${this.groupStructure.children.map((child: BlueprintGroup | BlueprintField | Information) =>
+        this.renderChild(child)
+      )}
     `;
   }
 
-  renderChild(child: BlueprintGroup | BlueprintField): TemplateResult {
+  renderChild(child: BlueprintGroup | BlueprintField | Information): TemplateResult | TemplateResult[] {
     const type: string = child.type;
     switch (child.type) {
       case 'field':
         return this.renderField(child);
       case 'group':
         return this.renderGroup(child);
+      case 'information':
+        return this.renderInformation(child);
       default:
         console.warn(`FormBuilderGroup: Unknown group type ${type}. Please, specify rendering method`);
         return html``;
@@ -95,158 +101,100 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   }
 
   renderField(blueprintField: BlueprintField): TemplateResult {
-    const isWide: boolean = blueprintField.styling.includes(StructureTypes.WIDE);
-    const isAdditional: boolean = blueprintField.styling.includes(StructureTypes.ADDITIONAL);
-    if (isWide) {
-      return html`
-        <div class="${isAdditional ? 'additional-field' : ''}">${this.renderWideField(blueprintField)}</div>
-      `;
-    } else {
-      return html`
-        <div class="${isAdditional ? 'additional-field finding-container' : 'finding-container'}">
-          ${this.renderStandardField(blueprintField)}
-        </div>
-      `;
-    }
-  }
-
-  renderWideField({name, label, placeholder, required, validations}: BlueprintField): TemplateResult {
     return html`
-      <wide-field
-        ?is-readonly="${this.readonly}"
-        ?required="${required}"
-        .value="${this.value && this.value[name]}"
-        label="${label}"
-        placeholder="${placeholder}"
-        .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-        .errorMessage="${this.getErrorMessage(name)}"
-        @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-        @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-      ></wide-field>
+      <field-renderer
+        .field="${blueprintField}"
+        ?readonly="${live(this.readonly)}"
+        .value="${this.value && this.value[blueprintField.name]}"
+        .validations="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
+        .errorMessage="${this.getErrorMessage(blueprintField.name)}"
+        .options="${this.metadata.options[blueprintField.options_key || '']?.values || []}"
+        .computedPath="${this.computedPath.concat(
+          this.groupStructure.name === 'root' ? [blueprintField.name] : [this.groupStructure.name, blueprintField.name]
+        )}"
+        @value-changed="${(event: CustomEvent) => this.valueChanged(event, blueprintField.name)}"
+        @error-changed="${(event: CustomEvent) => this.errorChanged(event, blueprintField.name)}"
+      ></field-renderer>
     `;
   }
 
-  renderStandardField({
-    input_type,
-    name,
-    label,
-    help_text,
-    options_key,
-    required,
-    validations
-  }: BlueprintField): TemplateResult {
-    switch (input_type) {
-      case FieldTypes.TEXT_TYPE:
-        return html`
-          <text-field
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </text-field>
-        `;
-      case FieldTypes.NUMBER_TYPE:
-      case FieldTypes.NUMBER_FLOAT_TYPE:
-      case FieldTypes.NUMBER_INTEGER_TYPE:
-        return html`
-          <number-field
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </number-field>
-        `;
-      case FieldTypes.BOOL_TYPE:
-      case FieldTypes.SCALE_TYPE:
-        return html`
-          <scale-field
-            .options="${this.metadata.options[options_key || '']?.values || []}"
-            ?is-readonly="${this.readonly}"
-            ?required="${required}"
-            .value="${this.value && this.value[name]}"
-            .validators="${validations.map((validation: string) => this.metadata.validations[validation])}"
-            .errorMessage="${this.getErrorMessage(name)}"
-            @value-changed="${(event: CustomEvent) => this.valueChanged(event, name)}"
-            @error-changed="${(event: CustomEvent) => this.errorChanged(event, name)}"
-          >
-            ${this.renderFieldLabel(label, help_text)}
-          </scale-field>
-        `;
-      default:
-        console.warn(`FormBuilderGroup: Unknown field type: ${input_type}`);
-        return html``;
-    }
+  renderInformation(information: Information): TemplateResult {
+    return html`<section class="elevation page-content" elevation="1">${information.text}</section>`;
   }
 
-  renderFieldLabel(label: string, helperText: string): TemplateResult {
+  renderGroup(groupStructure: BlueprintGroup): TemplateResult | TemplateResult[] {
+    if (!groupStructure.repeatable) {
+      return this.getGroupTemplate(groupStructure);
+    }
+    const value: GenericObject[] = (this.value && this.value[groupStructure.name]) || [{}];
     return html`
-      <div class="layout vertical question-container">
-        <div class="question-text">${label}</div>
-        <div class="question-details">${helperText}</div>
-      </div>
+      ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
+      <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
+        Add ${!groupStructure.title || groupStructure.title.length > 15 ? 'group' : groupStructure.title}
+      </paper-button>
     `;
   }
 
-  renderGroup(groupStructure: BlueprintGroup): TemplateResult {
+  getGroupTemplate(groupStructure: BlueprintGroup, index?: number): TemplateResult {
     const isAbstract: boolean = groupStructure.styling.includes(StructureTypes.ABSTRACT);
     const isCard: boolean = groupStructure.styling.includes(StructureTypes.CARD);
     const isCollapsed: boolean = groupStructure.styling.includes(StructureTypes.COLLAPSED);
+    let value: GenericObject | GenericObject[] = this.value && this.value[groupStructure.name];
+    if (typeof index === 'number') {
+      value = value && (value as GenericObject[])[index];
+    }
+    let errors: GenericObject | GenericObject[] = this._errors[groupStructure.name];
+    if (typeof index === 'number') {
+      errors = errors && (errors as GenericObject[])[index];
+    }
     if (isAbstract) {
       return html`
         <form-abstract-group
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-abstract-group>
       `;
     } else if (isCard && isCollapsed) {
       return html`
         <form-collapsed-card
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @remove-group="${() => this.removeGroup(groupStructure, index)}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-collapsed-card>
       `;
     } else if (isCard) {
       return html`
         <form-card
           .groupStructure="${groupStructure}"
-          .value="${this.value && this.value[groupStructure.name]}"
+          .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
           .readonly="${this.readonly}"
-          .errors="${this._errors[groupStructure.name] || null}"
-          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name)}"
-          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name)}"
+          .errors="${errors || null}"
+          @remove-group="${() => this.removeGroup(groupStructure, index)}"
+          @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
+          @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
         ></form-card>
       `;
     } else {
@@ -255,19 +203,33 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     }
   }
 
-  valueChanged(event: CustomEvent, name: string): void {
+  valueChanged(event: CustomEvent, name: string, index?: number): void {
     if (!this.value) {
       this.value = {};
     }
-    this.value[name] = event.detail.value;
-    event.stopPropagation();
+    if (typeof index === 'number') {
+      const value: GenericObject[] = this.value[name] || [];
+      value[index] = event.detail.value;
+      this.value[name] = value;
+    } else {
+      this.value[name] = event.detail.value;
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
     fireEvent(this, 'value-changed', {value: this.value});
     this.requestUpdate();
   }
 
-  errorChanged(event: CustomEvent, name: string): void {
+  errorChanged(event: CustomEvent, name: string, index?: number): void {
     const errorMessage: string | null = event.detail.error;
-    if (errorMessage) {
+    if (typeof index === 'number') {
+      const errors: (string | null)[] =
+        this._errors[name] || (this.value && new Array(this.value[name].length).fill(null)) || [];
+      errors.splice(index, 1, errorMessage);
+      const hasErrors: boolean = errors.some((error: null | string) => error !== null);
+      this._errors[name] = hasErrors ? errors : null;
+    } else if (errorMessage) {
       this._errors[name] = errorMessage;
     } else {
       delete this._errors[name];
@@ -275,6 +237,36 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     event.stopPropagation();
     const errors: GenericObject | null = Object.keys(this._errors).length ? this._errors : null;
     fireEvent(this, 'error-changed', {error: errors});
+  }
+
+  addGroup(name: string): void {
+    const value: GenericObject[] = this.value[name] || [];
+    value.push({});
+    this.valueChanged({detail: {value}} as CustomEvent, name);
+  }
+
+  removeGroup(group: BlueprintGroup, index?: number): void {
+    if (typeof index !== 'number') {
+      return;
+    }
+    const value: GenericObject[] = (this.value && this.value[group.name]) || [];
+    if (group.required && value.length < 2) {
+      openDialog<{
+        text: string;
+        dialogTitle: string;
+        hideConfirmBtn: boolean;
+      }>({
+        dialog: 'confirmation-popup',
+        dialogData: {
+          text: `Group is required. At least one group must exist`,
+          hideConfirmBtn: true,
+          dialogTitle: ''
+        }
+      });
+      return;
+    }
+    value.splice(index, 1);
+    this.valueChanged({detail: {value}} as CustomEvent, group.name);
   }
 
   protected getErrorMessage(fieldName: string): string | null {
@@ -292,12 +284,41 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       FlexLayoutClasses,
       FormBuilderCardStyles,
       css`
+        :host {
+          display: flex;
+          flex-direction: column;
+        }
+        .add-group {
+          align-self: flex-end;
+          margin-right: 23px;
+          margin-top: 20px;
+          box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12),
+            0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        }
+        .card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .card-header .remove-group {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0 10px 8px;
+          cursor: pointer;
+          width: min-content;
+          white-space: nowrap;
+        }
+        .card-header .title {
+          padding: 0 24px 8px;
+          font-size: 18px;
+          font-weight: bold;
+        }
         .save-button {
           margin-top: 8px;
           color: var(--primary-background-color);
           background-color: var(--primary-color);
         }
-
         .information-source {
           padding: 0.5% 2% 0.5% 1%;
         }
@@ -319,6 +340,10 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
 
         .attachments-warning {
           color: red;
+        }
+        paper-icon-button[icon='close'] {
+          cursor: pointer;
+          color: var(--primary-text-color);
         }
       `
     ];

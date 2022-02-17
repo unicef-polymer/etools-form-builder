@@ -1,11 +1,13 @@
-import {TemplateResult, html, property} from 'lit-element';
+import {TemplateResult, html, property, customElement} from 'lit-element';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {clone, equals} from 'ramda';
 import {IFormBuilderCard} from '../lib/types/form-builder.interfaces';
 import {FormAbstractGroup} from './form-abstract-group';
 import {GenericObject} from '../lib/types/global.types';
 import '@polymer/iron-collapse';
+import {openDialog} from '../lib/utils/dialog';
 
+@customElement('form-card')
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   @property() protected _value: GenericObject = {};
   /**
@@ -36,6 +38,18 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   render(): TemplateResult {
     return html`
       <section class="elevation page-content card-container form-card" elevation="1">
+        <div class="card-header">
+          <div class="title">${this.groupStructure.title}</div>
+          <div
+            class="remove-group"
+            ?hidden="${!this.groupStructure.repeatable}"
+            @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+          >
+            Remove
+            ${!this.groupStructure.title || this.groupStructure.title.length > 15 ? 'group' : this.groupStructure.title}
+            <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
+          </div>
+        </div>
         ${super.render()}
 
         <iron-collapse ?opened="${this.showSaveButton}">
@@ -67,5 +81,18 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
     }
     fireEvent(this, 'value-changed', {value: this.value});
     this.showSaveButton = false;
+  }
+
+  confirmRemove(groupName: string): void {
+    openDialog<{text: string}>({
+      dialog: 'confirmation-popup',
+      dialogData: {
+        text: `Are you sure you want to delete ${groupName}`
+      }
+    }).then((response: GenericObject) => {
+      if (response.confirmed) {
+        fireEvent(this, 'remove-group');
+      }
+    });
   }
 }
