@@ -11,7 +11,7 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
     return html`
       ${InputStyles}
       <paper-input
-        class="without-border no-padding-left form-control"
+        class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${value}"
@@ -19,7 +19,7 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
         placeholder="&#8212;"
         ?invalid="${this.errorMessage[index]}"
         error-message="${this.errorMessage[index]}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
       >
       </paper-input>
     `;

@@ -11,12 +11,12 @@ export class RepeatableTextField extends RepeatableBaseField<string> {
       ${InputStyles}
       <paper-textarea
         id="textarea"
-        class="no-padding-left form-control"
+        class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value, index)}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
         ?invalid="${this.errorMessage[index]}"
         error-message="${this.errorMessage[index]}"
       >
