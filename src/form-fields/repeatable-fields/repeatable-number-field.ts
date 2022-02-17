@@ -1,9 +1,10 @@
-import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
 import '@polymer/paper-input/paper-input';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 
+@customElement('repeatable-number-field')
 export class RepeatableNumberField extends RepeatableBaseField<number> {
   isInteger: boolean = false;
   protected controlTemplate(value: number | null, index: number): TemplateResult {

@@ -7,11 +7,12 @@ import {
   UploadedAttachment,
   UploadFinishedDetails
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray, css} from 'lit-element';
+import {TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
 
+@customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
   get uploadUrl(): string {
     return AttachmentsHelper.uploadUrl!;

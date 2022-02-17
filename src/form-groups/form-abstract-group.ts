@@ -1,4 +1,4 @@
-import {LitElement, property, TemplateResult, html, CSSResultArray, css} from 'lit-element';
+import {LitElement, property, TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
 import '../form-fields/single-fields/text-field';
 import '../form-fields/single-fields/number-field';
 import '../form-fields/single-fields/scale-field';
@@ -8,7 +8,6 @@ import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
 import {CardStyles} from '../lib/styles/card-styles';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
-import {FormBuilderCardStyles} from '..';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
 import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '../lib/types/form-builder.types';
@@ -16,6 +15,7 @@ import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
 import {live} from 'lit-html/directives/live';
 import {openDialog} from '../lib/utils/dialog';
+import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 
 export enum FieldTypes {
   FILE_TYPE = 'file',
@@ -36,6 +36,7 @@ export enum StructureTypes {
   ATTACHMENTS_BUTTON = 'floating_attachments'
 }
 
+@customElement('form-abstract-group')
 export class FormAbstractGroup extends LitElement implements IFormBuilderAbstractGroup {
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;

@@ -1,8 +1,9 @@
-import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
 import {BaseField} from './base-field';
 import '@polymer/paper-input/paper-input';
 import {InputStyles} from '../../lib/styles/input-styles';
 
+@customElement('number-field')
 export class NumberField extends BaseField<number> {
   isInteger: boolean = false;
   protected controlTemplate(): TemplateResult {

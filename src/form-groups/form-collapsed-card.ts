@@ -1,4 +1,4 @@
-import {TemplateResult, html, property} from 'lit-element';
+import {TemplateResult, html, property, customElement} from 'lit-element';
 import {clone} from 'ramda';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {openDialog} from '../lib/utils/dialog';
@@ -14,6 +14,7 @@ const PARTNER_KEY: string = 'partner';
 const OUTPUT_KEY: string = 'output';
 const INTERVENTION_KEY: string = 'intervention';
 
+@customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
   /**
    * Overrides readonly property

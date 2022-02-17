@@ -1,11 +1,12 @@
-import {css, CSSResultArray, html, LitElement, property, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, customElement, html, LitElement, property, TemplateResult} from 'lit-element';
 import {BlueprintField} from '../lib/types/form-builder.types';
-import {FieldTypes, StructureTypes} from '../form-groups';
 import {FieldValidator} from '../lib/utils/validations.helper';
 import {FieldOption} from './single-fields/scale-field';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
-import {FormBuilderCardStyles} from '..';
+import {FieldTypes, StructureTypes} from '../form-groups';
+import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 
+@customElement('field-renderer')
 export class FieldRendererComponent extends LitElement {
   @property() field!: BlueprintField;
   @property() value: any;

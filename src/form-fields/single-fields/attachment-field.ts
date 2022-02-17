@@ -7,11 +7,12 @@ import {
   StoredAttachment,
   UploadedAttachment
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray} from 'lit-element';
+import {TemplateResult, html, CSSResultArray, customElement} from 'lit-element';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
 
+@customElement('attachments-field')
 export class AttachmentField extends BaseField<StoredAttachment | null> {
   get uploadUrl(): string {
     return AttachmentsHelper.uploadUrl!;

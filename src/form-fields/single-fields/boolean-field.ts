@@ -1,9 +1,10 @@
-import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
 import {BaseField} from './base-field';
 import '@polymer/paper-toggle-button';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {PaperToggleButtonElement} from '@polymer/paper-toggle-button/paper-toggle-button';
 
+@customElement('boolean-field')
 export class BooleanField extends BaseField<boolean> {
   protected controlTemplate(): TemplateResult {
     return html`

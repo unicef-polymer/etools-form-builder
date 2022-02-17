@@ -1,4 +1,4 @@
-import {html, TemplateResult, property, CSSResultArray, css} from 'lit-element';
+import {html, TemplateResult, property, CSSResultArray, css, customElement} from 'lit-element';
 import {BaseField} from './base-field';
 import {repeat} from 'lit-html/directives/repeat';
 import '@polymer/paper-radio-group/paper-radio-group';
@@ -11,6 +11,7 @@ export type FieldOption = {
   label: string;
 };
 
+@customElement('scale-field')
 export class ScaleField extends BaseField<string | number | null> {
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(): TemplateResult {

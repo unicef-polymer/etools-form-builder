@@ -1,9 +1,10 @@
-import {css, CSSResultArray, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
 import '@polymer/paper-input/paper-textarea';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 
+@customElement('repeatable-text-field')
 export class RepeatableTextField extends RepeatableBaseField<string> {
   protected controlTemplate(value: string | null, index: number): TemplateResult {
     return html`

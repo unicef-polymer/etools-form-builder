@@ -1,4 +1,4 @@
-import {TemplateResult, html, property} from 'lit-element';
+import {TemplateResult, html, property, customElement} from 'lit-element';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {clone, equals} from 'ramda';
 import {IFormBuilderCard} from '../lib/types/form-builder.interfaces';
@@ -7,6 +7,7 @@ import {GenericObject} from '../lib/types/global.types';
 import '@polymer/iron-collapse';
 import {openDialog} from '../lib/utils/dialog';
 
+@customElement('form-card')
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   @property() protected _value: GenericObject = {};
   /**

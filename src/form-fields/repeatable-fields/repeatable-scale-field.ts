@@ -1,4 +1,4 @@
-import {html, TemplateResult, property, CSSResultArray, css} from 'lit-element';
+import {html, TemplateResult, property, CSSResultArray, css, customElement} from 'lit-element';
 import {repeat} from 'lit-html/directives/repeat';
 import '@polymer/paper-radio-group/paper-radio-group';
 import '@polymer/paper-radio-button/paper-radio-button';
@@ -8,6 +8,7 @@ import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {FieldOption} from '..';
 
+@customElement('repeatable-scale-field')
 export class RepeatableScaleField extends RepeatableBaseField<string | number | null> {
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(value: string | null, index: number): TemplateResult {

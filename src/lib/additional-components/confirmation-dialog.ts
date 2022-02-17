@@ -1,6 +1,7 @@
-import {LitElement, property, html, CSSResultArray, css} from 'lit-element';
+import {LitElement, property, html, CSSResultArray, css, customElement} from 'lit-element';
 import {fireEvent} from '../utils/fire-custom-event';
 
+@customElement('confirmation-popup')
 export class ConfirmationDialog extends LitElement {
   @property() dialogOpened: boolean = true;
   text: string = '';
