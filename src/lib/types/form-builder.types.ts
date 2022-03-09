@@ -21,7 +21,7 @@ export type BlueprintGroup = {
   repeatable: boolean;
   required: boolean;
   title: string | null;
-  children: (BlueprintGroup | BlueprintField)[];
+  children: (BlueprintGroup | BlueprintField | Information)[];
 };
 
 export type BlueprintField = {
@@ -31,13 +31,20 @@ export type BlueprintField = {
   name: string;
   repeatable: boolean;
   required: boolean;
-  input_type: 'text' | 'likert_scale' | 'bool' | 'number' | 'number-integer' | 'number-float'; // add more
+  input_type: 'text' | 'likert_scale' | 'bool' | 'number' | 'number-integer' | 'number-float' | 'file'; // add more
   label: string;
   validations: string[];
   help_text: string;
   placeholder: string;
   default_value: null;
   options_key: null;
+};
+
+export type Information = {
+  type: 'information';
+  extra: GenericObject;
+  styling: string[];
+  text: string;
 };
 
 /** Metadata for blueprint structure */

@@ -46,7 +46,7 @@ export interface IFormBuilderAbstractGroup {
    * Use it to update current group value:
    * @value-changed="${(event) => this.valueChanged(event, BlueprintGroup.name)}"
    */
-  renderGroup(groupStructure: BlueprintGroup, groupValue?: GenericObject): TemplateResult;
+  renderGroup(groupStructure: BlueprintGroup, groupValue?: GenericObject): TemplateResult | TemplateResult[];
 }
 
 export interface IFormBuilderCard extends IFormBuilderAbstractGroup {
@@ -80,7 +80,7 @@ export interface IFormBuilderCollapsedCard extends IFormBuilderAbstractGroup, IF
    * else { super.renderGroup(groupStructure); }
    *
    */
-  renderGroup(groupStructure: BlueprintGroup, groupValue?: GenericObject): TemplateResult;
+  renderGroup(groupStructure: BlueprintGroup, groupValue?: GenericObject): TemplateResult | TemplateResult[];
 
   /**
    * Use openDialog method. Call valueChanged() on popup resolve with confirmed === true

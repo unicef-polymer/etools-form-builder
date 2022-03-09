@@ -1,21 +1,32 @@
-import {css, CSSResultArray, html, LitElement, property, TemplateResult} from 'lit-element';
-import {fireEvent} from '../lib/utils/fire-custom-event';
-import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
+import {CSSResultArray, LitElement, property, css, html, TemplateResult} from 'lit-element';
 import {FieldValidator, validate} from '../lib/utils/validations.helper';
+import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
 
-export abstract class BaseField<T> extends LitElement {
+/**
+ * Class that contains common properties and methods for single and repeatable fields
+ */
+export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property({type: String}) questionText: string = '';
-  @property({type: Boolean, attribute: 'is-readonly'}) isReadonly: boolean = false;
-  @property({type: Boolean, attribute: 'required', reflect: true}) required: boolean = false;
+  @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
+    this._readonly = readonly;
+    this.setDefaultValue(readonly, this._defaultValue);
+    this.requestUpdate();
+  }
+  get isReadonly(): boolean {
+    return this._readonly;
+  }
+  @property({type: Boolean, attribute: 'required'}) required: boolean = false;
+  @property() placeholder: string = '';
   @property() value: T | null = null;
-  @property() protected _errorMessage: string | null = null;
   validators: FieldValidator[] = [];
-  set errorMessage(message: string | null) {
-    this._errorMessage = message;
+  touched: boolean = false;
+  set defaultValue(value: any) {
+    this._defaultValue = value;
+    this.setDefaultValue(this._readonly, value);
+    this.requestUpdate();
   }
-  get errorMessage(): string | null {
-    return this.isReadonly ? null : this._errorMessage;
-  }
+  private _defaultValue: any;
+  private _readonly: boolean = false;
 
   protected render(): TemplateResult {
     return html`
@@ -27,39 +38,35 @@ export abstract class BaseField<T> extends LitElement {
   }
 
   protected questionTemplate(): TemplateResult {
-    return html` <span class="question-text">${this.questionText}</span> `;
+    return html`<span class="question-text">${this.questionText}</span>`;
   }
 
-  protected valueChanged(newValue: T): void {
-    this.validateField(newValue);
-    if (newValue !== this.value) {
-      this.value = newValue;
-      fireEvent(this, 'value-changed', {value: newValue});
-    }
-  }
-
-  protected validateField(value: T): void {
-    let errorMessage: string | null;
-    if (this.required && !value) {
-      errorMessage = 'This field is required!';
-    } else {
-      errorMessage = this.metaValidation(value);
-    }
-    if (this._errorMessage !== errorMessage) {
-      fireEvent(this, 'error-changed', {error: errorMessage});
-      this._errorMessage = errorMessage;
-      this.requestUpdate();
-    }
-  }
-
-  protected metaValidation(value: T): string | null {
+  protected metaValidation(value: unknown): string | null {
     const message: string | null = validate(this.validators, value);
     return message ? message : this.customValidation(value);
   }
 
-  protected abstract customValidation(value: T): string | null;
+  private setDefaultValue(readonly: boolean, defaultValue: any): void {
+    if (readonly || (!defaultValue && defaultValue !== 0) || this.value !== undefined) {
+      return;
+    }
+    this.getUpdateComplete().then(() => {
+      if (defaultValue === this._defaultValue && readonly === this._readonly && this.value === undefined) {
+        this.setValue(defaultValue);
+        this.validateField(defaultValue);
+      }
+    });
+  }
 
-  protected abstract controlTemplate(): TemplateResult;
+  protected abstract valueChanged(...args: any): void;
+
+  protected abstract customValidation(value: unknown): string | null;
+
+  protected abstract controlTemplate(...args: any): TemplateResult;
+
+  protected abstract setValue(value: T): void;
+
+  protected abstract validateField(value: T): void;
 
   static get styles(): CSSResultArray {
     // language=CSS
@@ -81,8 +88,18 @@ export abstract class BaseField<T> extends LitElement {
           flex-wrap: wrap;
         }
 
+        :host(.wide) .finding-container {
+          flex-direction: column;
+        }
+
+        :host(.wide) .question {
+          margin-bottom: -8px;
+          min-height: 0;
+        }
+
         .question-control,
         .question {
+          min-width: 0;
           min-height: 57px;
           display: flex;
           align-items: center;
@@ -93,7 +110,15 @@ export abstract class BaseField<T> extends LitElement {
         .question-control {
           flex: 3;
         }
+        .add-button {
+          padding: 3px;
+          margin: 10px;
+          background: transparent;
+          color: var(--primary-color);
+          border: 1px solid;
+        }
 
+        .full-width,
         paper-input,
         paper-textarea {
           width: 100%;
@@ -120,6 +145,15 @@ export abstract class BaseField<T> extends LitElement {
         paper-textarea[disabled].form-control {
           --paper-input-container-underline_-_border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
           --paper-input-container-underline_-_border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        iron-icon[icon='close'] {
+          cursor: pointer;
+        }
+
+        .error-text {
+          color: var(--error-color);
+          font-size: 12px;
         }
 
         @media (max-width: 1080px) {
