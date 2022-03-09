@@ -77,17 +77,10 @@ export const InputStyles: TemplateResult = html`
     paper-dropdown-menu[disabled],
     paper-input[disabled],
     datepicker-lite[disabled] {
-      --paper-input-container-focus-color: var(
-        --paper-input-container-label_-_color,
-        var(--paper-input-container-color, var(--secondary-text-color))
-      );
       --paper-input-container: {
         opacity: 1 !important;
       }
-      --paper-input-container-underline: {
-        border-bottom: 1px dashed var(--gray-20, rgba(0, 0, 0, 0.2));
-        display: block !important;
-      }
+
       --paper-input-container-underline-focus: {
         display: none;
       }
@@ -114,9 +107,7 @@ export const InputStyles: TemplateResult = html`
       --paper-input-container-underline-focus: {
         display: none;
       }
-      --paper-input-container-underline-disabled: {
-        display: none;
-      }
+
       --esmm-select-cursor: initial;
     }
 
