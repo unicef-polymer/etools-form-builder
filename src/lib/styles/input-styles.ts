@@ -93,10 +93,8 @@ export const InputStyles: TemplateResult = html`
     paper-dropdown-menu[readonly],
     paper-input[readonly],
     datepicker-lite[readonly] {
-      --paper-input-container-focus-color: var(
-        --paper-input-container-label_-_color,
-        var(--paper-input-container-color, var(--secondary-text-color))
-      );
+      --paper-input-container-underline_-_display: none;
+      --paper-input-container-underline-focus_-_display: none;
       --paper-input-container: {
         opacity: 1 !important;
       }

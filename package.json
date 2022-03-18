@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-form-builder",
   "description": "Etools FM Form Builder components",
-  "version": "2.1.0-rc.5",
+  "version": "2.1.0-rc.6",
   "contributors": [
     "eTools Team"
   ],
@@ -22,7 +22,7 @@
     "@polymer/iron-collapse": "^3.0.1",
     "@polymer/iron-icons": "^3.0.1",
     "@polymer/paper-button": "^3.0.1",
-    "@polymer/paper-input": "^3.0.2",
+    "@polymer/paper-input": "^3.2.1",
     "@polymer/paper-radio-button": "^3.0.1",
     "@polymer/paper-radio-group": "^3.0.1",
     "@polymer/paper-toast": "^3.0.1",
