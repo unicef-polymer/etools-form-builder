@@ -10,7 +10,7 @@ export class NumberField extends BaseField<number> {
     return html`
       ${InputStyles}
       <paper-input
-        class="without-border no-padding-left form-control"
+        class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
@@ -19,7 +19,7 @@ export class NumberField extends BaseField<number> {
         placeholder="&#8212;"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
       >
       </paper-input>
     `;

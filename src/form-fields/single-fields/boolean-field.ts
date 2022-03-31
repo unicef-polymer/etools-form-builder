@@ -10,11 +10,11 @@ export class BooleanField extends BaseField<boolean> {
     return html`
       ${InputStyles}
       <paper-toggle-button
-        class="no-padding-left form-control"
+        class="no-padding-left"
         ?checked="${this.value}"
         @iron-change="${(event: CustomEvent) =>
           this.valueChanged((event.currentTarget as PaperToggleButtonElement).checked as boolean)}"
-        ?disabled="${this.isReadonly}"
+        ?readonly="${this.isReadonly}"
       >
       </paper-toggle-button>
 
