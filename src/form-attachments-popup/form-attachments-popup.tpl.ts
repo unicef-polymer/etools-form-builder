@@ -1,10 +1,5 @@
 import {FormAttachmentsPopup} from './form-attachments-popup';
 import {html, TemplateResult} from 'lit-html';
-import '@unicef-polymer/etools-upload/etools-upload-multi';
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
-import '@polymer/paper-button/paper-button';
-import '@polymer/iron-icons/iron-icons';
 import {GenericObject} from '../lib/types/global.types';
 import {InputStyles} from '../lib/styles/input-styles';
 import {DialogStyles} from '../lib/styles/dialog.styles';
@@ -33,7 +28,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
             <div class="file-selector-container with-type-dropdown">
               <!--        Type select Dropdown        -->
               <etools-dropdown
-                class="type-dropdown disabled-as-readonly file-selector__type-dropdown"
+                class="type-dropdown file-selector__type-dropdown"
                 .selected="${attachment.file_type}"
                 @etools-selected-item-changed="${({detail}: CustomEvent) =>
                   this.changeFileType(attachment, detail.selectedItem?.value, index)}"
@@ -42,7 +37,6 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
                 placeholder="Select Document Type"
                 required
                 ?readonly="${this.readonly}"
-                ?disabled="${this.readonly}"
                 hide-search
                 .options="${this.metadata?.options.target_attachments_file_types?.values}"
                 option-label="label"
