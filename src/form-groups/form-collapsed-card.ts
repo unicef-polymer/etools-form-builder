@@ -135,7 +135,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       case PARTNER_KEY:
         return `Partner: `;
       case OUTPUT_KEY:
-        return `Output: `;
+        return `CP Output: `;
       case INTERVENTION_KEY:
         return `PD/SSFA: `;
       default:
