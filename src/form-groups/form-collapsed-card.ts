@@ -9,6 +9,7 @@ import {BlueprintField, BlueprintGroup, Information} from '../lib/types/form-bui
 import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
 import '../lib/additional-components/confirmation-dialog';
+import {getTranslation} from '../lib/utils/translate';
 
 const PARTNER_KEY: string = 'partner';
 const OUTPUT_KEY: string = 'output';
@@ -87,7 +88,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
             <paper-icon-button
               icon="close"
               class="attachments-warning"
-              @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+              @click="${() =>
+                this.confirmRemove(this.groupStructure.title || getTranslation(this.language, 'THIS_GROUP'))}"
             ></paper-icon-button>
           </div>
           <div slot="content">${this.renderGroupChildren()}</div>
@@ -133,11 +135,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   retrieveTitle(target: string): string {
     switch (target) {
       case PARTNER_KEY:
-        return `Partner: `;
+        return `${getTranslation(this.language, 'PARTNER')}: `;
       case OUTPUT_KEY:
-        return `CP Output: `;
+        return `${getTranslation(this.language, 'CP_OUTPUT')}: `;
       case INTERVENTION_KEY:
-        return `PD/SSFA: `;
+        return `${getTranslation(this.language, 'PD_SSFA')}: `;
       default:
         return '';
     }
@@ -178,7 +180,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
 
   saveChanges(): void {
     if (Object.keys(this._errors).length) {
-      fireEvent(this, 'toast', {text: 'Please check all fields and try again'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'CHECK_FIELDS_TRY_AGAIN')});
       return;
     }
     this.isEditMode = false;
@@ -199,7 +201,9 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       dialogData: {
         attachments: this.value?.attachments,
         metadata: this.metadata,
-        title: `Attachments for ${this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title}`,
+        title: `${getTranslation(this.language, 'ATTACHMENTS_FOR')} ${
+          this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title
+        }`,
         computedPath: this.computedPath.concat([this.groupStructure.name, 'attachments']),
         errors: this._errors.attachments
       },
@@ -231,7 +235,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     openDialog<{text: string}>({
       dialog: 'confirmation-popup',
       dialogData: {
-        text: `Are you sure you want to delete ${groupName}`
+        text: `${getTranslation(this.language, 'CONFIRM_DELETE')} ${groupName}`
       }
     }).then((response: GenericObject) => {
       if (response.confirmed) {
@@ -242,11 +246,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
 
   protected getAttachmentsBtnText(attachmentsCount: number = 0): string {
     if (attachmentsCount === 1) {
-      return `${attachmentsCount} File`;
+      return `${attachmentsCount} ${getTranslation(this.language, 'FILE')}`;
     } else if (attachmentsCount > 1) {
-      return `${attachmentsCount} Files`;
+      return `${attachmentsCount} ${getTranslation(this.language, 'FILES')}`;
     } else {
-      return 'Upload Files';
+      return getTranslation(this.language, 'UPLOAD_FILES');
     }
   }
 }

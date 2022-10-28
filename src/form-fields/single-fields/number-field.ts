@@ -2,6 +2,7 @@ import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-elem
 import {BaseField} from './base-field';
 import '@polymer/paper-input/paper-input';
 import {InputStyles} from '../../lib/styles/input-styles';
+import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('number-field')
 export class NumberField extends BaseField<number> {
@@ -39,7 +40,7 @@ export class NumberField extends BaseField<number> {
       return 'Must be a number';
     }
     const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
-    return integerValidation ? null : 'Must be an integer';
+    return integerValidation ? null : getTranslation(this.language, 'MUST_BE_INTEGER');
   }
 
   static get styles(): CSSResultArray {
