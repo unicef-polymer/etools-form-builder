@@ -4,6 +4,7 @@ import {CardStyles} from '../styles/card-styles';
 import {elevationStyles} from '../styles/elevation-styles';
 import {FlexLayoutClasses} from '../styles/flex-layout-classes';
 import {fireEvent} from '../utils/fire-custom-event';
+import {getTranslation} from '../utils/translate';
 
 @customElement('etools-fb-card')
 export class EtoolsFbCard extends LitElement {
@@ -21,6 +22,7 @@ export class EtoolsFbCard extends LitElement {
 
   @property({type: Boolean}) collapsed: boolean = false;
   @property({type: Boolean}) edit: boolean = false;
+  @property() language!: string;
 
   static get styles(): CSSResultArray {
     // language=CSS
@@ -129,6 +131,15 @@ export class EtoolsFbCard extends LitElement {
     ];
   }
 
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
   save(): void {
     fireEvent(this, 'save');
   }
@@ -148,6 +159,20 @@ export class EtoolsFbCard extends LitElement {
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
   }
 
   // language=HTML
@@ -188,8 +213,12 @@ export class EtoolsFbCard extends LitElement {
             ${this.isEditable && this.edit
               ? html`
                   <div class="layout horizontal end-justified card-buttons">
-                    <paper-button @tap="${() => this.cancel()}">Cancel</paper-button>
-                    <paper-button class="save-button" @tap="${() => this.save()}">Save</paper-button>
+                    <paper-button @tap="${() => this.cancel()}"
+                      >${getTranslation(this.language, 'CANCEL')}</paper-button
+                    >
+                    <paper-button class="save-button" @tap="${() => this.save()}"
+                      >${getTranslation(this.language, 'SAVE')}</paper-button
+                    >
                   </div>
                 `
               : ''}

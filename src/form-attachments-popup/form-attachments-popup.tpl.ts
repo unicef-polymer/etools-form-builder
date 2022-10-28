@@ -3,6 +3,7 @@ import {html, TemplateResult} from 'lit-html';
 import {GenericObject} from '../lib/types/global.types';
 import {InputStyles} from '../lib/styles/input-styles';
 import {DialogStyles} from '../lib/styles/dialog.styles';
+import {getTranslation} from '../lib/utils/translate';
 
 export function template(this: FormAttachmentsPopup): TemplateResult {
   return html`
@@ -13,7 +14,8 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
       no-padding
       keep-dialog-open
       ?opened="${this.dialogOpened}"
-      .okBtnText="Save"
+      .okBtnText="${getTranslation(this.language, 'SAVE')}"
+      .cancelBtnText="${getTranslation(this.language, 'CANCEL')}"
       .hideConfirmBtn="${this.readonly}"
       dialog-title="${this.popupTitle}"
       @close="${this.onClose}"
@@ -33,8 +35,8 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
                 @etools-selected-item-changed="${({detail}: CustomEvent) =>
                   this.changeFileType(attachment, detail.selectedItem?.value, index)}"
                 trigger-value-change-event
-                label="Document Type"
-                placeholder="Select Document Type"
+                label="${getTranslation(this.language, 'DOCUMENT_TYPE')}"
+                placeholder="${getTranslation(this.language, 'SELECT_DOCUMENT_TYPE')}"
                 required
                 ?readonly="${this.readonly}"
                 hide-search
@@ -60,7 +62,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
                 @tap="${() => this.downloadFile(attachment)}"
               >
                 <iron-icon icon="cloud-download" class="dw-icon"></iron-icon>
-                Download
+                ${getTranslation(this.language, 'DOWNLOAD')}
               </paper-button>
 
               <!--        Delete Button          -->
@@ -69,7 +71,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
                 ?hidden="${this.readonly}"
                 @tap="${() => this.deleteAttachment(index)}"
               >
-                Delete
+                ${getTranslation(this.language, 'DELETE')}
               </paper-button>
             </div>
           `

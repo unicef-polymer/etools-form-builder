@@ -7,6 +7,7 @@ import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
  */
 export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property({type: String}) questionText: string = '';
+  @property() language!: string;
   @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
     this._readonly = readonly;
     this.setDefaultValue(readonly, this._defaultValue);
@@ -28,6 +29,29 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   private _defaultValue: any;
   private _readonly: boolean = false;
 
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
+  }
+
   protected render(): TemplateResult {
     return html`
       <div class="finding-container">
@@ -42,7 +66,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   }
 
   protected metaValidation(value: unknown): string | null {
-    const message: string | null = validate(this.validators, value);
+    const message: string | null = validate(this.validators, value, this.language);
     return message ? message : this.customValidation(value);
   }
 

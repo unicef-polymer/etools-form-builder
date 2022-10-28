@@ -13,6 +13,7 @@ import {SharedStyles} from '../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../lib/styles/attachments.styles';
 import {AttachmentsHelper} from './form-attachments-popup.helper';
 import {deleteFileFromDexie} from '@unicef-polymer/etools-upload/offline/dexie-operations';
+import {getTranslation} from '../lib/utils/translate';
 
 export type FormBuilderAttachmentsPopupData = {
   attachments: StoredAttachment[];
@@ -66,6 +67,7 @@ export class FormAttachmentsPopup extends LitElement {
   @property() saveBtnClicked: boolean = false;
   @property() attachments: StoredAttachment[] = [];
   @property() metadata!: BlueprintMetadata;
+  @property() language!: string;
   @query('#link') link!: HTMLLinkElement;
   readonly: boolean = false;
   popupTitle: string = '';
@@ -101,6 +103,9 @@ export class FormAttachmentsPopup extends LitElement {
     super();
     if (!AttachmentsHelper.isInitialized) {
       throw new Error('Please initialize attachments popup before use');
+    }
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
     }
   }
 
@@ -207,7 +212,7 @@ export class FormAttachmentsPopup extends LitElement {
 
     if (error && error.length) {
       console.error(error);
-      fireEvent(this, 'toast', {text: 'Can not upload attachments. Please try again later'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'UPLOAD_ATTACHMENTS_FAILED')});
     }
   }
 

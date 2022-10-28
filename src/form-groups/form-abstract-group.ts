@@ -16,6 +16,7 @@ import {clone} from 'ramda';
 import {live} from 'lit-html/directives/live';
 import {openDialog} from '../lib/utils/dialog';
 import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
+import {getTranslation} from '../lib/utils/translate';
 
 export enum FieldTypes {
   FILE_TYPE = 'file',
@@ -41,6 +42,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
   @property({type: String}) parentGroupName: string = '';
+  @property() language!: string;
   @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property() protected _errors: GenericObject = {};
   @property() protected _value: GenericObject = {};
@@ -71,6 +73,29 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     } else if (errors) {
       this._errors = errors;
     }
+  }
+
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
   }
 
   render(): TemplateResult {
@@ -130,7 +155,10 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
       <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
-        Add ${!groupStructure.title || groupStructure.title.length > 15 ? 'group' : groupStructure.title}
+        ${getTranslation(this.language, 'ADD')}
+        ${!groupStructure.title || groupStructure.title.length > 15
+          ? getTranslation(this.language, 'GROUP')
+          : groupStructure.title}
       </paper-button>
     `;
   }
@@ -258,7 +286,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       }>({
         dialog: 'confirmation-popup',
         dialogData: {
-          text: `Group is required. At least one group must exist`,
+          text: getTranslation(this.language, 'GROUP_REQUIRED'),
           hideConfirmBtn: true,
           dialogTitle: ''
         }
