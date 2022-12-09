@@ -14,7 +14,7 @@ export class BooleanField extends BaseField<boolean> {
         ?checked="${this.value}"
         @iron-change="${(event: CustomEvent) =>
           this.valueChanged((event.currentTarget as PaperToggleButtonElement).checked as boolean)}"
-        ?readonly="${this.isReadonly}"
+        ?disabled="${this.isReadonly}"
       >
       </paper-toggle-button>
 
