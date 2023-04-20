@@ -1,3 +1,5 @@
+import {getTranslation} from './translate';
+
 export enum Validations {
   MAX_LENGTH = 'max_length',
   REGEX = 'regex',
@@ -29,10 +31,10 @@ export type LowerValidation = {
 
 export type FieldValidator = MaxLengthValidation | RegexValidation | GreaterValidation | LowerValidation;
 
-export function validate(validators: FieldValidator[], value: any): string | null {
+export function validate(validators: FieldValidator[], value: any, language: string): string | null {
   let message: string | null = null;
   for (const validator of validators) {
-    message = checkValidation(validator, value);
+    message = checkValidation(validator, value, language);
     if (message) {
       break;
     }
@@ -40,20 +42,26 @@ export function validate(validators: FieldValidator[], value: any): string | nul
   return message;
 }
 
-function checkValidation(validation: FieldValidator, value: number | string | null): string | null {
+function checkValidation(validation: FieldValidator, value: number | string | null, language: string): string | null {
   switch (validation.name) {
     case Validations.MAX_LENGTH:
       const maxLength: number = Number(validation[Validations.MAX_LENGTH]) + 1;
-      return String(value).length < maxLength ? null : `Text must be less than ${maxLength} character`;
+      return String(value).length < maxLength
+        ? null
+        : getTranslation(language, 'TEXT_MUST_BE_LESS_CHARS').replace('{0}', String(maxLength));
     case Validations.REGEX:
       const regex: RegExp = new RegExp(`^${validation[Validations.REGEX]}$`);
-      return regex.test(String(value)) ? null : `Doesn't match allowed pattern`;
+      return regex.test(String(value)) ? null : getTranslation(language, 'DOES_NOT_MATCH_PATTERN');
     case Validations.GREATER_THAN:
       const greaterThan: number = Number(validation.threshold) - Number(validation.allow_equality);
-      return Number(value) > greaterThan ? null : `Number must be greater than ${greaterThan}`;
+      return Number(value) > greaterThan
+        ? null
+        : getTranslation(language, 'NUMBER_MUST_BE_GREATER_THAN').replace('{0}', String(greaterThan));
     case Validations.LOWER_THAN:
       const lowerThan: number = Number(validation.threshold) + Number(validation.allow_equality);
-      return Number(value) < lowerThan ? null : `Number must be lower than ${lowerThan}`;
+      return Number(value) < lowerThan
+        ? null
+        : getTranslation(language, 'NUMBER_MUST_BE_LOWER_THAN').replace('{0}', String(lowerThan));
     default:
       return null;
   }

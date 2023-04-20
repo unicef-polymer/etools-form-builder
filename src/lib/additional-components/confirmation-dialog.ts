@@ -1,9 +1,11 @@
 import {LitElement, property, html, CSSResultArray, css, customElement} from 'lit-element';
 import {fireEvent} from '../utils/fire-custom-event';
+import {getTranslation} from '../utils/translate';
 
 @customElement('confirmation-popup')
 export class ConfirmationDialog extends LitElement {
   @property() dialogOpened: boolean = true;
+  @property() language!: string;
   text: string = '';
   dialogTitle: string = '';
   hideConfirmBtn: boolean = false;
@@ -23,6 +25,14 @@ export class ConfirmationDialog extends LitElement {
     this.requestUpdate();
   }
 
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = window.localStorage.defaultLanguage || 'en';
+    }
+  }
+
   render(): unknown {
     return html`
       <etools-dialog
@@ -31,7 +41,7 @@ export class ConfirmationDialog extends LitElement {
         no-padding
         keep-dialog-open
         ?hide-confirm-btn="${this.hideConfirmBtn}"
-        cancel-btn-text="${this.hideConfirmBtn ? 'Ok' : 'Cancel'}"
+        cancel-btn-text="${getTranslation(this.language, this.hideConfirmBtn ? 'OK' : 'CANCEL')}"
         ?opened="${this.dialogOpened}"
         theme="confirmation"
         dialog-title="${this.dialogTitle}"

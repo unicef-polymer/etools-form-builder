@@ -6,6 +6,7 @@ import {FormAbstractGroup} from './form-abstract-group';
 import {GenericObject} from '../lib/types/global.types';
 import '@polymer/iron-collapse';
 import {openDialog} from '../lib/utils/dialog';
+import {getTranslation} from '../lib/utils/translate';
 
 @customElement('form-card')
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
@@ -43,10 +44,13 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
           <div
             class="remove-group"
             ?hidden="${!this.groupStructure.repeatable}"
-            @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
+            @click="${() =>
+              this.confirmRemove(this.groupStructure.title || getTranslation(this.language, 'THIS_GROUP'))}"
           >
             Remove
-            ${!this.groupStructure.title || this.groupStructure.title.length > 15 ? 'group' : this.groupStructure.title}
+            ${!this.groupStructure.title || this.groupStructure.title.length > 15
+              ? getTranslation(this.language, 'GROUP')
+              : this.groupStructure.title}
             <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
           </div>
         </div>
@@ -54,7 +58,9 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
 
         <iron-collapse ?opened="${this.showSaveButton}">
           <div class="layout horizontal end-justified card-buttons actions-container">
-            <paper-button class="save-button" @tap="${() => this.saveChanges()}">Save</paper-button>
+            <paper-button class="save-button" @tap="${() => this.saveChanges()}"
+              >${getTranslation(this.language, 'SAVE')}</paper-button
+            >
           </div>
         </iron-collapse>
       </section>
@@ -76,7 +82,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
 
   saveChanges(): void {
     if (Object.keys(this._errors).length) {
-      fireEvent(this, 'toast', {text: 'Please check all fields and try again'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'CHECK_FIELDS_TRY_AGAIN')});
       return;
     }
     fireEvent(this, 'value-changed', {value: this.value});
@@ -87,7 +93,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
     openDialog<{text: string}>({
       dialog: 'confirmation-popup',
       dialogData: {
-        text: `Are you sure you want to delete ${groupName}`
+        text: `${getTranslation(this.language, 'CONFIRM_DELETE')} ${groupName}`
       }
     }).then((response: GenericObject) => {
       if (response.confirmed) {

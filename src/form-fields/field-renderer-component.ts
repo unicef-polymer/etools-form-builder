@@ -231,6 +231,12 @@ export class FieldRendererComponent extends LitElement {
           color: var(--secondary-text-color);
           font-weight: 400;
         }
+
+        @media print {
+          :host {
+            break-inside: avoid;
+          }
+        }
       `
     ];
   }

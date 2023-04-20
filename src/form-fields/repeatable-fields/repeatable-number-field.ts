@@ -3,6 +3,7 @@ import '@polymer/paper-input/paper-input';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
+import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('repeatable-number-field')
 export class RepeatableNumberField extends RepeatableBaseField<number> {
@@ -36,10 +37,10 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
       return null;
     }
     if (isNaN(value)) {
-      return 'Must be a number';
+      return getTranslation(this.language, 'MUST_BE_NUMBER');
     }
     const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
-    return integerValidation ? null : 'Must be an integer';
+    return integerValidation ? null : getTranslation(this.language, 'MUST_BE_INTEGER');
   }
 
   static get styles(): CSSResultArray {

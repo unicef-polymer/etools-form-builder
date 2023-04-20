@@ -1,6 +1,7 @@
 import {property, TemplateResult} from 'lit-element';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
+import {getTranslation} from '../../lib/utils/translate';
 
 export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
   set errorMessage(message: string | null) {
@@ -35,7 +36,7 @@ export abstract class BaseField<T> extends AbstractFieldBaseClass<T> {
   protected validateField(value: T): void {
     let errorMessage: string | null;
     if (this.required && !value && typeof value !== 'number') {
-      errorMessage = 'This field is required!';
+      errorMessage = getTranslation(this.language, 'REQUIRED_FIELD');
     } else {
       errorMessage = this.metaValidation(value);
     }

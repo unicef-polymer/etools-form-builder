@@ -5,6 +5,7 @@ import '@polymer/paper-radio-group/paper-radio-group';
 import '@polymer/paper-radio-button/paper-radio-button';
 import {PaperRadioButtonElement} from '@polymer/paper-radio-button/paper-radio-button';
 import {InputStyles} from '../../lib/styles/input-styles';
+import {getTranslation} from '../../lib/utils/translate';
 
 export type FieldOption = {
   value: any;
@@ -34,7 +35,7 @@ export class ScaleField extends BaseField<string | number | null> {
         </paper-radio-group>
 
         <paper-button ?hidden="${this.isReadonly}" @click="${() => this.valueChanged(null)}" class="clear-button">
-          <iron-icon icon="clear"></iron-icon>Clear
+          <iron-icon icon="clear"></iron-icon>${getTranslation(this.language, 'CLEAR')}
         </paper-button>
       </div>
       <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>

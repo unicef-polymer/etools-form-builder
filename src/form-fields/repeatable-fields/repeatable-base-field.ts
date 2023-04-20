@@ -1,6 +1,7 @@
 import {css, CSSResultArray, html, property, TemplateResult} from 'lit-element';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
+import {getTranslation} from '../../lib/utils/translate';
 
 export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]> {
   set errorMessage(messages: (string | null)[]) {
@@ -32,7 +33,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
               </div>`
           )}
           <paper-button class="add-button" ?hidden="${this.isReadonly}" @click="${() => this.addNewField()}">
-            Add
+            ${getTranslation(this.language, 'ADD')}
           </paper-button>
         </div>
       </div>
@@ -69,7 +70,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     }
     let errorMessage: string | null;
     if (this.required && !value && value !== null && typeof value !== 'number') {
-      errorMessage = 'This field is required!';
+      errorMessage = getTranslation(this.language, 'REQUIRED_FIELD');
     } else {
       errorMessage = this.metaValidation(value);
     }

@@ -11,6 +11,7 @@ import {TemplateResult, html, CSSResultArray, css, customElement} from 'lit-elem
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
+import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
@@ -47,7 +48,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                       @tap="${() => this.downloadFile(value)}"
                     >
                       <iron-icon icon="cloud-download" class="dw-icon"></iron-icon>
-                      Download
+                      ${getTranslation(this.language, 'DOWNLOAD')}
                     </paper-button>
 
                     <!--        Delete Button          -->
@@ -56,7 +57,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                       ?hidden="${this.isReadonly}"
                       @tap="${() => this.removeControl(index)}"
                     >
-                      Delete
+                      ${getTranslation(this.language, 'DELETE')}
                     </paper-button>
                   </div>
                 `
