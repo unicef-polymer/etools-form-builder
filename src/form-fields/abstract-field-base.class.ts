@@ -187,6 +187,25 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
             flex: 0 1 auto;
           }
         }
+
+        @media print {
+          .question-control {
+            align-items: start;
+          }
+
+          :host(text-field) .question-control {
+            min-height: 150px;
+          }
+
+          .question-control .container paper-radio-group {
+            flex-direction: column;
+            opacity: 1 !important;
+          }
+
+          .finding-container {
+            flex-direction: column;
+          }
+        }
       `
     ];
   }
