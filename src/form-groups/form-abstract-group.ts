@@ -57,7 +57,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     this._value = this.groupStructure.name === 'root' ? clone(value) : value;
     if (this.groupStructure.name === 'root') {
       const res: {count: number} = this.countCollapsePanels(this.groupStructure, {count: 0});
-      // if more then 2 collapse panels, show them collapsed by default
+      // if more than 2 collapse panels, show them collapsed by default
       this.collapsed = res.count > 2;
     }
   }
