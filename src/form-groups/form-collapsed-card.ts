@@ -17,6 +17,7 @@ const INTERVENTION_KEY: string = 'intervention';
 
 @customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
+  @property({type: Boolean}) collapsed: boolean = false;
   /**
    * Overrides readonly property
    * In collapsed card it must consider isEditMode property,
@@ -78,6 +79,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
           is-collapsible
           ?is-editable="${!this._readonly}"
           ?edit="${this.isEditMode}"
+          .collapsed="${this.collapsed}"
           @start-edit="${() => this.startEdit()}"
           @save="${() => this.saveChanges()}"
           @cancel="${() => this.cancelEdit()}"
