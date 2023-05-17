@@ -42,6 +42,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
   @property({type: String}) parentGroupName: string = '';
+  @property({type: Boolean}) collapsed: boolean = false;
   @property() language!: string;
   @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
   @property() protected _errors: GenericObject = {};
@@ -54,6 +55,11 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
    */
   set value(value: GenericObject) {
     this._value = this.groupStructure.name === 'root' ? clone(value) : value;
+    if (this.groupStructure.name === 'root') {
+      const res: {count: number} = this.countCollapsePanels(this.groupStructure, {count: 0});
+      // if more than 2 collapse panels, show them collapsed by default
+      this.collapsed = res.count > 2;
+    }
   }
   get value(): GenericObject {
     return this._value;
@@ -92,6 +98,24 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   disconnectedCallback(): void {
     super.disconnectedCallback();
     document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  countCollapsePanels(
+    groupStructure: BlueprintGroup | BlueprintField | Information,
+    res: {count: number}
+  ): {count: number} {
+    if (groupStructure.type === 'group' && groupStructure.children) {
+      groupStructure.children.forEach((child: BlueprintGroup | BlueprintField | Information) =>
+        this.countCollapsePanels(child, res)
+      );
+    }
+    const isAbstract: boolean = groupStructure.styling.includes(StructureTypes.ABSTRACT);
+    const isCard: boolean = groupStructure.styling.includes(StructureTypes.CARD);
+    const isCollapsed: boolean = groupStructure.styling.includes(StructureTypes.COLLAPSED);
+    if (!isAbstract && isCard && isCollapsed) {
+      res.count++;
+    }
+    return res;
   }
 
   handleLanguageChange(e: CustomEvent): void {
@@ -182,6 +206,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
+          .collapsed="${this.collapsed}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
@@ -198,6 +223,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .value="${value}"
           .metadata="${this.metadata}"
           .parentGroupName="${this.groupStructure.name}"
+          .collapsed="${this.collapsed}"
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
