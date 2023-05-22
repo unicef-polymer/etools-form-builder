@@ -150,6 +150,7 @@ export class EtoolsFbCard extends LitElement {
   }
 
   startEdit(): void {
+    this.collapsed = false;
     if (this.edit) {
       return;
     }
