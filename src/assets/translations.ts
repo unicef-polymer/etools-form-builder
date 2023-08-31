@@ -55,7 +55,7 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     ATTACHMENTS_FOR: 'Pièces jointes pour',
     PARTNER: 'Partenaire',
     CP_OUTPUT: 'Sortie CP',
-    PD_SPD: 'PD/SSFA',
+    PD_SPD: 'PD/SPD',
     TEXT_MUST_BE_LESS_CHARS: 'Le texte doit comporter moins de {0} caractères',
     DOES_NOT_MATCH_PATTERN: 'Ne correspond pas au modèle autorisé',
     NUMBER_MUST_BE_GREATER_THAN: 'Le nombre doit être supérieur à {0}',
