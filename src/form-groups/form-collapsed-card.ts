@@ -141,7 +141,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       case OUTPUT_KEY:
         return `${getTranslation(this.language, 'CP_OUTPUT')}: `;
       case INTERVENTION_KEY:
-        return `${getTranslation(this.language, 'PD_SSFA')}: `;
+        return `${getTranslation(this.language, 'PD_SPD')}: `;
       default:
         return '';
     }
