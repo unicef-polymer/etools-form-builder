@@ -13,10 +13,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "lint": "eslint dist/",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run lint"
+    "tsToJs": "rm -rf dist && tsc",
+    "watch": "tsc --watch",
+    "lint": "eslint ./src/**/*.ts --ext ts",
+    "format": "eslint --ext .ts ./src/**/*.ts --fix --ignore-path .gitignore",
+    "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
     "@types/ramda": "^0.26.43",
