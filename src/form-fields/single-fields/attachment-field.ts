@@ -1,4 +1,4 @@
-import '@unicef-polymer/etools-upload/etools-upload';
+import '@unicef-polymer/etools-unicef/scr/etools-upload/etools-upload';
 import {BaseField} from './base-field';
 import {
   AttachmentsHelper,
@@ -7,7 +7,8 @@ import {
   StoredAttachment,
   UploadedAttachment
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray, customElement} from 'lit-element';
+import {html, CSSResultArray, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';

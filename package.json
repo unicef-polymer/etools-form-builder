@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-form-builder",
   "description": "Etools FM Form Builder components",
-  "version": "2.1.9",
+  "version": "3.0.0-rc.1",
   "contributors": [
     "eTools Team"
   ],
@@ -13,25 +13,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --skipLibCheck",
-    "lint": "eslint src/",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint dist/",
     "prepare": "npm run build",
     "prepublishOnly": "npm run lint"
   },
   "dependencies": {
-    "@polymer/iron-collapse": "^3.0.1",
-    "@polymer/iron-icons": "^3.0.1",
-    "@polymer/paper-button": "^3.0.1",
-    "@polymer/paper-input": "^3.2.1",
-    "@polymer/paper-radio-button": "^3.0.1",
-    "@polymer/paper-radio-group": "^3.0.1",
-    "@polymer/paper-toast": "^3.0.1",
-    "@polymer/paper-toggle-button": "^3.0.1",
     "@types/ramda": "^0.26.43",
-    "@unicef-polymer/etools-dialog": "^7.0.0",
-    "@unicef-polymer/etools-dropdown": "^5.0.0",
-    "@unicef-polymer/etools-upload": "^4.5.0",
+    "@shoelace-style/shoelace": "^2.10.0",
+    "@unicef-polymer/etools-unicef": "^1.0.0-rc.33",
     "@webcomponents/webcomponentsjs": "^2.6.0",
+    "lit": "^2.7.5",
     "lit-element": "^2.5.1",
     "lit-translate": "^1.2.1",
     "ramda": "^0.27.1",

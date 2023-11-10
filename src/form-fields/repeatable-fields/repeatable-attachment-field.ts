@@ -1,4 +1,4 @@
-import '@unicef-polymer/etools-upload/etools-upload';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {
   AttachmentsHelper,
@@ -7,11 +7,15 @@ import {
   UploadedAttachment,
   UploadFinishedDetails
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, CSSResultArray, html, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
 import {getTranslation} from '../../lib/utils/translate';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
 
 @customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
@@ -37,28 +41,31 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                   <div class="layout horizontal file-container">
                     <!--        File name component          -->
                     <div class="filename-container file-selector__filename">
-                      <iron-icon class="file-icon" icon="attachment"></iron-icon>
+                      <etools-icon class="file-icon" name="attachment"></etools-icon>
                       <span class="filename" title="${value.filename}">${value.filename}</span>
                     </div>
 
                     <!--         Download Button         -->
-                    <paper-button
+                    <sl-button
+                      class="neutral"
+                      variant="text"
                       ?hidden="${!value.url}"
                       class="download-button file-selector__download"
-                      @tap="${() => this.downloadFile(value)}"
+                      @click="${this.downloadFile(value)}"
                     >
-                      <iron-icon icon="cloud-download" class="dw-icon"></iron-icon>
+                      <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                       ${getTranslation(this.language, 'DOWNLOAD')}
-                    </paper-button>
+                    </sl-button>
 
                     <!--        Delete Button          -->
-                    <paper-button
+                    <sl-button
+                      variant="danger"
                       class="delete-button file-selector__delete"
                       ?hidden="${this.isReadonly}"
-                      @tap="${() => this.removeControl(index)}"
+                      @click="${this.removeControl(index)}"
                     >
                       ${getTranslation(this.language, 'DELETE')}
-                    </paper-button>
+                    </sl-button>
                   </div>
                 `
               : ''
@@ -157,6 +164,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
       ...RepeatableBaseField.styles,
       SharedStyles,
       AttachmentsStyles,
+      buttonsStyles,
       css`
         .file-selector__type-dropdown {
           flex-basis: 25%;

@@ -1,5 +1,6 @@
-import {css, CSSResultArray, customElement, html, LitElement, property, TemplateResult} from 'lit-element';
-import '@polymer/iron-icons/iron-icons';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
 import {CardStyles} from '../styles/card-styles';
 import {elevationStyles} from '../styles/elevation-styles';
 import {FlexLayoutClasses} from '../styles/flex-layout-classes';
@@ -183,11 +184,14 @@ export class EtoolsFbCard extends LitElement {
         <header class="card-title-box with-bottom-line flex-header" ?is-collapsible="${this.isCollapsible}">
           ${this.isCollapsible
             ? html`
-                <paper-icon-button
+                <sl-button
+                  variant="primary"
+                  size="small"
                   class="flex-header__collapse"
-                  @tap="${() => this.toggleCollapse()}"
-                  icon="${this.collapsed ? 'expand-more' : 'expand-less'}"
-                ></paper-icon-button>
+                  @click="${() => this.toggleCollapse()}"
+                >
+                  <etools-icon name="${this.collapsed ? 'expand-more' : 'expand-less'}"></etools-icon>
+                </sl-button>
               `
             : ''}
           <div class="flex-header__title">${this.cardTitle}</div>
@@ -195,36 +199,40 @@ export class EtoolsFbCard extends LitElement {
           <div class="layout horizontal center flex-header__edit">
             ${this.isEditable
               ? html`
-                  <paper-icon-button
-                    icon="create"
-                    ?edit=${this.edit}
+                  <sl-button
+                    slot="trigger"
+                    variant="primary"
+                    size="small"
                     ?hidden="${this.hideEditButton}"
                     class="edit-button"
-                    @tap="${() => this.startEdit()}"
-                  ></paper-icon-button>
+                    @click="${() => this.startEdit()}"
+                  >
+                    <etools-icon name="create"></etools-icon>
+                  </sl-button>
                 `
               : ''}
           </div>
           <div class="flex-header__postfix"><slot name="postfix"></slot></div>
         </header>
-        <iron-collapse ?opened="${!this.collapsed}">
+        <etools-collapse ?opened="${!this.collapsed}">
           <section class="card-content-block">
             <slot name="content"></slot>
 
             ${this.isEditable && this.edit
               ? html`
                   <div class="layout horizontal end-justified card-buttons">
-                    <paper-button @tap="${() => this.cancel()}"
-                      >${getTranslation(this.language, 'CANCEL')}</paper-button
-                    >
-                    <paper-button class="save-button" @tap="${() => this.save()}"
-                      >${getTranslation(this.language, 'SAVE')}</paper-button
-                    >
+                    <sl-button variant="neutral" @click="${this.cancel}">
+                      ${getTranslation(this.language, 'CANCEL')}
+                    </sl-button>
+
+                    <sl-button variant="primary" class="save-button" @click="${this.save}">
+                      ${getTranslation(this.language, 'SAVE')}
+                    </sl-button>
                   </div>
                 `
               : ''}
           </section>
-        </iron-collapse>
+        </etools-collapse>
       </div>
     `;
   }

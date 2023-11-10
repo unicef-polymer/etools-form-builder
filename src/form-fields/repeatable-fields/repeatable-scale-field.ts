@@ -1,10 +1,13 @@
-import {html, TemplateResult, property, CSSResultArray, css, customElement} from 'lit-element';
-import {repeat} from 'lit-html/directives/repeat';
-import '@polymer/paper-radio-group/paper-radio-group';
-import '@polymer/paper-radio-button/paper-radio-button';
-import {PaperRadioButtonElement} from '@polymer/paper-radio-button/paper-radio-button';
+import {css, html, CSSResultArray, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
+import {repeat} from 'lit/directives/repeat.js';
+import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
+import '@shoelace-style/shoelace/dist/components/radio/radio.js';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
+import {getTranslation} from '../../lib/utils/translate';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {FieldOption} from '..';
 
@@ -15,35 +18,33 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
     return html`
       ${InputStyles}
       <div class="container">
-        <paper-radio-group
+        <sl-radio-group
           class="radio-group"
-          selected="${value}"
-          @iron-select="${({detail}: CustomEvent) => this.onSelect(detail.item, index)}"
+          .value="${value}"
+          @sl-change="${(e: any) => this.onSelect(e.target.value, index)}"
         >
           ${repeat(
             this.options,
             (option: FieldOption | string | number) => html`
-              <paper-radio-button class="radio-button" name="${this.getValue(option)}">
-                ${this.getLabel(option)}
-              </paper-radio-button>
+              <sl-radio class="radio-button" value="${this.getValue(option)}"> ${this.getLabel(option)} </sl-radio>
             `
           )}
-        </paper-radio-group>
-
-        <paper-button
+        </sl-radio-group>
+        <sl-button
+          variant="primary"
           ?hidden="${this.isReadonly}"
           @click="${() => this.valueChanged(null, index)}"
           class="clear-button"
         >
-          <iron-icon icon="clear"></iron-icon>Clear
-        </paper-button>
+          <etools-icon name="clear" slot="prefix"></etools-icon>
+          ${getTranslation(this.language, 'CLEAR')}
+        </sl-button>
       </div>
     `;
   }
 
-  protected onSelect(item: PaperRadioButtonElement, index: number): void {
-    const newValue: string = item.get('name');
-    this.valueChanged(newValue, index);
+  protected onSelect(itemValue: string, index: number): void {
+    this.valueChanged(itemValue, index);
   }
 
   protected getLabel(option: FieldOption | string | number): unknown {
@@ -62,6 +63,7 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
     // language=CSS
     return [
       ...AbstractFieldBaseClass.styles,
+      buttonsStyles,
       css`
         .container {
           position: relative;

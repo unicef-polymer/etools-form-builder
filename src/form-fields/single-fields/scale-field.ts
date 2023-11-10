@@ -1,9 +1,11 @@
-import {html, TemplateResult, property, CSSResultArray, css, customElement} from 'lit-element';
+import {css, CSSResultArray, html, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
-import {repeat} from 'lit-html/directives/repeat';
-import '@polymer/paper-radio-group/paper-radio-group';
-import '@polymer/paper-radio-button/paper-radio-button';
-import {PaperRadioButtonElement} from '@polymer/paper-radio-button/paper-radio-button';
+import {repeat} from 'lit/directives/repeat.js';
+import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import '@shoelace-style/shoelace/dist/components/radio/radio.js';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {getTranslation} from '../../lib/utils/translate';
 
@@ -19,24 +21,27 @@ export class ScaleField extends BaseField<string | number | null> {
     return html`
       ${InputStyles}
       <div class="container">
-        <paper-radio-group
+        <sl-radio-group
           class="radio-group"
-          selected="${this.value}"
-          @iron-select="${({detail}: CustomEvent) => this.onSelect(detail.item)}"
+          .value="${this.value}"
+          @sl-change="${(e: any) => this.onSelect(e.target.value)}"
         >
           ${repeat(
             this.options,
             (option: FieldOption | string | number) => html`
-              <paper-radio-button class="radio-button" name="${this.getValue(option)}">
-                ${this.getLabel(option)}
-              </paper-radio-button>
+              <sl-radio class="radio-button" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
             `
           )}
-        </paper-radio-group>
-
-        <paper-button ?hidden="${this.isReadonly}" @click="${() => this.valueChanged(null)}" class="clear-button">
-          <iron-icon icon="clear"></iron-icon>${getTranslation(this.language, 'CLEAR')}
-        </paper-button>
+        </sl-radio-group>
+        <sl-button
+          variant="primary"
+          ?hidden="${this.isReadonly}"
+          @click="${() => this.valueChanged(null)}"
+          class="clear-button"
+        >
+          <etools-icon name="clear" slot="prefix"></etools-icon>
+          ${getTranslation(this.language, 'CLEAR')}
+        </sl-button>
       </div>
       <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>
     `;
@@ -50,12 +55,11 @@ export class ScaleField extends BaseField<string | number | null> {
     return typeof option === 'object' ? option.value : option;
   }
 
-  protected onSelect(item: PaperRadioButtonElement): void {
-    const newValue: string = item.get('name');
-    if (newValue !== this.value) {
+  protected onSelect(itemValue: string): void {
+    if (itemValue !== this.value) {
       this.touched = true;
     }
-    this.valueChanged(newValue);
+    this.valueChanged(itemValue);
   }
 
   protected customValidation(): string | null {
@@ -66,6 +70,7 @@ export class ScaleField extends BaseField<string | number | null> {
     // language=CSS
     return [
       ...BaseField.styles,
+      buttonsStyles,
       css`
         .container {
           position: relative;

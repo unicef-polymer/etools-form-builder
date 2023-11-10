@@ -1,8 +1,10 @@
-import {LitElement, property, TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import '../form-fields/single-fields/text-field';
 import '../form-fields/single-fields/number-field';
 import '../form-fields/single-fields/scale-field';
-import '@polymer/paper-input/paper-textarea';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
@@ -13,7 +15,7 @@ import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
 import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
-import {live} from 'lit-html/directives/live';
+import {live} from 'lit/directives/live.js';
 import {openDialog} from '../lib/utils/dialog';
 import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 import {getTranslation} from '../lib/utils/translate';
@@ -178,12 +180,12 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     const value: GenericObject[] = (this.value && this.value[groupStructure.name]) || [{}];
     return html`
       ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
-      <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
+      <sl-button variant="primary" class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
         ${getTranslation(this.language, 'ADD')}
         ${!groupStructure.title || groupStructure.title.length > 15
           ? getTranslation(this.language, 'GROUP')
           : groupStructure.title}
-      </paper-button>
+      </sl-button>
     `;
   }
 
@@ -337,6 +339,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       CardStyles,
       FlexLayoutClasses,
       FormBuilderCardStyles,
+      buttonsStyles,
       css`
         :host {
           display: flex;

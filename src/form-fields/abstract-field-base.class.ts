@@ -1,4 +1,5 @@
-import {CSSResultArray, LitElement, property, css, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property} from 'lit/decorators.js';
 import {FieldValidator, validate} from '../lib/utils/validations.helper';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
 

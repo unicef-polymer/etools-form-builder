@@ -1,6 +1,7 @@
-import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, html, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
-import '@polymer/paper-input/paper-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
 import {InputStyles} from '../../lib/styles/input-styles';
 
 @customElement('text-field')
@@ -8,20 +9,19 @@ export class TextField extends BaseField<string> {
   protected controlTemplate(): TemplateResult {
     return html`
       ${InputStyles}
-      <paper-textarea
-        id="textarea"
+      <etools-textarea
+        id="otherInfo"
         class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
         .value="${this.value}"
         @value-changed="${({detail}: CustomEvent) => this.valueChanged(detail.value)}"
         @focus="${() => (this.touched = true)}"
-        placeholder="&#8212;"
         ?readonly="${this.isReadonly}"
         ?invalid="${this.errorMessage}"
         error-message="${this.errorMessage}"
       >
-      </paper-textarea>
+      </etools-textarea>
     `;
   }
 
@@ -34,7 +34,7 @@ export class TextField extends BaseField<string> {
     return [
       ...BaseField.styles,
       css`
-        :host(.wide) paper-textarea {
+        :host(.wide) etools-textarea {
           padding-left: 0;
         }
         @media (max-width: 380px) {

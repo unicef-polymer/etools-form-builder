@@ -4,10 +4,18 @@ import {GenericObject} from '../lib/types/global.types';
 import {InputStyles} from '../lib/styles/input-styles';
 import {DialogStyles} from '../lib/styles/dialog.styles';
 import {getTranslation} from '../lib/utils/translate';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog.js';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown.js';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
 
 export function template(this: FormAttachmentsPopup): TemplateResult {
   return html`
     ${InputStyles} ${DialogStyles}
+    <style>
+      ${buttonsStyles}
+    </style>
     <etools-dialog
       id="form-attachments-dialog"
       size="md"
@@ -51,28 +59,31 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
 
               <!--        File name component          -->
               <div class="filename-container file-selector__filename">
-                <iron-icon class="file-icon" icon="attachment"></iron-icon>
+                <etools-icon class="file-icon" name="attachment"></etools-icon>
                 <span class="filename" title="${attachment.filename}">${attachment.filename}</span>
               </div>
 
               <!--         Download Button         -->
-              <paper-button
+              <sl-button
+                class="neutral"
+                variant="text"
                 ?hidden="${!attachment.url}"
                 class="download-button file-selector__download"
-                @tap="${() => this.downloadFile(attachment)}"
+                @click="${this.downloadFile(attachment)}"
               >
-                <iron-icon icon="cloud-download" class="dw-icon"></iron-icon>
+                <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                 ${getTranslation(this.language, 'DOWNLOAD')}
-              </paper-button>
+              </sl-button>
 
               <!--        Delete Button          -->
-              <paper-button
+              <sl-button
+                variant="danger"
                 class="delete-button file-selector__delete"
                 ?hidden="${this.readonly}"
-                @tap="${() => this.deleteAttachment(index)}"
+                @click="${this.deleteAttachment(index)}"
               >
                 ${getTranslation(this.language, 'DELETE')}
-              </paper-button>
+              </sl-button>
             </div>
           `
         )}

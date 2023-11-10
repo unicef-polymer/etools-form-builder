@@ -1,9 +1,9 @@
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@unicef-polymer/etools-upload/etools-upload-multi';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
-import '@polymer/paper-button/paper-button';
-import '@polymer/iron-icons/iron-icons';
-import {css, CSSResultArray, customElement, LitElement, property, query, TemplateResult} from 'lit-element';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
+import {deleteFileFromDexie} from '@unicef-polymer/etools-unicef/src/etools-upload/offline/dexie-operations';
+import {css, CSSResultArray, LitElement, TemplateResult} from 'lit';
+import {property, query, customElement} from 'lit/decorators.js';
 import {GenericObject} from '../lib/types/global.types';
 import {BlueprintMetadata} from '../lib/types/form-builder.types';
 import {clone, equals} from 'ramda';
@@ -12,7 +12,6 @@ import {fireEvent} from '../lib/utils/fire-custom-event';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../lib/styles/attachments.styles';
 import {AttachmentsHelper} from './form-attachments-popup.helper';
-import {deleteFileFromDexie} from '@unicef-polymer/etools-upload/offline/dexie-operations';
 import {getTranslation} from '../lib/utils/translate';
 
 export type FormBuilderAttachmentsPopupData = {

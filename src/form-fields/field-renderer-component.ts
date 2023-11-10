@@ -1,4 +1,5 @@
-import {css, CSSResultArray, customElement, html, LitElement, property, TemplateResult} from 'lit-element';
+import {css, html, CSSResultArray, LitElement, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {BlueprintField} from '../lib/types/form-builder.types';
 import {FieldValidator} from '../lib/utils/validations.helper';
 import {FieldOption} from './single-fields/scale-field';

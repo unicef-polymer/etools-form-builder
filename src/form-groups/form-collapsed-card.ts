@@ -1,4 +1,5 @@
-import {TemplateResult, html, property, customElement} from 'lit-element';
+import {TemplateResult, html} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {clone} from 'ramda';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {openDialog} from '../lib/utils/dialog';
@@ -10,6 +11,7 @@ import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
 import '../lib/additional-components/confirmation-dialog';
 import {getTranslation} from '../lib/utils/translate';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 
 const PARTNER_KEY: string = 'partner';
 const OUTPUT_KEY: string = 'output';
@@ -87,12 +89,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
           <!-- Open Attachments popup button -->
           <div slot="actions" class="layout horizontal center">${this.getAdditionalButtons()}</div>
           <div slot="postfix" class="layout horizontal center" ?hidden="${!this.groupStructure.repeatable}">
-            <paper-icon-button
-              icon="close"
+            <etools-icon-button
               class="attachments-warning"
+              name="close"
               @click="${() =>
                 this.confirmRemove(this.groupStructure.title || getTranslation(this.language, 'THIS_GROUP'))}"
-            ></paper-icon-button>
+            >
+            </etools-icon-button>
           </div>
           <div slot="content">${this.renderGroupChildren()}</div>
         </etools-fb-card>
@@ -126,11 +129,14 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     return hideAttachmentsButton
       ? html``
       : html`
-          <iron-icon icon="warning" class="attachments-warning" ?hidden="${!this._errors.attachments}"></iron-icon>
-          <paper-button @click="${() => this.openAttachmentsPopup()}" class="attachments-button">
-            <iron-icon icon="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"></iron-icon>
+          <etools-icon id="attachments-warning" name="warning" ?hidden="${!this._errors.attachments}"></etools-icon>
+          <sl-button id="primary" variant="primary" @click="${this.openAttachmentsPopup}">
+            <etools-icon
+              slot="prefix"
+              name="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"
+            ></etools-icon>
             ${this.getAttachmentsBtnText(this.value?.attachments?.length)}
-          </paper-button>
+          </sl-button>
         `;
   }
 

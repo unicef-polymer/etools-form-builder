@@ -1,4 +1,5 @@
-import {LitElement, property, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, html, CSSResultArray, LitElement} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {fireEvent} from '../utils/fire-custom-event';
 import {getTranslation} from '../utils/translate';
 
