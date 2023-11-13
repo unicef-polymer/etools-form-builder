@@ -1,4 +1,4 @@
-import '@unicef-polymer/etools-unicef/scr/etools-upload/etools-upload';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload';
 import {BaseField} from './base-field';
 import {
   AttachmentsHelper,
