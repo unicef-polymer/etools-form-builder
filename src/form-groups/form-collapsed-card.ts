@@ -25,12 +25,15 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * In collapsed card it must consider isEditMode property,
    * components inside card are readonly if isEditMode is off or if card is readonly
    */
-  set readonly(state: boolean) {
-    this._readonly = state;
-  }
-  get readonly(): boolean {
-    return this._readonly || !this.isEditMode;
-  }
+
+  // set readonly(state: boolean) {
+  //   this._readonly = state;
+  // }
+
+  // @dci seems to not be used, use instead getIsReadonly
+  // get readonly(): boolean {
+  //   return this._readonly || !this.isEditMode;
+  // }
   @property() protected isEditMode: boolean = false;
   @property({type: Boolean, attribute: 'readonly', reflect: true}) protected _readonly: boolean = true;
 
@@ -69,6 +72,9 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   @property() protected _value: GenericObject = {};
   protected originalValue: GenericObject = {};
 
+  getIsReadonly() {
+    return this._readonly || !this.isEditMode;
+  }
   /**
    * Extends parent render method for handling additional types (StructureTypes.ATTACHMENTS_BUTTON in our case)
    * and adds etools-card as container wrapper
@@ -79,7 +85,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         <etools-fb-card
           card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
           is-collapsible
-          ?is-editable="${!this._readonly}"
+          ?is-editable="${!this.getIsReadonly()}"
           ?edit="${this.isEditMode}"
           .collapsed="${this.collapsed}"
           @start-edit="${() => this.startEdit()}"
@@ -122,7 +128,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    */
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
-      (this._readonly && !this.value?.attachments?.length) ||
+      (this.getIsReadonly() && !this.value?.attachments?.length) ||
       !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField | Information) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
@@ -166,7 +172,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * Only then we can reset all changed values to their original
    */
   cancelEdit(): void {
-    this.requestUpdate().then(() => {
+    this.requestUpdate();
+    this.updateComplete.then(() => {
       this._value = clone(this.originalValue);
       this.isEditMode = false;
     });
