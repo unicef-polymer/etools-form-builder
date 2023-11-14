@@ -1,5 +1,5 @@
 import {FormAttachmentsPopup} from './form-attachments-popup';
-import {html, TemplateResult} from 'lit-html';
+import {html, TemplateResult} from 'lit';
 import {GenericObject} from '../lib/types/global.types';
 import {InputStyles} from '../lib/styles/input-styles';
 import {DialogStyles} from '../lib/styles/dialog.styles';
