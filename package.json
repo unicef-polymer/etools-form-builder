@@ -22,7 +22,7 @@
   "dependencies": {
     "@types/ramda": "^0.26.43",
     "@shoelace-style/shoelace": "^2.10.0",
-    "@unicef-polymer/etools-unicef": "^1.0.0-rc.33",
+    "@unicef-polymer/etools-unicef": "^1.0.0-rc.34",
     "@webcomponents/webcomponentsjs": "^2.6.0",
     "lit": "^2.7.5",
     "lit-element": "^2.5.1",
