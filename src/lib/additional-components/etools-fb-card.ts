@@ -185,9 +185,8 @@ export class EtoolsFbCard extends LitElement {
           ${this.isCollapsible
             ? html`
                 <sl-button
-                  variant="primary"
-                  size="small"
-                  class="flex-header__collapse"
+                  class="neutral flex-header__collapse"
+                  variant="text"
                   @click="${() => this.toggleCollapse()}"
                 >
                   <etools-icon name="${this.collapsed ? 'expand-more' : 'expand-less'}"></etools-icon>
@@ -201,10 +200,10 @@ export class EtoolsFbCard extends LitElement {
               ? html`
                   <sl-button
                     slot="trigger"
-                    variant="primary"
+                    variant="text"
                     size="small"
                     ?hidden="${this.hideEditButton}"
-                    class="edit-button"
+                    class="neutral edit-button"
                     @click="${() => this.startEdit()}"
                   >
                     <etools-icon name="create"></etools-icon>

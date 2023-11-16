@@ -29,15 +29,15 @@ export class ScaleField extends BaseField<string | number | null> {
           ${repeat(
             this.options,
             (option: FieldOption | string | number) => html`
-              <sl-radio class="radio-button" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
+              <sl-radio class="radio-button" disabled="${this.isReadonly}" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
             `
           )}
         </sl-radio-group>
         <sl-button
-          variant="primary"
+          class="neutral clear-button"
+          variant="text"
           ?hidden="${this.isReadonly}"
           @click="${() => this.valueChanged(null)}"
-          class="clear-button"
         >
           <etools-icon name="clear" slot="prefix"></etools-icon>
           ${getTranslation(this.language, 'CLEAR')}

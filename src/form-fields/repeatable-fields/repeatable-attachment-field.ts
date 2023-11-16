@@ -47,10 +47,9 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
                     <!--         Download Button         -->
                     <sl-button
-                      class="neutral"
+                      class="neutral download-button file-selector__download"
                       variant="text"
                       ?hidden="${!value.url}"
-                      class="download-button file-selector__download"
                       @click="${this.downloadFile(value)}"
                     >
                       <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>

@@ -31,10 +31,10 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
           )}
         </sl-radio-group>
         <sl-button
-          variant="primary"
+          class="neutral clear-button"
+          variant="text"
           ?hidden="${this.isReadonly}"
           @click="${() => this.valueChanged(null, index)}"
-          class="clear-button"
         >
           <etools-icon name="clear" slot="prefix"></etools-icon>
           ${getTranslation(this.language, 'CLEAR')}

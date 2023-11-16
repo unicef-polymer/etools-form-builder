@@ -398,7 +398,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         .attachments-warning {
           color: red;
         }
-        paper-icon-button[icon='close'] {
+        etools-icon-button[name='close'] {
           cursor: pointer;
           color: var(--primary-text-color);
         }

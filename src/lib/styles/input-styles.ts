@@ -134,5 +134,10 @@ export const InputStyles: TemplateResult = html`
         color: var(--gray-50, rgba(0, 0, 0, 0.5));
       }
     }
+    sl-radio {
+        display: inline-block;
+        margin-inline-end: 15px;
+        --sl-input-font-size-medium: 14px;
+    }
   </style>
 `;
