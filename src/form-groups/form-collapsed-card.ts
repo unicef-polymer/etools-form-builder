@@ -73,7 +73,6 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   protected originalValue: GenericObject = {};
 
   getIsReadonly() {
-    console.log(this._readonly || !this.isEditMode, this._readonly, !this.isEditMode)
     return this._readonly || !this.isEditMode;
   }
   /**
