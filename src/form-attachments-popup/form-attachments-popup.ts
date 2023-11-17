@@ -13,7 +13,7 @@ import {SharedStyles} from '../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../lib/styles/attachments.styles';
 import {AttachmentsHelper} from './form-attachments-popup.helper';
 import {getTranslation} from '../lib/utils/translate';
-import { buttonsStyles } from "@unicef-polymer/etools-unicef/src/styles/button-styles";
+import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
 
 export type FormBuilderAttachmentsPopupData = {
   attachments: StoredAttachment[];

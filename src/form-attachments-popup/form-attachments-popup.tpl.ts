@@ -17,11 +17,11 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
       ${buttonsStyles},
       etools-icon[name='error-outline'],
       .delete-button {
-          color: var(--etools-upload-danger-color, #ea4022);
+        color: var(--etools-upload-danger-color, #ea4022);
       }
 
       .delete-button::part(base) {
-          color: #f1572a;
+        color: #f1572a;
       }
     </style>
     <etools-dialog
