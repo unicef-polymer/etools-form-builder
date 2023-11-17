@@ -47,11 +47,10 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
                     <!--         Download Button         -->
                     <sl-button
-                      class="neutral"
+                      class="neutral download-button file-selector__download"
                       variant="text"
                       ?hidden="${!value.url}"
-                      class="download-button file-selector__download"
-                      @click="${this.downloadFile(value)}"
+                      @click="${() => this.downloadFile(value)}"
                     >
                       <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                       ${getTranslation(this.language, 'DOWNLOAD')}
@@ -60,9 +59,9 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                     <!--        Delete Button          -->
                     <sl-button
                       variant="danger"
-                      class="delete-button file-selector__delete"
+                      class="file-selector__delete"
                       ?hidden="${this.isReadonly}"
-                      @click="${this.removeControl(index)}"
+                      @click="${() => this.removeControl(index)}"
                     >
                       ${getTranslation(this.language, 'DELETE')}
                     </sl-button>

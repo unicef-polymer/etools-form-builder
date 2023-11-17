@@ -43,10 +43,10 @@ export enum StructureTypes {
 export class FormAbstractGroup extends LitElement implements IFormBuilderAbstractGroup {
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
-  @property({type: String}) parentGroupName: string = '';
-  @property({type: Boolean}) collapsed: boolean = false;
+  @property({type: String}) parentGroupName = '';
+  @property({type: Boolean}) collapsed = false;
   @property() language!: string;
-  @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
+  @property({type: Boolean, attribute: 'readonly'}) readonly = false;
   @property() protected _errors: GenericObject = {};
   @property() protected _value: GenericObject = {};
   computedPath: string[] = [];
@@ -66,7 +66,9 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   get value(): GenericObject {
     return this._value;
   }
-
+  isReadonly() {
+    return this.readonly;
+  }
   /**
    * Setter for handling error.
    * Normally we wouldn't have errors as string or string[] for FormGroups.
@@ -155,7 +157,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       <field-renderer
         .field="${blueprintField}"
-        ?readonly="${live(this.readonly)}"
+        ?readonly="${live(this.isReadonly())}"
         .value="${this.value && this.value[blueprintField.name]}"
         .validations="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
         .errorMessage="${this.getErrorMessage(blueprintField.name)}"
@@ -212,7 +214,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
           @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
@@ -229,7 +231,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
@@ -246,7 +248,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
@@ -398,7 +400,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         .attachments-warning {
           color: red;
         }
-        paper-icon-button[icon='close'] {
+        etools-icon-button[name='close'] {
           cursor: pointer;
           color: var(--primary-text-color);
         }

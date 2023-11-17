@@ -13,13 +13,13 @@ import '../lib/additional-components/confirmation-dialog';
 import {getTranslation} from '../lib/utils/translate';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 
-const PARTNER_KEY: string = 'partner';
-const OUTPUT_KEY: string = 'output';
-const INTERVENTION_KEY: string = 'intervention';
+const PARTNER_KEY = 'partner';
+const OUTPUT_KEY = 'output';
+const INTERVENTION_KEY = 'intervention';
 
 @customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
-  @property({type: Boolean}) collapsed: boolean = false;
+  @property({type: Boolean}) collapsed = false;
   /**
    * Overrides readonly property
    * In collapsed card it must consider isEditMode property,
@@ -34,8 +34,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   // get readonly(): boolean {
   //   return this._readonly || !this.isEditMode;
   // }
-  @property() protected isEditMode: boolean = false;
-  @property({type: Boolean, attribute: 'readonly', reflect: true}) protected _readonly: boolean = true;
+  @property() protected isEditMode = false;
+  @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly = false;
 
   /**
    * Overrides errors setter
@@ -72,8 +72,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   @property() protected _value: GenericObject = {};
   protected originalValue: GenericObject = {};
 
-  getIsReadonly() {
-    return this._readonly || !this.isEditMode;
+  isReadonly() {
+    return this.readonly || !this.isEditMode;
   }
   /**
    * Extends parent render method for handling additional types (StructureTypes.ATTACHMENTS_BUTTON in our case)
@@ -85,7 +85,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         <etools-fb-card
           card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
           is-collapsible
-          ?is-editable="${!this.getIsReadonly()}"
+          ?is-editable="${!this.readonly}"
           ?edit="${this.isEditMode}"
           .collapsed="${this.collapsed}"
           @start-edit="${() => this.startEdit()}"
@@ -128,7 +128,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    */
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
-      (this.getIsReadonly() && !this.value?.attachments?.length) ||
+      (this.readonly && !this.value?.attachments?.length) ||
       !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField | Information) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
@@ -136,7 +136,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       ? html``
       : html`
           <etools-icon id="attachments-warning" name="warning" ?hidden="${!this._errors.attachments}"></etools-icon>
-          <sl-button id="primary" variant="primary" @click="${this.openAttachmentsPopup}">
+          <sl-button id="primary" variant="text" class="primary" @click="${this.openAttachmentsPopup}">
             <etools-icon
               slot="prefix"
               name="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"
@@ -160,7 +160,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   }
 
   startEdit(): void {
-    if (this._readonly) {
+    if (this.readonly) {
       return;
     }
     this.isEditMode = true;
@@ -222,7 +222,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         computedPath: this.computedPath.concat([this.groupStructure.name, 'attachments']),
         errors: this._errors.attachments
       },
-      readonly: this._readonly
+      readonly: this.readonly
     }).then((response: GenericObject) => {
       if (!response.confirmed) {
         return;
@@ -259,7 +259,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     });
   }
 
-  protected getAttachmentsBtnText(attachmentsCount: number = 0): string {
+  protected getAttachmentsBtnText(attachmentsCount = 0): string {
     if (attachmentsCount === 1) {
       return `${attachmentsCount} ${getTranslation(this.language, 'FILE')}`;
     } else if (attachmentsCount > 1) {

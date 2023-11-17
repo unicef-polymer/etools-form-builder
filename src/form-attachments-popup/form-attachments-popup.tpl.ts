@@ -14,7 +14,10 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
   return html`
     ${InputStyles} ${DialogStyles}
     <style>
-      ${buttonsStyles}
+      ${buttonsStyles},
+      etools-icon[name='error-outline'] {
+        color: var(--etools-upload-danger-color, #ea4022);
+      }
     </style>
     <etools-dialog
       id="form-attachments-dialog"
@@ -65,11 +68,10 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
 
               <!--         Download Button         -->
               <sl-button
-                class="neutral"
                 variant="text"
                 ?hidden="${!attachment.url}"
                 class="download-button file-selector__download"
-                @click="${this.downloadFile(attachment)}"
+                @click="${() => this.downloadFile(attachment)}"
               >
                 <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                 ${getTranslation(this.language, 'DOWNLOAD')}
@@ -77,10 +79,10 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
 
               <!--        Delete Button          -->
               <sl-button
-                variant="danger"
-                class="delete-button file-selector__delete"
+                variant="text"
+                class="danger file-selector__delete"
                 ?hidden="${this.readonly}"
-                @click="${this.deleteAttachment(index)}"
+                @click="${() => this.deleteAttachment(index)}"
               >
                 ${getTranslation(this.language, 'DELETE')}
               </sl-button>
