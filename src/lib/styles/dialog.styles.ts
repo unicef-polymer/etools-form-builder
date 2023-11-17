@@ -14,6 +14,7 @@ export const DialogStyles: TemplateResult = html`
 
     #form-attachments-dialog etools-dialog {
       --etools-dialog-primary-color: var(--primary-color);
+      --sl-color-primary-500: var(--primary-color);
       --etools-dialog-content: {
         min-height: 80px;
         padding-bottom: 8px !important;

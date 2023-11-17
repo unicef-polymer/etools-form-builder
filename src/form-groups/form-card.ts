@@ -11,6 +11,12 @@ import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import {SharedStyles} from '../lib/styles/shared-styles';
+import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
+import {elevationStyles} from '../lib/styles/elevation-styles';
+import {CardStyles} from '../lib/styles/card-styles';
+import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
+import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 
 @customElement('form-card')
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
@@ -18,7 +24,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   /**
    * Show save button only if value was changed by user
    */
-  @property() private showSaveButton: boolean = false;
+  @property() private showSaveButton = false;
 
   /**
    * Overrides value property. Saves originalValue.
@@ -41,7 +47,15 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
    * adds card-container html wrapper and dynamic save button
    */
   static get styles(): CSSResultArray {
-    return [buttonsStyles];
+    return [
+      SharedStyles,
+      pageLayoutStyles,
+      elevationStyles,
+      CardStyles,
+      FlexLayoutClasses,
+      FormBuilderCardStyles,
+      buttonsStyles
+    ];
   }
 
   render(): TemplateResult {

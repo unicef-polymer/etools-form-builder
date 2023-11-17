@@ -6,6 +6,7 @@ import {elevationStyles} from '../styles/elevation-styles';
 import {FlexLayoutClasses} from '../styles/flex-layout-classes';
 import {fireEvent} from '../utils/fire-custom-event';
 import {getTranslation} from '../utils/translate';
+import { buttonsStyles } from "@unicef-polymer/etools-unicef/src/styles/button-styles";
 
 @customElement('etools-fb-card')
 export class EtoolsFbCard extends LitElement {
@@ -31,11 +32,17 @@ export class EtoolsFbCard extends LitElement {
       elevationStyles,
       CardStyles,
       FlexLayoutClasses,
+      buttonsStyles,
       css`
         :host {
           display: block;
         }
-
+        
+        etools-icon {
+            cursor: pointer;
+            margin: 6px;
+        }
+        
         .card-container {
           background-color: var(--primary-background-color);
         }
@@ -54,11 +61,10 @@ export class EtoolsFbCard extends LitElement {
         }
 
         .save-button {
-          color: var(--primary-background-color);
-          background-color: var(--primary-color);
+          --sl-color-primary-500: var(--primary-color);
         }
 
-        .edit-button {
+        .edit-button, etools-icon[name="create"] {
           color: var(--gray-mid);
         }
 
@@ -184,13 +190,7 @@ export class EtoolsFbCard extends LitElement {
         <header class="card-title-box with-bottom-line flex-header" ?is-collapsible="${this.isCollapsible}">
           ${this.isCollapsible
             ? html`
-                <sl-button
-                  class="neutral flex-header__collapse"
-                  variant="text"
-                  @click="${() => this.toggleCollapse()}"
-                >
-                  <etools-icon name="${this.collapsed ? 'expand-more' : 'expand-less'}"></etools-icon>
-                </sl-button>
+                <etools-icon name="${this.collapsed ? 'expand-more' : 'expand-less'}" @click="${() => this.toggleCollapse()}"></etools-icon>
               `
             : ''}
           <div class="flex-header__title">${this.cardTitle}</div>
@@ -198,16 +198,7 @@ export class EtoolsFbCard extends LitElement {
           <div class="layout horizontal center flex-header__edit">
             ${this.isEditable
               ? html`
-                  <sl-button
-                    slot="trigger"
-                    variant="text"
-                    size="small"
-                    ?hidden="${this.hideEditButton}"
-                    class="neutral edit-button"
-                    @click="${() => this.startEdit()}"
-                  >
-                    <etools-icon name="create"></etools-icon>
-                  </sl-button>
+                    <etools-icon  slot="trigger" ?hidden="${this.hideEditButton}" @click="${() => this.startEdit()}" name="create"></etools-icon>
                 `
               : ''}
           </div>
@@ -220,7 +211,7 @@ export class EtoolsFbCard extends LitElement {
             ${this.isEditable && this.edit
               ? html`
                   <div class="layout horizontal end-justified card-buttons">
-                    <sl-button variant="neutral" @click="${this.cancel}">
+                    <sl-button variant="text" class="neutral" @click="${this.cancel}">
                       ${getTranslation(this.language, 'CANCEL')}
                     </sl-button>
 

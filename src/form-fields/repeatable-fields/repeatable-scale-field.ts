@@ -79,7 +79,7 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
           flex-wrap: wrap;
         }
 
-        :host([is-readonly]) paper-radio-group {
+        :host([is-readonly]) sl-radio-group {
           pointer-events: none;
           opacity: 0.55;
         }

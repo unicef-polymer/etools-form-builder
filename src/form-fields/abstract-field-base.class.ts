@@ -7,7 +7,7 @@ import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
  * Class that contains common properties and methods for single and repeatable fields
  */
 export abstract class AbstractFieldBaseClass<T> extends LitElement {
-  @property({type: String}) questionText: string = '';
+  @property({type: String}) questionText = '';
   @property() language!: string;
   @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
     this._readonly = readonly;
@@ -17,18 +17,18 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   get isReadonly(): boolean {
     return this._readonly;
   }
-  @property({type: Boolean, attribute: 'required'}) required: boolean = false;
-  @property() placeholder: string = '';
+  @property({type: Boolean, attribute: 'required'}) required = false;
+  @property() placeholder = '';
   @property() value: T | null = null;
   validators: FieldValidator[] = [];
-  touched: boolean = false;
+  touched = false;
   set defaultValue(value: any) {
     this._defaultValue = value;
     this.setDefaultValue(this._readonly, value);
     this.requestUpdate();
   }
   private _defaultValue: any;
-  private _readonly: boolean = false;
+  private _readonly = false;
 
   constructor() {
     super();

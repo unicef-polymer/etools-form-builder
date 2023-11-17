@@ -29,7 +29,7 @@ export class ScaleField extends BaseField<string | number | null> {
           ${repeat(
             this.options,
             (option: FieldOption | string | number) => html`
-              <sl-radio class="radio-button" disabled="${this.isReadonly}" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
+              <sl-radio class="radio-button" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
             `
           )}
         </sl-radio-group>
@@ -86,7 +86,7 @@ export class ScaleField extends BaseField<string | number | null> {
           flex-wrap: wrap;
         }
 
-        :host([is-readonly]) paper-radio-group {
+        :host([is-readonly]) sl-radio-group {
           pointer-events: none;
           opacity: 0.55;
         }

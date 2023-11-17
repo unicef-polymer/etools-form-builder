@@ -13,6 +13,7 @@ import {SharedStyles} from '../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../lib/styles/attachments.styles';
 import {AttachmentsHelper} from './form-attachments-popup.helper';
 import {getTranslation} from '../lib/utils/translate';
+import { buttonsStyles } from "@unicef-polymer/etools-unicef/src/styles/button-styles";
 
 export type FormBuilderAttachmentsPopupData = {
   attachments: StoredAttachment[];
@@ -62,14 +63,14 @@ export type SingleUploadFinishedDetails = {
 
 @customElement('form-attachments-popup')
 export class FormAttachmentsPopup extends LitElement {
-  @property() dialogOpened: boolean = true;
-  @property() saveBtnClicked: boolean = false;
+  @property() dialogOpened = true;
+  @property() saveBtnClicked = false;
   @property() attachments: StoredAttachment[] = [];
   @property() metadata!: BlueprintMetadata;
   @property() language!: string;
   @query('#link') link!: HTMLLinkElement;
-  readonly: boolean = false;
-  popupTitle: string = '';
+  readonly = false;
+  popupTitle = '';
   computedPath: string[] = [];
   errors: GenericObject = [];
 
@@ -129,7 +130,7 @@ export class FormAttachmentsPopup extends LitElement {
   }
 
   async saveChanges(): Promise<void> {
-    let fileTypeNotSelected: boolean = false;
+    let fileTypeNotSelected = false;
     this.attachments.forEach((attachment: GenericObject, index: number) => {
       if (!attachment.file_type) {
         fileTypeNotSelected = true;
@@ -250,6 +251,7 @@ export class FormAttachmentsPopup extends LitElement {
     return [
       SharedStyles,
       AttachmentsStyles,
+      buttonsStyles,
       css`
         .file-selector__type-dropdown {
           flex-basis: 25%;

@@ -8,6 +8,7 @@ export interface IFormBuilderAbstractGroup {
   metadata: BlueprintMetadata;
   parentGroupName: string;
   readonly: boolean;
+  isReadonly: () => boolean;
   value: GenericObject;
 
   /**
