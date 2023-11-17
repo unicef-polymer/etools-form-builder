@@ -15,13 +15,8 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
     ${InputStyles} ${DialogStyles}
     <style>
       ${buttonsStyles},
-      etools-icon[name='error-outline'],
-      .delete-button {
+      etools-icon[name='error-outline'] {
         color: var(--etools-upload-danger-color, #ea4022);
-      }
-
-      .delete-button::part(base) {
-        color: #f1572a;
       }
     </style>
     <etools-dialog
@@ -85,7 +80,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
               <!--        Delete Button          -->
               <sl-button
                 variant="text"
-                class="delete-button file-selector__delete"
+                class="danger file-selector__delete"
                 ?hidden="${this.readonly}"
                 @click="${() => this.deleteAttachment(index)}"
               >

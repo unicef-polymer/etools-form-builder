@@ -30,9 +30,6 @@ export const AttachmentsStyles: CSSResult = css`
     flex: none;
     color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
   }
-  .delete-button {
-    color: #ea4022;
-  }
   .upload-button,
   .download-button {
     color: var(--primary-color);

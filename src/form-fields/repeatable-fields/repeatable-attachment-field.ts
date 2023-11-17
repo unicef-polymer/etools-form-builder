@@ -59,7 +59,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                     <!--        Delete Button          -->
                     <sl-button
                       variant="danger"
-                      class="delete-button file-selector__delete"
+                      class="file-selector__delete"
                       ?hidden="${this.isReadonly}"
                       @click="${() => this.removeControl(index)}"
                     >
