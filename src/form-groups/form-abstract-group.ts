@@ -3,8 +3,8 @@ import {property, customElement} from 'lit/decorators.js';
 import '../form-fields/single-fields/text-field';
 import '../form-fields/single-fields/number-field';
 import '../form-fields/single-fields/scale-field';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
@@ -182,12 +182,16 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     const value: GenericObject[] = (this.value && this.value[groupStructure.name]) || [{}];
     return html`
       ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
-      <sl-button variant="primary" class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
+      <etools-button
+        variant="primary"
+        class="add-group save-button"
+        @click="${() => this.addGroup(groupStructure.name)}"
+      >
         ${getTranslation(this.language, 'ADD')}
         ${!groupStructure.title || groupStructure.title.length > 15
           ? getTranslation(this.language, 'GROUP')
           : groupStructure.title}
-      </sl-button>
+      </etools-button>
     `;
   }
 
@@ -341,7 +345,6 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
       CardStyles,
       FlexLayoutClasses,
       FormBuilderCardStyles,
-      buttonsStyles,
       css`
         :host {
           display: flex;

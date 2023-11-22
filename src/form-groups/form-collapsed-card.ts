@@ -136,13 +136,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       ? html``
       : html`
           <etools-icon id="attachments-warning" name="warning" ?hidden="${!this._errors.attachments}"></etools-icon>
-          <sl-button id="primary" variant="text" class="primary" @click="${this.openAttachmentsPopup}">
+          <etools-button id="primary" variant="text" class="primary" @click="${this.openAttachmentsPopup}">
             <etools-icon
               slot="prefix"
               name="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"
             ></etools-icon>
             ${this.getAttachmentsBtnText(this.value?.attachments?.length)}
-          </sl-button>
+          </etools-button>
         `;
   }
 

@@ -6,7 +6,6 @@ import {elevationStyles} from '../styles/elevation-styles';
 import {FlexLayoutClasses} from '../styles/flex-layout-classes';
 import {fireEvent} from '../utils/fire-custom-event';
 import {getTranslation} from '../utils/translate';
-import { buttonsStyles } from "@unicef-polymer/etools-unicef/src/styles/button-styles";
 
 @customElement('etools-fb-card')
 export class EtoolsFbCard extends LitElement {
@@ -32,7 +31,6 @@ export class EtoolsFbCard extends LitElement {
       elevationStyles,
       CardStyles,
       FlexLayoutClasses,
-      buttonsStyles,
       css`
         :host {
           display: block;
@@ -211,13 +209,13 @@ export class EtoolsFbCard extends LitElement {
             ${this.isEditable && this.edit
               ? html`
                   <div class="layout horizontal end-justified card-buttons">
-                    <sl-button variant="text" class="neutral" @click="${this.cancel}">
+                    <etools-button variant="text" class="neutral" @click="${this.cancel}">
                       ${getTranslation(this.language, 'CANCEL')}
-                    </sl-button>
+                    </etools-button>
 
-                    <sl-button variant="primary" class="save-button" @click="${this.save}">
+                    <etools-button variant="primary" class="save-button" @click="${this.save}">
                       ${getTranslation(this.language, 'SAVE')}
-                    </sl-button>
+                    </etools-button>
                   </div>
                 `
               : ''}

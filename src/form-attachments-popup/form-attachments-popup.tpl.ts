@@ -7,14 +7,12 @@ import {getTranslation} from '../lib/utils/translate';
 import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog.js';
 import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown.js';
 import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 
 export function template(this: FormAttachmentsPopup): TemplateResult {
   return html`
     ${InputStyles} ${DialogStyles}
     <style>
-      ${buttonsStyles},
       etools-icon[name='error-outline'] {
         color: var(--etools-upload-danger-color, #ea4022);
       }
@@ -67,7 +65,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
               </div>
 
               <!--         Download Button         -->
-              <sl-button
+              <etools-button
                 variant="text"
                 ?hidden="${!attachment.url}"
                 class="download-button file-selector__download"
@@ -75,17 +73,17 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
               >
                 <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                 ${getTranslation(this.language, 'DOWNLOAD')}
-              </sl-button>
+              </etools-button>
 
               <!--        Delete Button          -->
-              <sl-button
+              <etools-button
                 variant="text"
                 class="danger file-selector__delete"
                 ?hidden="${this.readonly}"
                 @click="${() => this.deleteAttachment(index)}"
               >
                 ${getTranslation(this.language, 'DELETE')}
-              </sl-button>
+              </etools-button>
             </div>
           `
         )}

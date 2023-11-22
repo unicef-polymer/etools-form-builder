@@ -34,9 +34,9 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
                 ></etools-icon-button>
               </div>`
           )}
-          <sl-button variant="primary" class="add-button" ?hidden="${this.isReadonly}" @click="${this.addNewField}">
+          <etools-button variant="primary" class="add-button" ?hidden="${this.isReadonly}" @click="${this.addNewField}">
             ${getTranslation(this.language, 'ADD')}
-          </sl-button>
+          </etools-button>
         </div>
       </div>
     `;

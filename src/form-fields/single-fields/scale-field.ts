@@ -2,10 +2,10 @@ import {css, CSSResultArray, html, TemplateResult} from 'lit';
 import {property, customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
 import {repeat} from 'lit/directives/repeat.js';
-import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import '@unicef-polymer/etools-unicef/src/etools-radio/etools-radio-group';
+
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 import {InputStyles} from '../../lib/styles/input-styles';
 import {getTranslation} from '../../lib/utils/translate';
 
@@ -21,7 +21,7 @@ export class ScaleField extends BaseField<string | number | null> {
     return html`
       ${InputStyles}
       <div class="container">
-        <sl-radio-group
+        <etools-radio-group
           class="radio-group"
           .value="${this.value}"
           @sl-change="${(e: any) => this.onSelect(e.target.value)}"
@@ -32,8 +32,8 @@ export class ScaleField extends BaseField<string | number | null> {
               <sl-radio class="radio-button" value="${this.getValue(option)}">${this.getLabel(option)}</sl-radio>
             `
           )}
-        </sl-radio-group>
-        <sl-button
+        </etools-radio-group>
+        <etools-button
           class="neutral clear-button"
           variant="text"
           ?hidden="${this.isReadonly}"
@@ -41,7 +41,7 @@ export class ScaleField extends BaseField<string | number | null> {
         >
           <etools-icon name="clear" slot="prefix"></etools-icon>
           ${getTranslation(this.language, 'CLEAR')}
-        </sl-button>
+        </etools-button>
       </div>
       <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>
     `;
@@ -70,7 +70,6 @@ export class ScaleField extends BaseField<string | number | null> {
     // language=CSS
     return [
       ...BaseField.styles,
-      buttonsStyles,
       css`
         .container {
           position: relative;
@@ -86,7 +85,7 @@ export class ScaleField extends BaseField<string | number | null> {
           flex-wrap: wrap;
         }
 
-        :host([is-readonly]) sl-radio-group {
+        :host([is-readonly]) etools-radio-group {
           pointer-events: none;
           opacity: 0.55;
         }

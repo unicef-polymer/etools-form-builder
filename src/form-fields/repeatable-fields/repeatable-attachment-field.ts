@@ -13,9 +13,9 @@ import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
 import {getTranslation} from '../../lib/utils/translate';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+
 
 @customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
@@ -46,7 +46,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                     </div>
 
                     <!--         Download Button         -->
-                    <sl-button
+                    <etools-button
                       class="neutral download-button file-selector__download"
                       variant="text"
                       ?hidden="${!value.url}"
@@ -54,17 +54,17 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                     >
                       <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                       ${getTranslation(this.language, 'DOWNLOAD')}
-                    </sl-button>
+                    </etools-button>
 
                     <!--        Delete Button          -->
-                    <sl-button
+                    <etools-button
                       variant="danger"
                       class="file-selector__delete"
                       ?hidden="${this.isReadonly}"
                       @click="${() => this.removeControl(index)}"
                     >
                       ${getTranslation(this.language, 'DELETE')}
-                    </sl-button>
+                    </etools-button>
                   </div>
                 `
               : ''
@@ -163,7 +163,6 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
       ...RepeatableBaseField.styles,
       SharedStyles,
       AttachmentsStyles,
-      buttonsStyles,
       css`
         .file-selector__type-dropdown {
           flex-basis: 25%;
