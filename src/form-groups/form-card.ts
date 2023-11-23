@@ -10,7 +10,7 @@ import {getTranslation} from '../lib/utils/translate';
 import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
@@ -47,15 +47,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
    * adds card-container html wrapper and dynamic save button
    */
   static get styles(): CSSResultArray {
-    return [
-      SharedStyles,
-      pageLayoutStyles,
-      elevationStyles,
-      CardStyles,
-      FlexLayoutClasses,
-      FormBuilderCardStyles,
-      buttonsStyles
-    ];
+    return [SharedStyles, pageLayoutStyles, elevationStyles, CardStyles, FlexLayoutClasses, FormBuilderCardStyles];
   }
 
   render(): TemplateResult {
@@ -80,9 +72,9 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
 
         <etools-collapse ?opened="${this.showSaveButton}">
           <div class="layout horizontal end-justified card-buttons actions-container">
-            <sl-button variant="primary" @click="${this.saveChanges}">
+            <etools-button variant="primary" @click="${this.saveChanges}">
               ${getTranslation(this.language, 'SAVE')}
-            </sl-button>
+            </etools-button>
           </div>
         </etools-collapse>
       </section>

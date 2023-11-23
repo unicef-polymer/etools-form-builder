@@ -17,6 +17,10 @@
     "watch": "tsc --watch",
     "lint": "eslint ./src/**/*.ts --ext ts",
     "format": "eslint --ext .ts ./src/**/*.ts --fix --ignore-path .gitignore",
+    "rd:init": "relative-deps init",
+    "rd:add": "relative-deps add",
+    "rd:reload": "relative-deps",
+    "prepare": "relative-deps",
     "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
@@ -29,7 +33,8 @@
     "lit-translate": "^1.2.1",
     "ramda": "^0.27.1",
     "typescript": "^4.9.5",
-    "web-animations-js": "^2.3.2"
+    "web-animations-js": "^2.3.2",
+    "relative-deps": "^1.0.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.7.0",

@@ -1,10 +1,10 @@
 import {css, html, CSSResultArray, TemplateResult} from 'lit';
 import {property, customElement} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
-import '@shoelace-style/shoelace/dist/components/radio-group/radio-group.js';
+import '@unicef-polymer/etools-unicef/src/etools-radio/etools-radio-group';
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
-import '@shoelace-style/shoelace/dist/components/button/button.js';
-import {buttonsStyles} from '@unicef-polymer/etools-unicef/src/styles/button-styles';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+
 import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {getTranslation} from '../../lib/utils/translate';
@@ -18,7 +18,7 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
     return html`
       ${InputStyles}
       <div class="container">
-        <sl-radio-group
+        <etools-radio-group
           class="radio-group"
           .value="${value}"
           @sl-change="${(e: any) => this.onSelect(e.target.value, index)}"
@@ -29,8 +29,8 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
               <sl-radio class="radio-button" value="${this.getValue(option)}"> ${this.getLabel(option)} </sl-radio>
             `
           )}
-        </sl-radio-group>
-        <sl-button
+        </etools-radio-group>
+        <etools-button
           class="neutral clear-button"
           variant="text"
           ?hidden="${this.isReadonly}"
@@ -38,7 +38,7 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
         >
           <etools-icon name="clear" slot="prefix"></etools-icon>
           ${getTranslation(this.language, 'CLEAR')}
-        </sl-button>
+        </etools-button>
       </div>
     `;
   }
@@ -63,7 +63,6 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
     // language=CSS
     return [
       ...AbstractFieldBaseClass.styles,
-      buttonsStyles,
       css`
         .container {
           position: relative;
@@ -79,7 +78,7 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
           flex-wrap: wrap;
         }
 
-        :host([is-readonly]) sl-radio-group {
+        :host([is-readonly]) etools-radio-group {
           pointer-events: none;
           opacity: 0.55;
         }
