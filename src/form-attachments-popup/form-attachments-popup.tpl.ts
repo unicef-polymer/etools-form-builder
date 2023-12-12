@@ -78,7 +78,7 @@ export function template(this: FormAttachmentsPopup): TemplateResult {
               <!--        Delete Button          -->
               <etools-button
                 variant="text"
-                class="danger file-selector__delete"
+                class="danger delete-button file-selector__delete"
                 ?hidden="${this.readonly}"
                 @click="${() => this.deleteAttachment(index)}"
               >
