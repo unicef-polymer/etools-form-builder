@@ -38,7 +38,7 @@ export class NumberField extends BaseField<number> {
       return null;
     }
     if (isNaN(value)) {
-      return 'Must be a number';
+      return getTranslation(this.language, 'MUST_BE_NUMBER');
     }
     const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
     return integerValidation ? null : getTranslation(this.language, 'MUST_BE_INTEGER');

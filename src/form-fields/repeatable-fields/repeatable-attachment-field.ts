@@ -123,7 +123,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
     if (error && error.length) {
       console.error(error);
-      fireEvent(this, 'toast', {text: 'Can not upload attachments. Please try again later'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'UPLOAD_ATTACHMENTS_FAILED')});
     }
   }
 

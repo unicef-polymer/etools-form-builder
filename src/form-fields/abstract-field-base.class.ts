@@ -34,7 +34,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
     super();
 
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
   }
