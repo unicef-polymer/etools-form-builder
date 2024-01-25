@@ -35,12 +35,12 @@ export class EtoolsFbCard extends LitElement {
         :host {
           display: block;
         }
-        
+
         etools-icon {
             cursor: pointer;
             margin: 6px;
         }
-        
+
         .card-container {
           background-color: var(--primary-background-color);
         }
@@ -140,7 +140,7 @@ export class EtoolsFbCard extends LitElement {
     super();
 
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
   }

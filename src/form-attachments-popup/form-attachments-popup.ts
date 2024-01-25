@@ -104,8 +104,22 @@ export class FormAttachmentsPopup extends LitElement {
       throw new Error('Please initialize attachments popup before use');
     }
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
   }
 
   render(): TemplateResult | void {
@@ -133,7 +147,7 @@ export class FormAttachmentsPopup extends LitElement {
     this.attachments.forEach((attachment: GenericObject, index: number) => {
       if (!attachment.file_type) {
         fileTypeNotSelected = true;
-        this.errors[index] = {file_type: ['This field is required']};
+        this.errors[index] = {file_type: [getTranslation(this.language, 'REQUIRED_FIELD')]};
       } else {
         this.errors[index] = [];
       }
