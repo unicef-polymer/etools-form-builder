@@ -3,7 +3,7 @@ import {html, TemplateResult} from 'lit';
 export const DialogStyles: TemplateResult = html`
   <style>
     #form-attachments-dialog etools-dialog etools-loading {
-      font-size: 14px;
+      font-size: var(--etools-font-size-14, 14px);
     }
 
     #form-attachments-dialog etools-dialog[no-padding] {

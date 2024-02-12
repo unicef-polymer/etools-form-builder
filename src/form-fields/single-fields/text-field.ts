@@ -2,13 +2,11 @@ import {css, CSSResultArray, html, TemplateResult} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
-import {InputStyles} from '../../lib/styles/input-styles';
 
 @customElement('text-field')
 export class TextField extends BaseField<string> {
   protected controlTemplate(): TemplateResult {
     return html`
-      ${InputStyles}
       <etools-textarea
         id="otherInfo"
         class="no-padding-left"

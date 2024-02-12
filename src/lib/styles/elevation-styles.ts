@@ -1,11 +1,11 @@
 import {css, CSSResult} from 'lit';
 
 /**
- * LitElement css version for used paper-material-styles
+ * LitElement css version for used material-styles
  * TODO:
  *  - use only in new litElements
  *  - add more elevations if needed
- *  - replace all paper-material-styles with this css module
+ *  - replace all material-styles with this css module
  */
 
 // language=CSS

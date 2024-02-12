@@ -373,7 +373,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         }
         .card-header .title {
           padding: 0 24px 8px;
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
           font-weight: bold;
         }
         .save-button {

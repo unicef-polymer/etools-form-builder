@@ -2,7 +2,6 @@ import {css, html, CSSResultArray, TemplateResult} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
-import {InputStyles} from '../../lib/styles/input-styles';
 import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('number-field')
@@ -10,7 +9,6 @@ export class NumberField extends BaseField<number> {
   isInteger: boolean = false;
   protected controlTemplate(): TemplateResult {
     return html`
-      ${InputStyles}
       <etools-input
         class="no-padding-left"
         no-label-float

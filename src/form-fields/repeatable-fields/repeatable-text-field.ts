@@ -1,7 +1,6 @@
 import {css, html, CSSResultArray, TemplateResult} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import '@unicef-polymer/etools-unicef/src/etools-input/etools-textarea';
-import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 
@@ -9,7 +8,6 @@ import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 export class RepeatableTextField extends RepeatableBaseField<string> {
   protected controlTemplate(value: string | null, index: number): TemplateResult {
     return html`
-      ${InputStyles}
       <etools-textarea
         id="textarea"
         class="no-padding-left"
@@ -34,9 +32,6 @@ export class RepeatableTextField extends RepeatableBaseField<string> {
     return [
       ...AbstractFieldBaseClass.styles,
       css`
-        :host(.wide) paper-textarea {
-          padding-left: 0;
-        }
         @media (max-width: 380px) {
           .no-padding-left {
             padding-left: 0;

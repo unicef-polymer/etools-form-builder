@@ -15,7 +15,7 @@ export const AttachmentsStyles: CSSResult = css`
     margin: 0 14px 0 0;
     min-width: 145px;
     overflow-wrap: break-word;
-    font-size: 16px;
+    font-size: var(--etools-font-size-16, 16px);
   }
   :host([is-readonly]) .filename-container {
     border-bottom-color: transparent;
@@ -38,13 +38,8 @@ export const AttachmentsStyles: CSSResult = css`
   .change-button {
     color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
   }
-  iron-icon {
+  etools-icon {
     margin-right: 8px;
-  }
-  paper-button {
-    font-weight: 700;
-    margin: 0 0;
-    padding: 0 0;
   }
   .file-selector-container.with-type-dropdown {
     padding: 0;
