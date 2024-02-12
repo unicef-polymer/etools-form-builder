@@ -22,7 +22,7 @@ export const FormBuilderCardStyles: CSSResult = css`
     box-shadow: 0 0 5px 5px rgb(170 165 165 / 20%);
     background-color: rgba(170, 165, 165, 0.2);
   }
-  .attachments-button iron-icon {
+  .attachments-button etools-icon {
     margin-right: 8px;
   }
   .question-container {
@@ -34,11 +34,11 @@ export const FormBuilderCardStyles: CSSResult = css`
   }
   .question-text {
     font-weight: 500;
-    font-size: 13px;
+    font-size: var(--etools-font-size-13, 13px);
     color: var(--primary-text-color);
   }
   .question-details {
-    font-size: 9px;
+    font-size: var(--etools-font-size-10, 10px);
   }
 
   @media (max-width: 380px) {

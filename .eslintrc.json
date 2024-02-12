@@ -20,6 +20,7 @@
   "rules": {
     "prettier/prettier": "error",
     "lit/attribute-value-entities": "off",
+    "no-prototype-builtins": "off",
     "lit/no-legacy-template-syntax": "off",
     "linebreak-style": "off",
     "no-irregular-whitespace": [

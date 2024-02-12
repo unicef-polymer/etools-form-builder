@@ -5,7 +5,6 @@ import '@unicef-polymer/etools-unicef/src/etools-radio/etools-radio-group';
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
 import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 
-import {InputStyles} from '../../lib/styles/input-styles';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {getTranslation} from '../../lib/utils/translate';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
@@ -16,7 +15,6 @@ export class RepeatableScaleField extends RepeatableBaseField<string | number | 
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(value: string | null, index: number): TemplateResult {
     return html`
-      ${InputStyles}
       <div class="container">
         <etools-radio-group
           class="radio-group"

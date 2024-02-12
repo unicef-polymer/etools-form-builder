@@ -6,7 +6,6 @@ import '@unicef-polymer/etools-unicef/src/etools-radio/etools-radio-group';
 
 import '@shoelace-style/shoelace/dist/components/radio/radio.js';
 import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
-import {InputStyles} from '../../lib/styles/input-styles';
 import {getTranslation} from '../../lib/utils/translate';
 
 export type FieldOption = {
@@ -19,7 +18,6 @@ export class ScaleField extends BaseField<string | number | null> {
   @property({type: Array}) options: (FieldOption | string | number)[] = [];
   protected controlTemplate(): TemplateResult {
     return html`
-      ${InputStyles}
       <div class="container">
         <etools-radio-group
           class="radio-group"

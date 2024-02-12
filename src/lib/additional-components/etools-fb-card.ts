@@ -37,8 +37,8 @@ export class EtoolsFbCard extends LitElement {
         }
 
         etools-icon {
-            cursor: pointer;
-            margin: 6px;
+          cursor: pointer;
+          margin: 6px;
         }
 
         .card-container {
@@ -62,7 +62,8 @@ export class EtoolsFbCard extends LitElement {
           --sl-color-primary-500: var(--primary-color);
         }
 
-        .edit-button, etools-icon[name="create"] {
+        .edit-button,
+        etools-icon[name='create'] {
           color: var(--gray-mid);
         }
 
@@ -80,7 +81,7 @@ export class EtoolsFbCard extends LitElement {
           flex-basis: auto;
         }
         .flex-header__title {
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
           flex-basis: auto;
           flex-grow: 1;
           overflow: hidden;
