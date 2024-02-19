@@ -52,6 +52,12 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
 
   render(): TemplateResult {
     return html`
+      <style>
+        .card-buttons {
+          padding: 12px 24px;
+          padding-top: 0;
+        }
+      </style>
       <section class="elevation page-content card-container form-card" elevation="1">
         <div class="card-header">
           <div class="title">${this.groupStructure.title}</div>

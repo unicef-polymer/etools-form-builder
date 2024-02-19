@@ -27,6 +27,7 @@ export const FormBuilderCardStyles: CSSResult = css`
   }
   .question-container {
     padding: 7px 0;
+    padding-right: 10px;
     width: 100%;
     min-height: 57px;
     box-sizing: border-box;
@@ -44,6 +45,12 @@ export const FormBuilderCardStyles: CSSResult = css`
   @media (max-width: 380px) {
     .overall-finding {
       padding: 5px;
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .question-container {
+      padding-right: 0;
     }
   }
 `;
