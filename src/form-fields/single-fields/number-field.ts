@@ -1,7 +1,7 @@
-import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
+import {css, html, CSSResultArray, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
-import '@polymer/paper-input/paper-input';
-import {InputStyles} from '../../lib/styles/input-styles';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
 import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('number-field')
@@ -9,8 +9,7 @@ export class NumberField extends BaseField<number> {
   isInteger: boolean = false;
   protected controlTemplate(): TemplateResult {
     return html`
-      ${InputStyles}
-      <paper-input
+      <etools-input
         class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
@@ -22,7 +21,7 @@ export class NumberField extends BaseField<number> {
         error-message="${this.errorMessage}"
         ?readonly="${this.isReadonly}"
       >
-      </paper-input>
+      </etools-input>
     `;
   }
 
@@ -37,7 +36,7 @@ export class NumberField extends BaseField<number> {
       return null;
     }
     if (isNaN(value)) {
-      return 'Must be a number';
+      return getTranslation(this.language, 'MUST_BE_NUMBER');
     }
     const integerValidation: boolean = !this.isInteger || value - Math.floor(value) === 0;
     return integerValidation ? null : getTranslation(this.language, 'MUST_BE_INTEGER');

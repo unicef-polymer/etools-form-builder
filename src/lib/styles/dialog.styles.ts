@@ -1,9 +1,9 @@
-import {html, TemplateResult} from 'lit-element';
+import {html, TemplateResult} from 'lit';
 // language=HTML
 export const DialogStyles: TemplateResult = html`
   <style>
     #form-attachments-dialog etools-dialog etools-loading {
-      font-size: 14px;
+      font-size: var(--etools-font-size-14, 14px);
     }
 
     #form-attachments-dialog etools-dialog[no-padding] {
@@ -14,6 +14,7 @@ export const DialogStyles: TemplateResult = html`
 
     #form-attachments-dialog etools-dialog {
       --etools-dialog-primary-color: var(--primary-color);
+      --sl-color-primary-500: var(--primary-color);
       --etools-dialog-content: {
         min-height: 80px;
         padding-bottom: 8px !important;

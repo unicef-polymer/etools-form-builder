@@ -4,7 +4,7 @@
     "target": "es2018",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["es2018", "esnext", "dom"],
+    "lib": ["es2018", "dom", "esnext"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -12,10 +12,11 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "outDir": "dist"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": []
+  "include": ["src/**/*.ts"]
 }

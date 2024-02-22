@@ -1,8 +1,10 @@
-import {LitElement, property, TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import '../form-fields/single-fields/text-field';
 import '../form-fields/single-fields/number-field';
 import '../form-fields/single-fields/scale-field';
-import '@polymer/paper-input/paper-textarea';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
 import {elevationStyles} from '../lib/styles/elevation-styles';
@@ -13,7 +15,7 @@ import {IFormBuilderAbstractGroup} from '../lib/types/form-builder.interfaces';
 import {BlueprintField, BlueprintGroup, BlueprintMetadata, Information} from '../lib/types/form-builder.types';
 import {GenericObject} from '../lib/types/global.types';
 import {clone} from 'ramda';
-import {live} from 'lit-html/directives/live';
+import {live} from 'lit/directives/live.js';
 import {openDialog} from '../lib/utils/dialog';
 import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 import {getTranslation} from '../lib/utils/translate';
@@ -41,10 +43,10 @@ export enum StructureTypes {
 export class FormAbstractGroup extends LitElement implements IFormBuilderAbstractGroup {
   @property({type: Object}) groupStructure!: BlueprintGroup;
   @property({type: Object}) metadata!: BlueprintMetadata;
-  @property({type: String}) parentGroupName: string = '';
-  @property({type: Boolean}) collapsed: boolean = false;
+  @property({type: String}) parentGroupName = '';
+  @property({type: Boolean}) collapsed = false;
   @property() language!: string;
-  @property({type: Boolean, attribute: 'readonly'}) readonly: boolean = false;
+  @property({type: Boolean, attribute: 'readonly'}) readonly = false;
   @property() protected _errors: GenericObject = {};
   @property() protected _value: GenericObject = {};
   computedPath: string[] = [];
@@ -64,7 +66,9 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
   get value(): GenericObject {
     return this._value;
   }
-
+  isReadonly() {
+    return this.readonly;
+  }
   /**
    * Setter for handling error.
    * Normally we wouldn't have errors as string or string[] for FormGroups.
@@ -85,7 +89,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     super();
 
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
   }
@@ -153,7 +157,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       <field-renderer
         .field="${blueprintField}"
-        ?readonly="${live(this.readonly)}"
+        ?readonly="${live(this.isReadonly())}"
         .value="${this.value && this.value[blueprintField.name]}"
         .validations="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"
         .errorMessage="${this.getErrorMessage(blueprintField.name)}"
@@ -178,12 +182,16 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     const value: GenericObject[] = (this.value && this.value[groupStructure.name]) || [{}];
     return html`
       ${value.map((_: GenericObject, index: number) => this.getGroupTemplate(groupStructure, index))}
-      <paper-button class="add-group save-button" @click="${() => this.addGroup(groupStructure.name)}">
+      <etools-button
+        variant="primary"
+        class="add-group save-button"
+        @click="${() => this.addGroup(groupStructure.name)}"
+      >
         ${getTranslation(this.language, 'ADD')}
         ${!groupStructure.title || groupStructure.title.length > 15
           ? getTranslation(this.language, 'GROUP')
           : groupStructure.title}
-      </paper-button>
+      </etools-button>
     `;
   }
 
@@ -210,7 +218,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
           @error-changed="${(event: CustomEvent) => this.errorChanged(event, groupStructure.name, index)}"
@@ -227,7 +235,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
@@ -244,7 +252,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
           .computedPath="${this.computedPath.concat(
             this.groupStructure.name === 'root' ? [] : [this.groupStructure.name]
           )}"
-          .readonly="${this.readonly}"
+          .readonly="${this.isReadonly()}"
           .errors="${errors || null}"
           @remove-group="${() => this.removeGroup(groupStructure, index)}"
           @value-changed="${(event: CustomEvent) => this.valueChanged(event, groupStructure.name, index)}"
@@ -365,7 +373,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         }
         .card-header .title {
           padding: 0 24px 8px;
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
           font-weight: bold;
         }
         .save-button {
@@ -395,7 +403,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
         .attachments-warning {
           color: red;
         }
-        paper-icon-button[icon='close'] {
+        etools-icon-button[name='close'] {
           cursor: pointer;
           color: var(--primary-text-color);
         }

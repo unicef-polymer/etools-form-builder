@@ -1,6 +1,6 @@
-import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
-import '@polymer/paper-input/paper-input';
-import {InputStyles} from '../../lib/styles/input-styles';
+import {css, html, CSSResultArray, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-input/etools-input';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {getTranslation} from '../../lib/utils/translate';
@@ -10,8 +10,7 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
   isInteger: boolean = false;
   protected controlTemplate(value: number | null, index: number): TemplateResult {
     return html`
-      ${InputStyles}
-      <paper-input
+      <etools-input
         class="no-padding-left"
         no-label-float
         placeholder="${this.isReadonly ? '—' : this.placeholder}"
@@ -22,7 +21,7 @@ export class RepeatableNumberField extends RepeatableBaseField<number> {
         error-message="${this.errorMessage[index]}"
         ?readonly="${this.isReadonly}"
       >
-      </paper-input>
+      </etools-input>
     `;
   }
 

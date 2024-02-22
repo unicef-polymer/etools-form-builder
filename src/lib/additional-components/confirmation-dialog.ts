@@ -1,4 +1,5 @@
-import {LitElement, property, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, html, CSSResultArray, LitElement} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {fireEvent} from '../utils/fire-custom-event';
 import {getTranslation} from '../utils/translate';
 
@@ -29,7 +30,7 @@ export class ConfirmationDialog extends LitElement {
     super();
 
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
   }
 

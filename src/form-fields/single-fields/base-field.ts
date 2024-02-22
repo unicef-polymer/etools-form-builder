@@ -1,4 +1,5 @@
-import {property, TemplateResult} from 'lit-element';
+import {TemplateResult} from 'lit';
+import {property} from 'lit/decorators.js';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {getTranslation} from '../../lib/utils/translate';

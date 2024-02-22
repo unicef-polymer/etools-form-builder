@@ -1,22 +1,20 @@
-import {css, CSSResultArray, customElement, html, TemplateResult} from 'lit-element';
+import {css, html, CSSResultArray, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {BaseField} from './base-field';
-import '@polymer/paper-toggle-button';
-import {InputStyles} from '../../lib/styles/input-styles';
-import {PaperToggleButtonElement} from '@polymer/paper-toggle-button/paper-toggle-button';
+import '@shoelace-style/shoelace/dist/components/switch/switch.js';
+import {SlSwitch} from '@shoelace-style/shoelace';
 
 @customElement('boolean-field')
 export class BooleanField extends BaseField<boolean> {
   protected controlTemplate(): TemplateResult {
     return html`
-      ${InputStyles}
-      <paper-toggle-button
+      <sl-switch
         class="no-padding-left"
         ?checked="${this.value}"
-        @iron-change="${(event: CustomEvent) =>
-          this.valueChanged((event.currentTarget as PaperToggleButtonElement).checked as boolean)}"
+        @sl-change="${(e: CustomEvent) => this.valueChanged((e.target as SlSwitch).checked)}"
         ?disabled="${this.isReadonly}"
       >
-      </paper-toggle-button>
+      </sl-switch>
 
       <div ?hidden="${!this.errorMessage}" class="error-text">${this.errorMessage}</div>
     `;
@@ -31,9 +29,6 @@ export class BooleanField extends BaseField<boolean> {
     return [
       ...BaseField.styles,
       css`
-        :host(.wide) paper-textarea {
-          padding-left: 0;
-        }
         @media (max-width: 380px) {
           .no-padding-left {
             padding-left: 0;

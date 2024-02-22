@@ -1,4 +1,4 @@
-import {css, CSSResult} from 'lit-element';
+import {css, CSSResult} from 'lit';
 
 // language=CSS
 export const SharedStyles: CSSResult = css`
@@ -20,11 +20,11 @@ export const SharedStyles: CSSResult = css`
 
   h1 {
     text-transform: capitalize;
-    font-size: 24px;
+    font-size: var(--etools-font-size-24, 24px);
   }
 
   h2 {
-    font-size: 20px;
+    font-size: var(--etools-font-size-20, 20px);
   }
 
   a {
@@ -48,13 +48,7 @@ export const SharedStyles: CSSResult = css`
 
   .toggle-button-control span {
     padding: 0 12px;
-    font-size: 16px;
-  }
-
-  .toggle-button-control paper-checkbox {
-    --paper-checkbox-label: {
-      padding-left: 0;
-    }
+    font-size: var(--etools-font-size-16, 16px);
   }
 
   .readonly {

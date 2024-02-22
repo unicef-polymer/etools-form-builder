@@ -1,4 +1,4 @@
-import {TemplateResult} from 'lit-element';
+import {TemplateResult} from 'lit';
 import {BlueprintField, BlueprintGroup, BlueprintMetadata} from './form-builder.types';
 import {GenericObject} from './global.types';
 
@@ -8,6 +8,7 @@ export interface IFormBuilderAbstractGroup {
   metadata: BlueprintMetadata;
   parentGroupName: string;
   readonly: boolean;
+  isReadonly: () => boolean;
   value: GenericObject;
 
   /**
