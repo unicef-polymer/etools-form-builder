@@ -35,11 +35,11 @@ export const FormBuilderCardStyles: CSSResult = css`
   }
   .question-text {
     font-weight: 500;
-    font-size: var(--etools-font-size-13, 13px);
+    font-size: var(--etools-font-size-14, 14px);
     color: var(--primary-text-color);
   }
   .question-details {
-    font-size: var(--etools-font-size-10, 10px);
+    font-size: var(--etools-font-size-12, 12px);
   }
 
   @media (max-width: 380px) {
