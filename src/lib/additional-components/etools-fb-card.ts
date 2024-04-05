@@ -130,7 +130,7 @@ export class EtoolsFbCard extends LitElement {
           }
           .flex-header__edit {
             order: 1;
-            flex-basis: 20%;
+            flex-basis: 12%;
           }
         }
       `
