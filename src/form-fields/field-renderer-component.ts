@@ -40,7 +40,15 @@ export class FieldRendererComponent extends LitElement {
     `;
   }
 
-  renderStandardField({input_type, label, help_text, required, placeholder, styling, name}: BlueprintField): TemplateResult {
+  renderStandardField({
+    input_type,
+    label,
+    help_text,
+    required,
+    placeholder,
+    styling,
+    name
+  }: BlueprintField): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
