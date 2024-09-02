@@ -19,6 +19,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   }
   @property({type: Boolean, attribute: 'required'}) required = false;
   @property() placeholder = '';
+  @property() name = '';
   @property() value: T | null = null;
   validators: FieldValidator[] = [];
   touched = false;

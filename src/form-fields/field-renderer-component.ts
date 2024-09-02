@@ -40,7 +40,15 @@ export class FieldRendererComponent extends LitElement {
     `;
   }
 
-  renderStandardField({input_type, label, help_text, required, placeholder, styling}: BlueprintField): TemplateResult {
+  renderStandardField({
+    input_type,
+    label,
+    help_text,
+    required,
+    placeholder,
+    styling,
+    name
+  }: BlueprintField): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
@@ -50,6 +58,7 @@ export class FieldRendererComponent extends LitElement {
             ?is-readonly="${this.readonly}"
             ?required="${required}"
             .placeholder="${placeholder}"
+            .name="${name}"
             .value="${this.value}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
@@ -67,6 +76,7 @@ export class FieldRendererComponent extends LitElement {
             ?required="${required}"
             .placeholder="${placeholder}"
             .value="${this.value}"
+            .name="${name}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
@@ -81,6 +91,7 @@ export class FieldRendererComponent extends LitElement {
             ?is-readonly="${this.readonly}"
             ?required="${required}"
             .value="${this.value}"
+            .name="${name}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
@@ -96,6 +107,7 @@ export class FieldRendererComponent extends LitElement {
             ?required="${required}"
             .placeholder="${placeholder}"
             .value="${this.value}"
+            .name="${name}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
@@ -110,6 +122,7 @@ export class FieldRendererComponent extends LitElement {
             ?required="${required}"
             .placeholder="${placeholder}"
             .value="${this.value}"
+            .name="${name}"
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .computedPath="${this.computedPath}"
