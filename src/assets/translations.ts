@@ -30,7 +30,7 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_LOWER_THAN: 'Number must be lower than {0}',
     DOCUMENT_TYPE: 'Document type',
     SELECT_DOCUMENT_TYPE: 'Select Document Type',
-    PLEASE_FILL: 'Highly important: Please fill if information is available'
+    PLEASE_ANSWER: 'Important: Please provide the answer if available'
   },
   fr: {
     SAVE: 'Sauvegarder',
@@ -63,7 +63,7 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_LOWER_THAN: 'Le nombre doit être inférieur à {0}',
     DOCUMENT_TYPE: 'Type de document',
     SELECT_DOCUMENT_TYPE: 'Sélectionnez le type de document',
-    PLEASE_FILL: 'Très important : veuillez remplir si les informations sont disponibles'
+    PLEASE_ANSWER: 'Important : veuillez fournir la réponse si disponible'
   },
   ar: {
     SAVE: 'يحفظ',
@@ -96,7 +96,7 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_LOWER_THAN: 'يجب أن يكون الرقم أقل من {0}',
     DOCUMENT_TYPE: 'نوع الوثيقة',
     SELECT_DOCUMENT_TYPE: 'حدد نوع المستند',
-    PLEASE_FILL: 'مهم للغاية: يرجى ملء المعلومات إذا كانت متوفرة'
+    PLEASE_ANSWER: 'هام: يرجى تقديم الإجابة إذا كانت متوفرة'
   },
   es: {
     SAVE: 'Guardar',
@@ -129,7 +129,7 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_LOWER_THAN: 'El número debe ser inferior a {0}',
     DOCUMENT_TYPE: 'Tipo de Documento',
     SELECT_DOCUMENT_TYPE: 'Seleccionar tipo de documento',
-    PLEASE_FILL: 'Muy importante: complete si hay información disponible'
+    PLEASE_ANSWER: 'Importante: proporcione la respuesta si está disponible.'
   }
 };
 

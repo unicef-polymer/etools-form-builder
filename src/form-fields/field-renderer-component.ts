@@ -142,7 +142,7 @@ export class FieldRendererComponent extends LitElement {
 
   renderTooltip(isMandatory: boolean) {
     return isMandatory
-      ? html` <sl-tooltip placement="top" content="${getTranslation(this.language, 'PLEASE_FILL')}">
+      ? html` <sl-tooltip placement="top" content="${getTranslation(this.language, 'PLEASE_ANSWER')}">
           <etools-icon id="users-icon" name="info-outline"></etools-icon>
         </sl-tooltip>`
       : ``;
@@ -253,9 +253,8 @@ export class FieldRendererComponent extends LitElement {
           color: var(--secondary-text-color);
           font-weight: 400;
         }
-        .mandatory_warning .question-text {
-          color: #f59e0b !important;
-          font-weight: 500;
+        .mandatory_warning etools-icon {
+          --etools-icon-fill-color: #f59e0b !important;
         }
 
         @media print {
