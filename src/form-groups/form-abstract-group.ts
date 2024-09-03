@@ -36,7 +36,8 @@ export enum StructureTypes {
   CARD = 'card',
   ABSTRACT = 'abstract',
   COLLAPSED = 'collapse',
-  ATTACHMENTS_BUTTON = 'floating_attachments'
+  ATTACHMENTS_BUTTON = 'floating_attachments',
+  MANDATORY_WARNING = 'mandatory_warning'
 }
 
 @customElement('form-abstract-group')
@@ -157,6 +158,7 @@ export class FormAbstractGroup extends LitElement implements IFormBuilderAbstrac
     return html`
       <field-renderer
         .field="${blueprintField}"
+        .language="${this.language}"
         ?readonly="${live(this.isReadonly())}"
         .value="${this.value && this.value[blueprintField.name]}"
         .validations="${blueprintField.validations.map((validation: string) => this.metadata.validations[validation])}"

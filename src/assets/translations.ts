@@ -29,7 +29,8 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_GREATER_THAN: 'Number must be greater than {0}',
     NUMBER_MUST_BE_LOWER_THAN: 'Number must be lower than {0}',
     DOCUMENT_TYPE: 'Document type',
-    SELECT_DOCUMENT_TYPE: 'Select Document Type'
+    SELECT_DOCUMENT_TYPE: 'Select Document Type',
+    PLEASE_FILL: 'Highly important: Please fill if information is available'
   },
   fr: {
     SAVE: 'Sauvegarder',
@@ -61,7 +62,8 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_GREATER_THAN: 'Le nombre doit être supérieur à {0}',
     NUMBER_MUST_BE_LOWER_THAN: 'Le nombre doit être inférieur à {0}',
     DOCUMENT_TYPE: 'Type de document',
-    SELECT_DOCUMENT_TYPE: 'Sélectionnez le type de document'
+    SELECT_DOCUMENT_TYPE: 'Sélectionnez le type de document',
+    PLEASE_FILL: 'Très important : veuillez remplir si les informations sont disponibles'
   },
   ar: {
     SAVE: 'يحفظ',
@@ -93,7 +95,8 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_GREATER_THAN: 'يجب أن يكون الرقم أكبر من {0}',
     NUMBER_MUST_BE_LOWER_THAN: 'يجب أن يكون الرقم أقل من {0}',
     DOCUMENT_TYPE: 'نوع الوثيقة',
-    SELECT_DOCUMENT_TYPE: 'حدد نوع المستند'
+    SELECT_DOCUMENT_TYPE: 'حدد نوع المستند',
+    PLEASE_FILL: 'مهم للغاية: يرجى ملء المعلومات إذا كانت متوفرة'
   },
   es: {
     SAVE: 'Guardar',
@@ -125,7 +128,8 @@ const translations: {[lang: string]: {[key: string]: string}} = {
     NUMBER_MUST_BE_GREATER_THAN: 'El número debe ser mayor que {0}',
     NUMBER_MUST_BE_LOWER_THAN: 'El número debe ser inferior a {0}',
     DOCUMENT_TYPE: 'Tipo de Documento',
-    SELECT_DOCUMENT_TYPE: 'Seleccionar tipo de documento'
+    SELECT_DOCUMENT_TYPE: 'Seleccionar tipo de documento',
+    PLEASE_FILL: 'Muy importante: complete si hay información disponible'
   }
 };
 

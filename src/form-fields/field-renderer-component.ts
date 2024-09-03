@@ -6,11 +6,15 @@ import {FieldOption} from './single-fields/scale-field';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
 import {FieldTypes, StructureTypes} from '../form-groups';
 import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import {getTranslation} from '../lib/utils/translate';
 
 @customElement('field-renderer')
 export class FieldRendererComponent extends LitElement {
   @property() field!: BlueprintField;
   @property() value: any;
+  @property() language!: string;
   @property() errorMessage: string | null = null;
   @property() validations: FieldValidator[] = [];
   @property({type: Boolean, attribute: 'readonly'}) readonly = false;
@@ -31,29 +35,28 @@ export class FieldRendererComponent extends LitElement {
       ? 'additional-field '
       : '';
     const wideClass: string = blueprintField.styling.includes(StructureTypes.WIDE) ? 'wide-field-container ' : '';
+    const mandatoryClass: string = blueprintField.styling.includes(StructureTypes.MANDATORY_WARNING)
+      ? 'mandatory_warning '
+      : '';
     return html`
-      <div class="${`${additionalClass}${wideClass}finding-container`}">
+      <div class="${`${additionalClass}${wideClass}${mandatoryClass}finding-container`}">
         ${blueprintField.repeatable
-          ? this.renderRepeatableField(blueprintField)
-          : this.renderStandardField(blueprintField)}
+          ? this.renderRepeatableField(blueprintField, !!mandatoryClass)
+          : this.renderStandardField(blueprintField, !!mandatoryClass)}
       </div>
     `;
   }
 
-  renderStandardField({
-    input_type,
-    label,
-    help_text,
-    required,
-    placeholder,
-    styling,
-    name
-  }: BlueprintField): TemplateResult {
+  renderStandardField(
+    {input_type, label, help_text, required, placeholder, styling, name}: BlueprintField,
+    isMandatory = false
+  ): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
         return html`
           <text-field
+            slot="field"
             class="${isWide ? 'wide' : ''}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
@@ -64,7 +67,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </text-field>
         `;
       case FieldTypes.NUMBER_TYPE:
@@ -82,7 +85,7 @@ export class FieldRendererComponent extends LitElement {
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </number-field>
         `;
       case FieldTypes.BOOL_TYPE:
@@ -96,12 +99,13 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </boolean-field>
         `;
       case FieldTypes.SCALE_TYPE:
         return html`
           <scale-field
+            slot="field"
             .options="${this.options}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
@@ -112,7 +116,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </scale-field>
         `;
       case FieldTypes.FILE_TYPE:
@@ -127,7 +131,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .computedPath="${this.computedPath}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </attachments-field>
         `;
       default:
@@ -136,14 +140,18 @@ export class FieldRendererComponent extends LitElement {
     }
   }
 
-  renderRepeatableField({
-    input_type,
-    label,
-    help_text,
-    required,
-    placeholder,
-    styling
-  }: BlueprintField): TemplateResult {
+  renderTooltip(isMandatory: boolean) {
+    return isMandatory
+      ? html` <sl-tooltip placement="top" content="${getTranslation(this.language, 'PLEASE_FILL')}">
+          <etools-icon id="users-icon" name="info-outline"></etools-icon>
+        </sl-tooltip>`
+      : ``;
+  }
+
+  renderRepeatableField(
+    {input_type, label, help_text, required, placeholder, styling}: BlueprintField,
+    isMandatory = false
+  ): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
       case FieldTypes.TEXT_TYPE:
@@ -158,7 +166,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </repeatable-text-field>
         `;
       case FieldTypes.NUMBER_TYPE:
@@ -176,7 +184,7 @@ export class FieldRendererComponent extends LitElement {
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </repeatable-number-field>
         `;
       case FieldTypes.SCALE_TYPE:
@@ -192,7 +200,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </repeatable-scale-field>
         `;
       case FieldTypes.FILE_TYPE:
@@ -206,7 +214,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .computedPath="${this.computedPath}"
           >
-            ${this.renderFieldLabel(label, help_text)}
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
           </repeatable-attachments-field>
         `;
       default:
@@ -215,10 +223,10 @@ export class FieldRendererComponent extends LitElement {
     }
   }
 
-  renderFieldLabel(label: string, helperText: string): TemplateResult {
+  renderFieldLabel(label: string, helperText: string, isMandatory = false): TemplateResult {
     return html`
       <div class="layout vertical question-container">
-        <div class="question-text">${label}</div>
+        <div class="question-text">${this.renderTooltip(isMandatory)}${label}</div>
         <div class="question-details">${helperText}</div>
       </div>
     `;
@@ -244,6 +252,10 @@ export class FieldRendererComponent extends LitElement {
         .wide-field-container .question-text {
           color: var(--secondary-text-color);
           font-weight: 400;
+        }
+        .mandatory_warning .question-text {
+          color: #f59e0b !important;
+          font-weight: 500;
         }
 
         @media print {
