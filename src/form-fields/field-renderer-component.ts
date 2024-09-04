@@ -57,7 +57,6 @@ export class FieldRendererComponent extends LitElement {
       case FieldTypes.TEXT_TYPE:
         return html`
           <text-field
-            slot="field"
             class="${isWide ? 'wide' : ''}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
@@ -106,7 +105,6 @@ export class FieldRendererComponent extends LitElement {
       case FieldTypes.SCALE_TYPE:
         return html`
           <scale-field
-            slot="field"
             .options="${this.options}"
             ?is-readonly="${this.readonly}"
             ?required="${required}"
