@@ -36,13 +36,6 @@ export class TextField extends BaseField<string> {
         :host(.wide) etools-textarea {
           padding-left: 0;
         }
-        etools-textarea[name='overall']::part(form-control-input)::after {
-            border-bottom: 0;
-        }
-        etools-textarea[name='overall']:not([readonly])::part(textarea) {
-            background-color: white;
-            border: solid 1px #000000;
-        }
         @media (max-width: 380px) {
           .no-padding-left {
             padding-left: 0;

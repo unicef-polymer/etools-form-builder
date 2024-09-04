@@ -31,13 +31,14 @@ export class FieldRendererComponent extends LitElement {
   }
 
   renderField(blueprintField: BlueprintField): TemplateResult {
-    const additionalClass: string = blueprintField.styling.includes(StructureTypes.ADDITIONAL)
-      ? 'additional-field '
-      : '';
+    let additionalClass: string = blueprintField.styling.includes(StructureTypes.ADDITIONAL)
+      ? `additional-field ${blueprintField.name} `
+      : `${blueprintField.name} `;
+    
     const wideClass: string = blueprintField.styling.includes(StructureTypes.WIDE) ? 'wide-field-container ' : '';
     const mandatoryClass: string = blueprintField.styling.includes(StructureTypes.MANDATORY_WARNING)
       ? 'mandatory_warning '
-      : '';
+      : '';  
     return html`
       <div class="${`${additionalClass}${wideClass}${mandatoryClass}finding-container`}">
         ${blueprintField.repeatable
@@ -256,7 +257,14 @@ export class FieldRendererComponent extends LitElement {
         .mandatory_warning etools-icon {
           --etools-icon-fill-color: #f59e0b !important;
         }
-
+        :host(:not([readonly])) {
+          .overall {
+            background-color: #ffffff;
+            border-style: inset;
+            border-width: 0 1px 1px 1px;
+            border-color: var(--dark-divider-color);
+          }
+        }        
         @media print {
           :host {
             break-inside: avoid;
