@@ -16,7 +16,6 @@ import {getTranslation} from '../../lib/utils/translate';
 import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
 import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
 
-
 @customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
   get uploadUrl(): string {
@@ -95,7 +94,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
   protected attachmentsUploaded({success, error}: UploadFinishedDetails): void {
     success?.forEach((file: UploadedAttachment | OfflineSavedAttachment, index: number) => {
-      const newIndex: number = (Number(this.editedValues?.length) ?? 0) + index;
+      const newIndex: number = (Number(this.editedValues?.length) || 0) + index;
       if (this.isUploadedAttachment(file)) {
         this.valueChanged(
           {
