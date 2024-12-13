@@ -1,7 +1,6 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import lit from 'eslint-plugin-lit';
 import prettier from 'eslint-plugin-prettier';
-import google from 'eslint-config-google';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
@@ -25,14 +24,12 @@ export default [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:lit/recommended',
-    'google',
     'plugin:prettier/recommended'
   ),
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
       lit,
-      google,
       prettier
     },
 
