@@ -1,19 +1,19 @@
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@unicef-polymer/etools-upload/etools-upload-multi';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
-import '@polymer/paper-button/paper-button';
-import '@polymer/iron-icons/iron-icons';
-import {css, CSSResultArray, customElement, LitElement, property, query, TemplateResult} from 'lit-element';
+import '@unicef-polymer/etools-unicef/src/etools-dialog/etools-dialog';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
+import '@unicef-polymer/etools-unicef/src/etools-dropdown/etools-dropdown';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import {deleteFileFromDexie} from '@unicef-polymer/etools-unicef/src/etools-upload/offline/dexie-operations';
+import {css, html, CSSResultArray, LitElement, TemplateResult} from 'lit';
+import {property, query, customElement} from 'lit/decorators.js';
 import {GenericObject} from '../lib/types/global.types';
 import {BlueprintMetadata} from '../lib/types/form-builder.types';
 import {clone, equals} from 'ramda';
-import {template} from './form-attachments-popup.tpl';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {SharedStyles} from '../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../lib/styles/attachments.styles';
 import {AttachmentsHelper} from './form-attachments-popup.helper';
-import {deleteFileFromDexie} from '@unicef-polymer/etools-upload/offline/dexie-operations';
 import {getTranslation} from '../lib/utils/translate';
+import {DialogStyles} from '../lib/styles/dialog.styles';
 
 export type FormBuilderAttachmentsPopupData = {
   attachments: StoredAttachment[];
@@ -63,14 +63,14 @@ export type SingleUploadFinishedDetails = {
 
 @customElement('form-attachments-popup')
 export class FormAttachmentsPopup extends LitElement {
-  @property() dialogOpened: boolean = true;
-  @property() saveBtnClicked: boolean = false;
+  @property() dialogOpened = true;
+  @property() saveBtnClicked = false;
   @property() attachments: StoredAttachment[] = [];
   @property() metadata!: BlueprintMetadata;
   @property() language!: string;
   @query('#link') link!: HTMLLinkElement;
-  readonly: boolean = false;
-  popupTitle: string = '';
+  readonly = false;
+  popupTitle = '';
   computedPath: string[] = [];
   errors: GenericObject = [];
 
@@ -105,12 +105,116 @@ export class FormAttachmentsPopup extends LitElement {
       throw new Error('Please initialize attachments popup before use');
     }
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
+  }
+
   render(): TemplateResult | void {
-    return template.call(this);
+    return html`
+      ${DialogStyles}
+      <style>
+        etools-icon[name='error-outline'] {
+          color: var(--etools-upload-danger-color, #ea4022);
+        }
+      </style>
+      <etools-dialog
+        id="form-attachments-dialog"
+        size="md"
+        no-padding
+        keep-dialog-open
+        ?opened="${this.dialogOpened}"
+        .okBtnText="${getTranslation(this.language, 'SAVE')}"
+        .cancelBtnText="${getTranslation(this.language, 'CANCEL')}"
+        .hideConfirmBtn="${this.readonly}"
+        dialog-title="${this.popupTitle}"
+        @close="${this.onClose}"
+        @confirm-btn-clicked="${() => this.saveChanges()}"
+      >
+        <!--  Link is used to download attachments  -->
+        <a id="link" target="_blank" hidden></a>
+
+        <div class="popup-container">
+          ${this.attachments?.map(
+            (attachment: GenericObject, index: number) => html`
+              <div class="file-selector-container with-type-dropdown">
+                <!--        Type select Dropdown        -->
+                <etools-dropdown
+                  class="type-dropdown file-selector__type-dropdown"
+                  .selected="${attachment.file_type}"
+                  @etools-selected-item-changed="${({detail}: CustomEvent) =>
+                    this.changeFileType(attachment, detail.selectedItem?.value, index)}"
+                  trigger-value-change-event
+                  label="${getTranslation(this.language, 'DOCUMENT_TYPE')}"
+                  placeholder="${getTranslation(this.language, 'SELECT_DOCUMENT_TYPE')}"
+                  required
+                  ?readonly="${this.readonly}"
+                  hide-search
+                  .options="${this.metadata?.options.target_attachments_file_types?.values}"
+                  option-label="label"
+                  option-value="value"
+                  ?invalid="${this.checkFileType(index)}"
+                  .errorMessage="${this.retrieveErrorMessage(index)}"
+                  allow-outside-scroll
+                  dynamic-align
+                ></etools-dropdown>
+
+                <!--        File name component          -->
+                <div class="filename-container file-selector__filename">
+                  <etools-icon class="file-icon" name="attachment"></etools-icon>
+                  <span class="filename" title="${attachment.filename}">${attachment.filename}</span>
+                </div>
+
+                <!--         Download Button         -->
+                <etools-button
+                  variant="text"
+                  ?hidden="${!attachment.url}"
+                  class="download-button file-selector__download"
+                  @click="${() => this.downloadFile(attachment)}"
+                >
+                  <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
+                  ${getTranslation(this.language, 'DOWNLOAD')}
+                </etools-button>
+
+                <!--        Delete Button          -->
+                <etools-button
+                  variant="text"
+                  class="danger delete-button file-selector__delete"
+                  ?hidden="${this.readonly}"
+                  @click="${() => this.deleteAttachment(index)}"
+                >
+                  ${getTranslation(this.language, 'DELETE')}
+                </etools-button>
+              </div>
+            `
+          )}
+
+          <!--     Upload button     -->
+          <etools-upload-multi
+            class="with-padding"
+            activate-offline
+            ?hidden="${this.readonly}"
+            @upload-finished="${({detail}: CustomEvent) => this.attachmentsUploaded(detail)}"
+            .endpointInfo="${{endpoint: this.uploadUrl, extraInfo: {composedPath: this.computedPath}}}"
+            .jwtLocalStorageKey="${this.jwtLocalStorageKey}"
+          >
+          </etools-upload-multi>
+        </div>
+      </etools-dialog>
+    `;
   }
 
   /**
@@ -130,11 +234,11 @@ export class FormAttachmentsPopup extends LitElement {
   }
 
   async saveChanges(): Promise<void> {
-    let fileTypeNotSelected: boolean = false;
+    let fileTypeNotSelected = false;
     this.attachments.forEach((attachment: GenericObject, index: number) => {
       if (!attachment.file_type) {
         fileTypeNotSelected = true;
-        this.errors[index] = {file_type: ['This field is required']};
+        this.errors[index] = {file_type: [getTranslation(this.language, 'REQUIRED_FIELD')]};
       } else {
         this.errors[index] = [];
       }

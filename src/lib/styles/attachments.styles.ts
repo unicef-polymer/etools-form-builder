@@ -1,4 +1,4 @@
-import {css, CSSResult} from 'lit-element';
+import {css, CSSResult} from 'lit';
 
 // language=CSS
 export const AttachmentsStyles: CSSResult = css`
@@ -15,7 +15,7 @@ export const AttachmentsStyles: CSSResult = css`
     margin: 0 14px 0 0;
     min-width: 145px;
     overflow-wrap: break-word;
-    font-size: 16px;
+    font-size: var(--etools-font-size-16, 16px);
   }
   :host([is-readonly]) .filename-container {
     border-bottom-color: transparent;
@@ -30,9 +30,6 @@ export const AttachmentsStyles: CSSResult = css`
     flex: none;
     color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
   }
-  .delete-button {
-    color: #ea4022;
-  }
   .upload-button,
   .download-button {
     color: var(--primary-color);
@@ -41,13 +38,8 @@ export const AttachmentsStyles: CSSResult = css`
   .change-button {
     color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
   }
-  iron-icon {
+  etools-icon {
     margin-right: 8px;
-  }
-  paper-button {
-    font-weight: 700;
-    margin: 0 0;
-    padding: 0 0;
   }
   .file-selector-container.with-type-dropdown {
     padding: 0;
@@ -59,7 +51,7 @@ export const AttachmentsStyles: CSSResult = css`
   .file-selector-container.with-type-dropdown .filename-container {
     height: 32px;
     box-sizing: border-box;
-    margin: 22px 0 8px;
+    margin: 22px 8px;
     border-bottom: 1px solid var(--gray-20);
   }
   .file-selector-container.with-type-dropdown .delete-button,

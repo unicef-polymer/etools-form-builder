@@ -1,12 +1,22 @@
-import {TemplateResult, html, property, customElement} from 'lit-element';
+import {CSSResultArray, TemplateResult, html} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {clone, equals} from 'ramda';
 import {IFormBuilderCard} from '../lib/types/form-builder.interfaces';
 import {FormAbstractGroup} from './form-abstract-group';
 import {GenericObject} from '../lib/types/global.types';
-import '@polymer/iron-collapse';
 import {openDialog} from '../lib/utils/dialog';
 import {getTranslation} from '../lib/utils/translate';
+import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
+import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
+
+import {SharedStyles} from '../lib/styles/shared-styles';
+import {pageLayoutStyles} from '../lib/styles/page-layout-styles';
+import {elevationStyles} from '../lib/styles/elevation-styles';
+import {CardStyles} from '../lib/styles/card-styles';
+import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
+import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 
 @customElement('form-card')
 export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
@@ -14,7 +24,7 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
   /**
    * Show save button only if value was changed by user
    */
-  @property() private showSaveButton: boolean = false;
+  @property() private showSaveButton = false;
 
   /**
    * Overrides value property. Saves originalValue.
@@ -36,8 +46,18 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
    * Extends parent render method,
    * adds card-container html wrapper and dynamic save button
    */
+  static get styles(): CSSResultArray {
+    return [SharedStyles, pageLayoutStyles, elevationStyles, CardStyles, FlexLayoutClasses, FormBuilderCardStyles];
+  }
+
   render(): TemplateResult {
     return html`
+      <style>
+        .card-buttons {
+          padding: 12px 24px;
+          padding-top: 0;
+        }
+      </style>
       <section class="elevation page-content card-container form-card" elevation="1">
         <div class="card-header">
           <div class="title">${this.groupStructure.title}</div>
@@ -51,18 +71,18 @@ export class FormCard extends FormAbstractGroup implements IFormBuilderCard {
             ${!this.groupStructure.title || this.groupStructure.title.length > 15
               ? getTranslation(this.language, 'GROUP')
               : this.groupStructure.title}
-            <paper-icon-button icon="delete" class="attachments-warning"></paper-icon-button>
+            <etools-icon-button class="attachments-warning" name="delete"></etools-icon-button>
           </div>
         </div>
         ${super.render()}
 
-        <iron-collapse ?opened="${this.showSaveButton}">
+        <etools-collapse ?opened="${this.showSaveButton}">
           <div class="layout horizontal end-justified card-buttons actions-container">
-            <paper-button class="save-button" @tap="${() => this.saveChanges()}"
-              >${getTranslation(this.language, 'SAVE')}</paper-button
-            >
+            <etools-button variant="primary" @click="${this.saveChanges}">
+              ${getTranslation(this.language, 'SAVE')}
+            </etools-button>
           </div>
-        </iron-collapse>
+        </etools-collapse>
       </section>
     `;
   }

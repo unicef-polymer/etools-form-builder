@@ -1,4 +1,4 @@
-import '@unicef-polymer/etools-upload/etools-upload';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload';
 import {RepeatableBaseField} from './repeatable-base-field';
 import {
   AttachmentsHelper,
@@ -7,11 +7,14 @@ import {
   UploadedAttachment,
   UploadFinishedDetails
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray, css, customElement} from 'lit-element';
+import {css, CSSResultArray, html, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
 import {getTranslation} from '../../lib/utils/translate';
+import '@unicef-polymer/etools-unicef/src/etools-button/etools-button';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload-multi';
 
 @customElement('repeatable-attachments-field')
 export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachment> {
@@ -37,28 +40,30 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
                   <div class="layout horizontal file-container">
                     <!--        File name component          -->
                     <div class="filename-container file-selector__filename">
-                      <iron-icon class="file-icon" icon="attachment"></iron-icon>
+                      <etools-icon class="file-icon" name="attachment"></etools-icon>
                       <span class="filename" title="${value.filename}">${value.filename}</span>
                     </div>
 
                     <!--         Download Button         -->
-                    <paper-button
+                    <etools-button
+                      class="neutral download-button file-selector__download"
+                      variant="text"
                       ?hidden="${!value.url}"
-                      class="download-button file-selector__download"
-                      @tap="${() => this.downloadFile(value)}"
+                      @click="${() => this.downloadFile(value)}"
                     >
-                      <iron-icon icon="cloud-download" class="dw-icon"></iron-icon>
+                      <etools-icon name="cloud-download" class="dw-icon" slot="prefix"></etools-icon>
                       ${getTranslation(this.language, 'DOWNLOAD')}
-                    </paper-button>
+                    </etools-button>
 
                     <!--        Delete Button          -->
-                    <paper-button
-                      class="delete-button file-selector__delete"
+                    <etools-button
+                      variant="danger"
+                      class="file-selector__delete"
                       ?hidden="${this.isReadonly}"
-                      @tap="${() => this.removeControl(index)}"
+                      @click="${() => this.removeControl(index)}"
                     >
                       ${getTranslation(this.language, 'DELETE')}
-                    </paper-button>
+                    </etools-button>
                   </div>
                 `
               : ''
@@ -89,7 +94,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
   protected attachmentsUploaded({success, error}: UploadFinishedDetails): void {
     success?.forEach((file: UploadedAttachment | OfflineSavedAttachment, index: number) => {
-      const newIndex: number = (Number(this.editedValues?.length) ?? 0) + index;
+      const newIndex: number = (Number(this.editedValues?.length) || 0) + index;
       if (this.isUploadedAttachment(file)) {
         this.valueChanged(
           {
@@ -117,7 +122,7 @@ export class RepeatableAttachmentField extends RepeatableBaseField<StoredAttachm
 
     if (error && error.length) {
       console.error(error);
-      fireEvent(this, 'toast', {text: 'Can not upload attachments. Please try again later'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'UPLOAD_ATTACHMENTS_FAILED')});
     }
   }
 

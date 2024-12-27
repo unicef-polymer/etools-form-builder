@@ -1,5 +1,6 @@
-import {css, CSSResultArray, customElement, html, LitElement, property, TemplateResult} from 'lit-element';
-import '@polymer/iron-icons/iron-icons';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-collapse/etools-collapse';
 import {CardStyles} from '../styles/card-styles';
 import {elevationStyles} from '../styles/elevation-styles';
 import {FlexLayoutClasses} from '../styles/flex-layout-classes';
@@ -35,6 +36,11 @@ export class EtoolsFbCard extends LitElement {
           display: block;
         }
 
+        etools-icon {
+          cursor: pointer;
+          margin: 6px;
+        }
+
         .card-container {
           background-color: var(--primary-background-color);
         }
@@ -53,11 +59,11 @@ export class EtoolsFbCard extends LitElement {
         }
 
         .save-button {
-          color: var(--primary-background-color);
-          background-color: var(--primary-color);
+          --sl-color-primary-500: var(--primary-color);
         }
 
-        .edit-button {
+        .edit-button,
+        etools-icon[name='create'] {
           color: var(--gray-mid);
         }
 
@@ -75,7 +81,7 @@ export class EtoolsFbCard extends LitElement {
           flex-basis: auto;
         }
         .flex-header__title {
-          font-size: 18px;
+          font-size: var(--etools-font-size-18, 18px);
           flex-basis: auto;
           flex-grow: 1;
           overflow: hidden;
@@ -124,7 +130,7 @@ export class EtoolsFbCard extends LitElement {
           }
           .flex-header__edit {
             order: 1;
-            flex-basis: 20%;
+            flex-basis: 12%;
           }
         }
       `
@@ -135,7 +141,7 @@ export class EtoolsFbCard extends LitElement {
     super();
 
     if (!this.language) {
-      this.language = window.localStorage.defaultLanguage || 'en';
+      this.language = (window as any).EtoolsLanguage || 'en';
     }
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
   }
@@ -183,11 +189,11 @@ export class EtoolsFbCard extends LitElement {
         <header class="card-title-box with-bottom-line flex-header" ?is-collapsible="${this.isCollapsible}">
           ${this.isCollapsible
             ? html`
-                <paper-icon-button
-                  class="flex-header__collapse"
-                  @tap="${() => this.toggleCollapse()}"
-                  icon="${this.collapsed ? 'expand-more' : 'expand-less'}"
-                ></paper-icon-button>
+                <etools-icon
+                  name="${this.collapsed ? 'expand-more' : 'expand-less'}"
+                  @click="${() => this.toggleCollapse()}"
+                >
+                </etools-icon>
               `
             : ''}
           <div class="flex-header__title">${this.cardTitle}</div>
@@ -195,36 +201,36 @@ export class EtoolsFbCard extends LitElement {
           <div class="layout horizontal center flex-header__edit">
             ${this.isEditable
               ? html`
-                  <paper-icon-button
-                    icon="create"
-                    ?edit=${this.edit}
+                  <etools-icon
+                    slot="trigger"
                     ?hidden="${this.hideEditButton}"
-                    class="edit-button"
-                    @tap="${() => this.startEdit()}"
-                  ></paper-icon-button>
+                    @click="${() => this.startEdit()}"
+                    name="create"
+                  ></etools-icon>
                 `
               : ''}
           </div>
           <div class="flex-header__postfix"><slot name="postfix"></slot></div>
         </header>
-        <iron-collapse ?opened="${!this.collapsed}">
+        <etools-collapse ?opened="${!this.collapsed}">
           <section class="card-content-block">
             <slot name="content"></slot>
 
             ${this.isEditable && this.edit
               ? html`
                   <div class="layout horizontal end-justified card-buttons">
-                    <paper-button @tap="${() => this.cancel()}"
-                      >${getTranslation(this.language, 'CANCEL')}</paper-button
-                    >
-                    <paper-button class="save-button" @tap="${() => this.save()}"
-                      >${getTranslation(this.language, 'SAVE')}</paper-button
-                    >
+                    <etools-button variant="text" class="neutral" @click="${this.cancel}">
+                      ${getTranslation(this.language, 'CANCEL')}
+                    </etools-button>
+
+                    <etools-button variant="primary" class="save-button" @click="${this.save}">
+                      ${getTranslation(this.language, 'SAVE')}
+                    </etools-button>
                   </div>
                 `
               : ''}
           </section>
-        </iron-collapse>
+        </etools-collapse>
       </div>
     `;
   }
