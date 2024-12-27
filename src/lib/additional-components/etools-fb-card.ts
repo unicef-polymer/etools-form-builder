@@ -189,7 +189,11 @@ export class EtoolsFbCard extends LitElement {
         <header class="card-title-box with-bottom-line flex-header" ?is-collapsible="${this.isCollapsible}">
           ${this.isCollapsible
             ? html`
-                <etools-icon name="${this.collapsed ? 'expand-more' : 'expand-less'}" @click="${() => this.toggleCollapse()}"></etools-icon>
+                <etools-icon
+                  name="${this.collapsed ? 'expand-more' : 'expand-less'}"
+                  @click="${() => this.toggleCollapse()}"
+                >
+                </etools-icon>
               `
             : ''}
           <div class="flex-header__title">${this.cardTitle}</div>
@@ -197,7 +201,12 @@ export class EtoolsFbCard extends LitElement {
           <div class="layout horizontal center flex-header__edit">
             ${this.isEditable
               ? html`
-                    <etools-icon  slot="trigger" ?hidden="${this.hideEditButton}" @click="${() => this.startEdit()}" name="create"></etools-icon>
+                  <etools-icon
+                    slot="trigger"
+                    ?hidden="${this.hideEditButton}"
+                    @click="${() => this.startEdit()}"
+                    name="create"
+                  ></etools-icon>
                 `
               : ''}
           </div>
