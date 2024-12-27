@@ -1,6 +1,9 @@
-import {css, CSSResultArray, html, property, TemplateResult} from 'lit-element';
+import {css, html, CSSResultArray, TemplateResult} from 'lit';
+import {property} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import {AbstractFieldBaseClass} from '../abstract-field-base.class';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
+import {getTranslation} from '../../lib/utils/translate';
 
 export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]> {
   set errorMessage(messages: (string | null)[]) {
@@ -24,16 +27,16 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
             (value: T | null, index: number) =>
               html`<div class="layout horizontal center full-width">
                 ${this.controlTemplate(value, index)}
-                <iron-icon
-                  icon="close"
+                <etools-icon-button
+                  name="close"
                   ?hidden="${this.isReadonly || values.length < 2}"
                   @click="${() => this.removeControl(index)}"
-                ></iron-icon>
+                ></etools-icon-button>
               </div>`
           )}
-          <paper-button class="add-button" ?hidden="${this.isReadonly}" @click="${() => this.addNewField()}">
-            Add
-          </paper-button>
+          <etools-button variant="primary" class="add-button" ?hidden="${this.isReadonly}" @click="${this.addNewField}">
+            ${getTranslation(this.language, 'ADD')}
+          </etools-button>
         </div>
       </div>
     `;
@@ -69,7 +72,7 @@ export abstract class RepeatableBaseField<T> extends AbstractFieldBaseClass<T[]>
     }
     let errorMessage: string | null;
     if (this.required && !value && value !== null && typeof value !== 'number') {
-      errorMessage = 'This field is required!';
+      errorMessage = getTranslation(this.language, 'REQUIRED_FIELD');
     } else {
       errorMessage = this.metaValidation(value);
     }

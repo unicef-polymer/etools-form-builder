@@ -1,4 +1,5 @@
-import {CSSResultArray, LitElement, property, css, html, TemplateResult} from 'lit-element';
+import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
+import {property} from 'lit/decorators.js';
 import {FieldValidator, validate} from '../lib/utils/validations.helper';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
 
@@ -6,7 +7,8 @@ import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
  * Class that contains common properties and methods for single and repeatable fields
  */
 export abstract class AbstractFieldBaseClass<T> extends LitElement {
-  @property({type: String}) questionText: string = '';
+  @property({type: String}) questionText = '';
+  @property() language!: string;
   @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
     this._readonly = readonly;
     this.setDefaultValue(readonly, this._defaultValue);
@@ -15,18 +17,42 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   get isReadonly(): boolean {
     return this._readonly;
   }
-  @property({type: Boolean, attribute: 'required'}) required: boolean = false;
-  @property() placeholder: string = '';
+  @property({type: Boolean, attribute: 'required'}) required = false;
+  @property() placeholder = '';
+  @property() name = '';
   @property() value: T | null = null;
   validators: FieldValidator[] = [];
-  touched: boolean = false;
+  touched = false;
   set defaultValue(value: any) {
     this._defaultValue = value;
     this.setDefaultValue(this._readonly, value);
     this.requestUpdate();
   }
   private _defaultValue: any;
-  private _readonly: boolean = false;
+  private _readonly = false;
+
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = (window as any).EtoolsLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
+  }
 
   protected render(): TemplateResult {
     return html`
@@ -42,7 +68,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   }
 
   protected metaValidation(value: unknown): string | null {
-    const message: string | null = validate(this.validators, value);
+    const message: string | null = validate(this.validators, value, this.language);
     return message ? message : this.customValidation(value);
   }
 
@@ -118,37 +144,23 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
           border: 1px solid;
         }
 
-        .full-width,
-        paper-input,
-        paper-textarea {
+        .full-width {
           width: 100%;
         }
 
         .question-text {
           font-weight: 500;
-          font-size: 13px;
+          font-size: var(--etools-font-size-13, 13px);
           color: var(--primary-text-color);
         }
 
-        paper-input,
-        paper-textarea {
-          outline: none !important;
-        }
-        paper-input[required],
-        paper-textarea[required] {
-          --paper-input-container-label_-_background: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221235%22%20height%3D%221175%22%3E%3Cpath%20fill%3D%22%23de0000%22%20d%3D%22M0%2C449h1235l-999%2C726%20382-1175%20382%2C1175z%22%2F%3E%3C%2Fsvg%3E')
-            no-repeat 98% 14%/7px;
-          --paper-input-container-label_-_max-width: max-content;
-          --paper-input-container-label_-_padding-right: 15px;
-        }
-
-        iron-icon[icon='close'] {
+        etools-icon[name='close'] {
           cursor: pointer;
         }
 
         .error-text {
           color: var(--error-color);
-          font-size: 12px;
+          font-size: var(--etools-font-size-12, 12px);
         }
 
         @media (max-width: 1080px) {
@@ -161,6 +173,25 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
           .question,
           .question-control {
             flex: 0 1 auto;
+          }
+        }
+
+        @media print {
+          .question-control {
+            align-items: start;
+          }
+
+          :host(text-field) .question-control {
+            min-height: 150px;
+          }
+
+          .question-control .container etools-radio-group {
+            flex-direction: column;
+            opacity: 1 !important;
+          }
+
+          .finding-container {
+            flex-direction: column;
           }
         }
       `

@@ -1,4 +1,5 @@
-import {TemplateResult, html, property, customElement} from 'lit-element';
+import {TemplateResult, html} from 'lit';
+import {property, customElement} from 'lit/decorators.js';
 import {clone} from 'ramda';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import {openDialog} from '../lib/utils/dialog';
@@ -9,26 +10,32 @@ import {BlueprintField, BlueprintGroup, Information} from '../lib/types/form-bui
 import {GenericObject} from '../lib/types/global.types';
 import {FormBuilderAttachmentsPopupData} from '../form-attachments-popup';
 import '../lib/additional-components/confirmation-dialog';
+import {getTranslation} from '../lib/utils/translate';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 
-const PARTNER_KEY: string = 'partner';
-const OUTPUT_KEY: string = 'output';
-const INTERVENTION_KEY: string = 'intervention';
+const PARTNER_KEY = 'partner';
+const OUTPUT_KEY = 'output';
+const INTERVENTION_KEY = 'intervention';
 
 @customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
+  @property({type: Boolean}) collapsed = false;
   /**
    * Overrides readonly property
    * In collapsed card it must consider isEditMode property,
    * components inside card are readonly if isEditMode is off or if card is readonly
    */
-  set readonly(state: boolean) {
-    this._readonly = state;
-  }
-  get readonly(): boolean {
-    return this._readonly || !this.isEditMode;
-  }
-  @property() protected isEditMode: boolean = false;
-  @property({type: Boolean, attribute: 'readonly', reflect: true}) protected _readonly: boolean = true;
+
+  // set readonly(state: boolean) {
+  //   this._readonly = state;
+  // }
+
+  // @dci seems to not be used, use instead getIsReadonly
+  // get readonly(): boolean {
+  //   return this._readonly || !this.isEditMode;
+  // }
+  @property() protected isEditMode = false;
+  @property({type: Boolean, attribute: 'readonly', reflect: true}) readonly = false;
 
   /**
    * Overrides errors setter
@@ -65,6 +72,9 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   @property() protected _value: GenericObject = {};
   protected originalValue: GenericObject = {};
 
+  isReadonly() {
+    return this.readonly || !this.isEditMode;
+  }
   /**
    * Extends parent render method for handling additional types (StructureTypes.ATTACHMENTS_BUTTON in our case)
    * and adds etools-card as container wrapper
@@ -75,8 +85,9 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         <etools-fb-card
           card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
           is-collapsible
-          ?is-editable="${!this._readonly}"
+          ?is-editable="${!this.readonly}"
           ?edit="${this.isEditMode}"
+          .collapsed="${this.collapsed}"
           @start-edit="${() => this.startEdit()}"
           @save="${() => this.saveChanges()}"
           @cancel="${() => this.cancelEdit()}"
@@ -84,11 +95,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
           <!-- Open Attachments popup button -->
           <div slot="actions" class="layout horizontal center">${this.getAdditionalButtons()}</div>
           <div slot="postfix" class="layout horizontal center" ?hidden="${!this.groupStructure.repeatable}">
-            <paper-icon-button
-              icon="close"
+            <etools-icon-button
               class="attachments-warning"
-              @click="${() => this.confirmRemove(this.groupStructure.title || 'this group')}"
-            ></paper-icon-button>
+              name="close"
+              @click="${() =>
+                this.confirmRemove(this.groupStructure.title || getTranslation(this.language, 'THIS_GROUP'))}"
+            >
+            </etools-icon-button>
           </div>
           <div slot="content">${this.renderGroupChildren()}</div>
         </etools-fb-card>
@@ -115,36 +128,39 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    */
   getAdditionalButtons(): TemplateResult {
     const hideAttachmentsButton: boolean =
-      (this._readonly && !this.value?.attachments?.length) ||
+      (this.readonly && !this.value?.attachments?.length) ||
       !this.groupStructure.children.some(({styling}: BlueprintGroup | BlueprintField | Information) =>
         styling.includes(StructureTypes.ATTACHMENTS_BUTTON)
       );
     return hideAttachmentsButton
       ? html``
       : html`
-          <iron-icon icon="warning" class="attachments-warning" ?hidden="${!this._errors.attachments}"></iron-icon>
-          <paper-button @click="${() => this.openAttachmentsPopup()}" class="attachments-button">
-            <iron-icon icon="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"></iron-icon>
+          <etools-icon id="attachments-warning" name="warning" ?hidden="${!this._errors.attachments}"></etools-icon>
+          <etools-button id="primary" variant="text" class="primary" @click="${this.openAttachmentsPopup}">
+            <etools-icon
+              slot="prefix"
+              name="${this.value?.attachments?.length ? 'file-download' : 'file-upload'}"
+            ></etools-icon>
             ${this.getAttachmentsBtnText(this.value?.attachments?.length)}
-          </paper-button>
+          </etools-button>
         `;
   }
 
   retrieveTitle(target: string): string {
     switch (target) {
       case PARTNER_KEY:
-        return `Partner: `;
+        return `${getTranslation(this.language, 'PARTNER')}: `;
       case OUTPUT_KEY:
-        return `Output: `;
+        return `${getTranslation(this.language, 'CP_OUTPUT')}: `;
       case INTERVENTION_KEY:
-        return `PD/SSFA: `;
+        return `${getTranslation(this.language, 'PD_SPD')}: `;
       default:
         return '';
     }
   }
 
   startEdit(): void {
-    if (this._readonly) {
+    if (this.readonly) {
       return;
     }
     this.isEditMode = true;
@@ -156,7 +172,8 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
    * Only then we can reset all changed values to their original
    */
   cancelEdit(): void {
-    this.requestUpdate().then(() => {
+    this.requestUpdate();
+    this.updateComplete.then(() => {
       this._value = clone(this.originalValue);
       this.isEditMode = false;
     });
@@ -178,7 +195,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
 
   saveChanges(): void {
     if (Object.keys(this._errors).length) {
-      fireEvent(this, 'toast', {text: 'Please check all fields and try again'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'CHECK_FIELDS_TRY_AGAIN')});
       return;
     }
     this.isEditMode = false;
@@ -199,11 +216,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       dialogData: {
         attachments: this.value?.attachments,
         metadata: this.metadata,
-        title: `Attachments for ${this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title}`,
+        title: `${getTranslation(this.language, 'ATTACHMENTS_FOR')} ${
+          this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title
+        }`,
         computedPath: this.computedPath.concat([this.groupStructure.name, 'attachments']),
         errors: this._errors.attachments
       },
-      readonly: this._readonly
+      readonly: this.readonly
     }).then((response: GenericObject) => {
       if (!response.confirmed) {
         return;
@@ -231,7 +250,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     openDialog<{text: string}>({
       dialog: 'confirmation-popup',
       dialogData: {
-        text: `Are you sure you want to delete ${groupName}`
+        text: `${getTranslation(this.language, 'CONFIRM_DELETE')} ${groupName}`
       }
     }).then((response: GenericObject) => {
       if (response.confirmed) {
@@ -240,13 +259,13 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     });
   }
 
-  protected getAttachmentsBtnText(attachmentsCount: number = 0): string {
+  protected getAttachmentsBtnText(attachmentsCount = 0): string {
     if (attachmentsCount === 1) {
-      return `${attachmentsCount} File`;
+      return `${attachmentsCount} ${getTranslation(this.language, 'FILE')}`;
     } else if (attachmentsCount > 1) {
-      return `${attachmentsCount} Files`;
+      return `${attachmentsCount} ${getTranslation(this.language, 'FILES')}`;
     } else {
-      return 'Upload Files';
+      return getTranslation(this.language, 'UPLOAD_FILES');
     }
   }
 }

@@ -1,4 +1,4 @@
-import '@unicef-polymer/etools-upload/etools-upload';
+import '@unicef-polymer/etools-unicef/src/etools-upload/etools-upload';
 import {BaseField} from './base-field';
 import {
   AttachmentsHelper,
@@ -7,10 +7,12 @@ import {
   StoredAttachment,
   UploadedAttachment
 } from '../../form-attachments-popup';
-import {TemplateResult, html, CSSResultArray, customElement} from 'lit-element';
+import {html, CSSResultArray, TemplateResult} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {fireEvent} from '../../lib/utils/fire-custom-event';
 import {SharedStyles} from '../../lib/styles/shared-styles';
 import {AttachmentsStyles} from '../../lib/styles/attachments.styles';
+import {getTranslation} from '../../lib/utils/translate';
 
 @customElement('attachments-field')
 export class AttachmentField extends BaseField<StoredAttachment | null> {
@@ -67,7 +69,7 @@ export class AttachmentField extends BaseField<StoredAttachment | null> {
 
     if (error && error.length) {
       console.error(error);
-      fireEvent(this, 'toast', {text: 'Can not upload attachments. Please try again later'});
+      fireEvent(this, 'toast', {text: getTranslation(this.language, 'UPLOAD_ATTACHMENTS_FAILED')});
     }
   }
 
