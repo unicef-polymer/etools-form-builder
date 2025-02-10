@@ -21,6 +21,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property() placeholder = '';
   @property() name = '';
   @property() value: T | null = null;
+  @property({type: Boolean}) showRichEditor = false;
   validators: FieldValidator[] = [];
   touched = false;
   set defaultValue(value: any) {
@@ -119,7 +120,6 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
         }
 
         :host(.wide) .question {
-          margin-bottom: -8px;
           min-height: 0;
         }
 
