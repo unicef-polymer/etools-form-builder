@@ -31,7 +31,8 @@ export class FieldRendererComponent extends LitElement {
   }
 
   renderField(blueprintField: BlueprintField): TemplateResult {
-    const additionalClass: string = blueprintField.styling.includes(StructureTypes.ADDITIONAL)
+    const isAdditionalField = blueprintField.styling.includes(StructureTypes.ADDITIONAL);
+    const additionalClass: string = isAdditionalField
       ? `additional-field ${blueprintField.name} `
       : `${blueprintField.name} `;
 
@@ -43,14 +44,15 @@ export class FieldRendererComponent extends LitElement {
       <div class="${`${additionalClass}${wideClass}${mandatoryClass}finding-container`}">
         ${blueprintField.repeatable
           ? this.renderRepeatableField(blueprintField, !!mandatoryClass)
-          : this.renderStandardField(blueprintField, !!mandatoryClass)}
+          : this.renderStandardField(blueprintField, !!mandatoryClass, isAdditionalField)}
       </div>
     `;
   }
 
   renderStandardField(
     {input_type, label, help_text, required, placeholder, styling, name}: BlueprintField,
-    isMandatory = false
+    isMandatory = false,
+    isAdditionalField = false
   ): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
     switch (input_type) {
@@ -66,6 +68,7 @@ export class FieldRendererComponent extends LitElement {
             .validators="${this.validations}"
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
+            .showRichEditor="${isAdditionalField}"
           >
             ${this.renderFieldLabel(label, help_text, isMandatory)}
           </text-field>
