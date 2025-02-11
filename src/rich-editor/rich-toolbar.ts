@@ -2,6 +2,7 @@ import {css, html, LitElement} from 'lit';
 import {property, customElement, query, state} from 'lit/decorators.js';
 import './rich-action';
 import {editorCommand} from './rich-action';
+import {getTranslation} from '../lib/utils/translate';
 
 @customElement('rich-toolbar')
 export class RichToolbar extends LitElement {
@@ -10,7 +11,7 @@ export class RichToolbar extends LitElement {
       width: 100%;
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-end;
       justify-content: flex-start;
       padding-inline-start: 12px;
       flex-wrap: wrap;
@@ -36,6 +37,7 @@ export class RichToolbar extends LitElement {
   @property({type: String}) formatColor = '#000000';
   @property({type: String}) backgroundColor = '#000000';
   @property({type: Object, hasChanged: () => true}) selection: Selection | null = null;
+  @property() language!: string;
 
   render() {
     const tags = this.getTags();
@@ -107,29 +109,29 @@ export class RichToolbar extends LitElement {
         icon="title"
         command="formatblock"
         .values=${[
-          {name: 'Normal Text', value: '--'},
-          {name: 'Heading 1', value: 'h1'},
-          {name: 'Heading 2', value: 'h2'},
-          {name: 'Heading 3', value: 'h3'},
-          {name: 'Heading 4', value: 'h4'},
-          {name: 'Heading 5', value: 'h5'},
-          {name: 'Heading 6', value: 'h6'},
-          {name: 'Paragraph', value: 'p'},
-          {name: 'Pre-Formatted', value: 'pre'}
+          {name: getTranslation(this.language, 'NORMAL_TEXT'), value: '--'},
+          {name: getTranslation(this.language, 'HEADING1'), value: 'h1'},
+          {name: getTranslation(this.language, 'HEADING2'), value: 'h2'},
+          {name: getTranslation(this.language, 'HEADING3'), value: 'h3'},
+          {name: getTranslation(this.language, 'HEADING4'), value: 'h4'},
+          {name: getTranslation(this.language, 'HEADING5'), value: 'h5'},
+          {name: getTranslation(this.language, 'HEADING6'), value: 'h6'},
+          {name: getTranslation(this.language, 'PARAGRAPH'), value: 'p'},
+          {name: getTranslation(this.language, 'PRE_FORMATTED'), value: 'pre'}
         ]}
       ></rich-action>
       <rich-action
         icon="editor:format-size"
         command="fontsize"
         .values=${[
-          {name: 'Font Size', value: '--'},
-          {name: 'Very Small', value: '1'},
-          {name: 'Small', value: '2'},
-          {name: 'Normal', value: '3'},
-          {name: 'Medium Large', value: '4'},
-          {name: 'Large', value: '5'},
-          {name: 'Very Large', value: '6'},
-          {name: 'Maximum', value: '7'}
+          {name: getTranslation(this.language, 'FONT_SIZE'), value: '--'},
+          {name: getTranslation(this.language, 'VERY_SMALL'), value: '1'},
+          {name: getTranslation(this.language, 'SMALL'), value: '2'},
+          {name: getTranslation(this.language, 'NORMAL'), value: '3'},
+          {name: getTranslation(this.language, 'MEDIUM_LARGE'), value: '4'},
+          {name: getTranslation(this.language, 'LARGE'), value: '5'},
+          {name: getTranslation(this.language, 'VERY_LARGE'), value: '6'},
+          {name: getTranslation(this.language, 'MAXIMUM'), value: '7'}
         ]}
       ></rich-action>
       <rich-action icon="undo" command="undo"></rich-action>
@@ -138,6 +140,29 @@ export class RichToolbar extends LitElement {
       <!-- <rich-action icon="content_copy" command="copy"></rich-action>
       <rich-action icon="content_paste" command="paste"></rich-action> -->
     </header>`;
+  }
+
+  constructor() {
+    super();
+
+    if (!this.language) {
+      this.language = (window as any).EtoolsLanguage || 'en';
+    }
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('language-changed', this.handleLanguageChange.bind(this) as any);
+  }
+
+  handleLanguageChange(e: CustomEvent): void {
+    this.language = e.detail.language;
   }
 
   getTags() {

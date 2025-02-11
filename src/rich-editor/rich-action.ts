@@ -10,6 +10,7 @@ export class RichAction extends LitElement {
       height: 100%;
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       align-items: center;
       margin-inline-end: 4px;
     }
@@ -23,7 +24,7 @@ export class RichAction extends LitElement {
     }
     etools-dropdown {
       min-width: 140px;
-      margin-block-end: 24px;
+      margin-block-end: 2px;
     }
   `;
 

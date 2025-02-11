@@ -6,8 +6,10 @@ import {fireEvent} from '../lib/utils/fire-custom-event';
 export class RichViewer extends LitElement {
   static styles = css`
     article {
-      width: calc(100% - var(--rich-padding) * 2);
-      height: calc(100% - var(--rich-padding) * 2);
+      width: calc(100% - 24px);
+      padding: 12px;
+      height: auto;
+      min-height: 60px;
     }
 
     article[contenteditable='true'] {
