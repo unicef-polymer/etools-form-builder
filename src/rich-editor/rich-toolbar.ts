@@ -1,5 +1,6 @@
 import {css, html, LitElement} from 'lit';
 import {property, customElement, query, state} from 'lit/decorators.js';
+import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button';
 import './rich-action';
 import {editorCommand} from './rich-action';
 import {getTranslation} from '../lib/utils/translate';
@@ -42,7 +43,6 @@ export class RichToolbar extends LitElement {
   render() {
     const tags = this.getTags();
     return html`<header>
-      <rich-action icon="editor:format-clear" command="removeFormat"></rich-action>
       <rich-action icon="editor:format-bold" command="bold" ?active=${tags.includes('b')}></rich-action>
       <rich-action icon="editor:format-italic" command="italic" ?active=${tags.includes('i')}></rich-action>
       <rich-action icon="editor:format-underlined" command="underline" ?active=${tags.includes('u')}></rich-action>
@@ -78,8 +78,9 @@ export class RichToolbar extends LitElement {
       <rich-action
         icon="editor:format-color-text"
         .color="${this.formatColor}"
-        @action=${() => this.fgColorInput.click()}
+        @action=${() => editorCommand('forecolor', this.formatColor)}
       >
+        <etools-icon-button name="arrow-drop-down" @click="${() => this.fgColorInput.click()}"></etools-icon-button>
         <input
           type="color"
           id="fg-color"
@@ -91,10 +92,11 @@ export class RichToolbar extends LitElement {
         />
       </rich-action>
       <rich-action
-        icon="editor:border-color"
+        icon="editor:background-color"
         .color="${this.backgroundColor}"
-        @action=${() => this.bdColorInput.click()}
+        @action=${() => editorCommand('backcolor', this.backgroundColor)}
       >
+        <etools-icon-button name="arrow-drop-down" @click="${() => this.bdColorInput.click()}"></etools-icon-button>
         <input
           type="color"
           id="bd-color"
@@ -136,6 +138,7 @@ export class RichToolbar extends LitElement {
       ></rich-action>
       <rich-action icon="undo" command="undo"></rich-action>
       <rich-action icon="redo" command="redo"></rich-action>
+      <rich-action icon="editor:format-clear" command="removeFormat"></rich-action>
       <!-- <rich-action icon="content_cut" command="cut"></rich-action> -->
       <!-- <rich-action icon="content_copy" command="copy"></rich-action>
       <rich-action icon="content_paste" command="paste"></rich-action> -->
