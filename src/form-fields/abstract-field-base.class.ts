@@ -2,6 +2,7 @@ import {css, CSSResultArray, html, LitElement, TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {FieldValidator, validate} from '../lib/utils/validations.helper';
 import {FlexLayoutClasses} from '../lib/styles/flex-layout-classes';
+import {fireEvent} from '../lib/utils/fire-custom-event';
 
 /**
  * Class that contains common properties and methods for single and repeatable fields
@@ -12,6 +13,7 @@ export abstract class AbstractFieldBaseClass<T> extends LitElement {
   @property({type: Boolean, attribute: 'is-readonly'}) set isReadonly(readonly: boolean) {
     this._readonly = readonly;
     this.setDefaultValue(readonly, this._defaultValue);
+    fireEvent(this, 'readonly-changed', {value: readonly});
     this.requestUpdate();
   }
   get isReadonly(): boolean {

@@ -39,6 +39,23 @@ export class TextField extends BaseField<string> {
         `;
   }
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener('readonly-changed', this.handleReadonlyChange.bind(this) as any);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('readonly-changed', this.handleReadonlyChange.bind(this) as any);
+  }
+
+  handleReadonlyChange(_e: CustomEvent): void {
+    // for rich editor need to reset the value here because of the logic below
+    if (this.showRichEditor && this.originalValue !== this.value) {
+      this.originalValue = this.value;
+    }
+  }
+
   updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties);
 
