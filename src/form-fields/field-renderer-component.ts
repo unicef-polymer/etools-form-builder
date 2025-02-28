@@ -44,7 +44,7 @@ export class FieldRendererComponent extends LitElement {
       <div class="${`${additionalClass}${wideClass}${mandatoryClass}finding-container`}">
         ${blueprintField.repeatable
           ? this.renderRepeatableField(blueprintField, !!mandatoryClass)
-          : this.renderStandardField(blueprintField, !!mandatoryClass, isAdditionalField)}
+          : this.renderStandardField(blueprintField, !!mandatoryClass, false)}
       </div>
     `;
   }
