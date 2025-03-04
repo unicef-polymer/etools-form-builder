@@ -17,7 +17,7 @@ export class RichViewer extends LitElement {
       outline: none;
     }
     article[contenteditable='false'] {
-      background-color: var(--secondary-background-color);
+      background-color: #ffffff;
     }
     blockquote {
       margin-inline-start: 8px;

@@ -44,7 +44,7 @@ export class FieldRendererComponent extends LitElement {
       <div class="${`${additionalClass}${wideClass}${mandatoryClass}finding-container`}">
         ${blueprintField.repeatable
           ? this.renderRepeatableField(blueprintField, !!mandatoryClass)
-          : this.renderStandardField(blueprintField, !!mandatoryClass, false)}
+          : this.renderStandardField(blueprintField, !!mandatoryClass, isAdditionalField)}
       </div>
     `;
   }
@@ -242,7 +242,6 @@ export class FieldRendererComponent extends LitElement {
         .additional-field {
           padding-top: 15px;
           padding-bottom: 20px;
-          background-color: var(--secondary-background-color);
         }
         .wide-field-container {
           padding-bottom: 10px;
@@ -253,7 +252,7 @@ export class FieldRendererComponent extends LitElement {
         }
         .wide-field-container .question-text {
           color: var(--secondary-text-color);
-          font-weight: 400;
+          font-weight: 600;
         }
         .mandatory_warning etools-icon {
           --etools-icon-fill-color: #f59e0b !important;

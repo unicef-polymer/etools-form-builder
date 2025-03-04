@@ -29,6 +29,15 @@ export class RichToolbar extends LitElement {
     input[type='color']::-webkit-color-swatch {
       border: none;
     }
+    rich-action {
+      margin: 2px 4px 2px 2px;
+    }
+    rich-action[active] {
+      background-color: #e8e8e8;
+    }
+    .arrow-icon {
+      margin-left: -6px;
+    }
   `;
 
   @query('#fg-color') fgColorInput!: HTMLInputElement;
@@ -37,8 +46,12 @@ export class RichToolbar extends LitElement {
   @property({type: Object, hasChanged: () => true}) node!: Element;
   @property({type: String}) formatColor = '#000000';
   @property({type: String}) backgroundColor = '#000000';
+  @property({type: String}) selectedFormatBlock?: string;
+  @property({type: String}) selectedFontSize?: string;
   @property({type: Object, hasChanged: () => true}) selection: Selection | null = null;
   @property() language!: string;
+  formatBlocks = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre'];
+  fontSizes = ['1', '2', '3', '4', '5', '6', '7'];
 
   render() {
     const tags = this.getTags();
@@ -46,9 +59,21 @@ export class RichToolbar extends LitElement {
       <rich-action icon="editor:format-bold" command="bold" ?active=${tags.includes('b')}></rich-action>
       <rich-action icon="editor:format-italic" command="italic" ?active=${tags.includes('i')}></rich-action>
       <rich-action icon="editor:format-underlined" command="underline" ?active=${tags.includes('u')}></rich-action>
-      <rich-action icon="editor:format-align-left" command="justifyleft"></rich-action>
-      <rich-action icon="editor:format-align-center" command="justifycenter"></rich-action>
-      <rich-action icon="editor:format-align-right" command="justifyright"></rich-action>
+      <rich-action
+        icon="editor:format-align-left"
+        command="justifyleft"
+        ?active=${tags.includes('text-align-left')}
+      ></rich-action>
+      <rich-action
+        icon="editor:format-align-center"
+        command="justifycenter"
+        ?active=${tags.includes('text-align-center')}
+      ></rich-action>
+      <rich-action
+        icon="editor:format-align-right"
+        command="justifyright"
+        ?active=${tags.includes('text-align-right')}
+      ></rich-action>
       <rich-action
         icon="editor:format-list-numbered"
         command="insertorderedlist"
@@ -59,7 +84,12 @@ export class RichToolbar extends LitElement {
         command="insertunorderedlist"
         ?active=${tags.includes('ul')}
       ></rich-action>
-      <rich-action icon="format_quote" command="formatblock" value="blockquote"></rich-action>
+      <rich-action
+        icon="format_quote"
+        command="formatblock"
+        value="blockquote"
+        ?active=${tags.includes('blockquote')}
+      ></rich-action>
       <!-- <rich-action icon="format_indent_decrease" command="outdent"></rich-action>
       <rich-action icon="format_indent_increase" command="indent"></rich-action> -->
       <rich-action
@@ -74,13 +104,17 @@ export class RichToolbar extends LitElement {
         }}
       >
       </rich-action>
-      <rich-action icon="editor:unlink" ?active=${tags.includes('a')} command="unlink"></rich-action>
+      <rich-action icon="editor:unlink" command="unlink"></rich-action>
       <rich-action
         icon="editor:format-color-text"
         .color="${this.formatColor}"
         @action=${() => editorCommand('forecolor', this.formatColor)}
       >
-        <etools-icon-button name="arrow-drop-down" @click="${() => this.fgColorInput.click()}"></etools-icon-button>
+        <etools-icon-button
+          class="arrow-icon"
+          name="arrow-drop-down"
+          @click="${() => this.fgColorInput.click()}"
+        ></etools-icon-button>
         <input
           type="color"
           id="fg-color"
@@ -96,7 +130,11 @@ export class RichToolbar extends LitElement {
         .color="${this.backgroundColor}"
         @action=${() => editorCommand('backcolor', this.backgroundColor)}
       >
-        <etools-icon-button name="arrow-drop-down" @click="${() => this.bdColorInput.click()}"></etools-icon-button>
+        <etools-icon-button
+          class="arrow-icon"
+          name="arrow-drop-down"
+          @click="${() => this.bdColorInput.click()}"
+        ></etools-icon-button>
         <input
           type="color"
           id="bd-color"
@@ -110,6 +148,7 @@ export class RichToolbar extends LitElement {
       <rich-action
         icon="title"
         command="formatblock"
+        .selectedValue="${this.selectedFormatBlock}"
         .values=${[
           {name: getTranslation(this.language, 'NORMAL_TEXT'), value: '--'},
           {name: getTranslation(this.language, 'HEADING1'), value: 'h1'},
@@ -125,6 +164,7 @@ export class RichToolbar extends LitElement {
       <rich-action
         icon="editor:format-size"
         command="fontsize"
+        .selectedValue="${this.selectedFontSize}"
         .values=${[
           {name: getTranslation(this.language, 'FONT_SIZE'), value: '--'},
           {name: getTranslation(this.language, 'VERY_SMALL'), value: '1'},
@@ -171,13 +211,37 @@ export class RichToolbar extends LitElement {
   getTags() {
     let tags: string[] = [];
     if (this.selection) {
-      if (this.selection.type === 'Range') {
+      this.selectedFontSize = this.selectedFormatBlock = '';
+      if (this.selection.type === 'Range' || this.selection.type === 'Caret') {
         // @ts-ignore
         let parentNode = this.selection.baseNode;
         if (parentNode) {
           const checkNode = () => {
             const tag = parentNode?.tagName?.toLowerCase()?.trim();
-            if (tag) tags.push(tag);
+            if (tag) {
+              tags.push(tag);
+              const textAlign = parentNode.style?.textAlign;
+              if (textAlign) {
+                tags.push(`text-align-${textAlign}`);
+              }
+              const backgroundColor = parentNode.style?.backgroundColor;
+              if (backgroundColor) {
+                tags.push(`background-color`);
+                this.backgroundColor = backgroundColor;
+              }
+              const fontColor = parentNode.style?.fontColor || parentNode.attributes.getNamedItem('color')?.value;
+              if (fontColor) {
+                tags.push(`font-color`);
+                this.formatColor = fontColor;
+              }
+              const fontSize = parentNode.style?.fontSize || parentNode.attributes.getNamedItem('size')?.value;
+              if (fontSize && this.fontSizes.includes(fontSize)) {
+                this.selectedFontSize = fontSize;
+              }
+              if (this.formatBlocks.includes(tag)) {
+                this.selectedFormatBlock = tag;
+              }
+            }
           };
           while (parentNode != null) {
             checkNode();
@@ -192,6 +256,12 @@ export class RichToolbar extends LitElement {
           .filter((tag) => !tag.startsWith('</'))
           .map((tag) => tag.replace(/<|>/g, ''));
       }
+    }
+    if (!tags.includes('background-color')) {
+      this.backgroundColor = '#000000';
+    }
+    if (!tags.includes('font-color')) {
+      this.formatColor = '#000000';
     }
     return tags;
   }

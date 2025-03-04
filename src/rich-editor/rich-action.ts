@@ -12,15 +12,11 @@ export class RichAction extends LitElement {
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      margin-inline-end: 4px;
-    }
-    section * {
-      margin: 2px;
     }
     etools-icon-button {
       cursor: pointer;
       width: 12px;
-      padding: 2px 4px;
+      padding: 0px 8px;
     }
     etools-dropdown {
       min-width: 140px;
@@ -30,6 +26,7 @@ export class RichAction extends LitElement {
 
   @property({type: String}) command = '';
   @property({type: String}) value?: string;
+  @property({type: String}) selectedValue?: string;
   @property({type: String}) icon = 'info';
   @property({type: Boolean}) active = false;
   @property({type: String}) color = '#000000';
@@ -43,7 +40,7 @@ export class RichAction extends LitElement {
             option-label="name"
             option-value="value"
             .options="${this.values}"
-            .selected="${this.values[0].value}"
+            .selected="${this.selectedValue || this.values[0].value}"
             dynamic-align
             hide-search
             trigger-value-change-event
@@ -51,11 +48,11 @@ export class RichAction extends LitElement {
               if (detail === undefined || detail.selectedItem === null) {
                 return;
               }
-              const selectedValue = detail.selectedItem.value;
-              if (selectedValue === '--') {
+              this.selectedValue = detail.selectedItem.value;
+              if (this.selectedValue === '--') {
                 editorCommand('removeFormat', undefined);
               } else {
-                editorCommand(this.command, selectedValue);
+                editorCommand(this.command, this.selectedValue);
               }
             }}"
           >
