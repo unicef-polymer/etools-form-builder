@@ -13,6 +13,7 @@ export class RichText extends LitElement {
       --rich-action-active-color: red;
       --icon-size: 24px;
       border: solid 1px var(--rich-border-color, #eeeeee);
+      background-color: #ffffff;
       width: 100%;
     }
     main {
@@ -43,9 +44,6 @@ export class RichText extends LitElement {
       background-color: var(--rich-background);
       color: var(--rich-color);
     }
-    rich-viewer[readonly] {
-      background-color: #eeeeee;
-    }
     main {
       grid-template-rows: auto 1fr;
       grid-template-areas:
@@ -67,6 +65,7 @@ export class RichText extends LitElement {
     const {selection, readonly, node} = this;
     return html`<main>
       <rich-toolbar
+        part="rich-toolbar"
         ?hidden="${this.readonly}"
         .selection="${selection}"
         .node="${node}"
@@ -80,6 +79,7 @@ export class RichText extends LitElement {
         }}
       ></rich-toolbar>
       <rich-viewer
+        part="rich-viewer"
         ?readonly="${readonly}"
         .value="${this.value}"
         @selection=${(e: Event) => {
