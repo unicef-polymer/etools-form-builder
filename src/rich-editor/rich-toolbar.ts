@@ -155,8 +155,6 @@ export class RichToolbar extends LitElement {
           {name: getTranslation(this.language, 'HEADING2'), value: 'h2'},
           {name: getTranslation(this.language, 'HEADING3'), value: 'h3'},
           {name: getTranslation(this.language, 'HEADING4'), value: 'h4'},
-          {name: getTranslation(this.language, 'HEADING5'), value: 'h5'},
-          {name: getTranslation(this.language, 'HEADING6'), value: 'h6'},
           {name: getTranslation(this.language, 'PARAGRAPH'), value: 'p'},
           {name: getTranslation(this.language, 'PRE_FORMATTED'), value: 'pre'}
         ]}
@@ -171,9 +169,7 @@ export class RichToolbar extends LitElement {
           {name: getTranslation(this.language, 'SMALL'), value: '2'},
           {name: getTranslation(this.language, 'NORMAL'), value: '3'},
           {name: getTranslation(this.language, 'MEDIUM_LARGE'), value: '4'},
-          {name: getTranslation(this.language, 'LARGE'), value: '5'},
-          {name: getTranslation(this.language, 'VERY_LARGE'), value: '6'},
-          {name: getTranslation(this.language, 'MAXIMUM'), value: '7'}
+          {name: getTranslation(this.language, 'LARGE'), value: '5'}
         ]}
       ></rich-action>
       <rich-action icon="undo" command="undo"></rich-action>

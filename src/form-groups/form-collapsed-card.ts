@@ -149,11 +149,11 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
   retrieveTitle(target: string): string {
     switch (target) {
       case PARTNER_KEY:
-        return `${getTranslation(this.language, 'PARTNER')}: `;
+        return `${getTranslation(this.language, 'PARTNER')}`;
       case OUTPUT_KEY:
-        return `${getTranslation(this.language, 'CP_OUTPUT')}: `;
+        return `${getTranslation(this.language, 'CP_OUTPUT')}`;
       case INTERVENTION_KEY:
-        return `${getTranslation(this.language, 'PD_SPD')}: `;
+        return `${getTranslation(this.language, 'PD_SPD')}`;
       default:
         return '';
     }
