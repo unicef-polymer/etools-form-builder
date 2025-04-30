@@ -51,14 +51,17 @@ export class RichViewer extends LitElement {
 
   firstUpdated() {
     document.execCommand('defaultParagraphSeparator', false, 'br');
-    document.addEventListener('selectionchange', () => {
-      this.updateSelection();
-    });
-    window.addEventListener('selectionchange', () => {
-      this.updateSelection();
-    });
-    document.addEventListener('keydown', () => {
-      this.updateSelection();
-    });
+    const mainEl = this.closest('main');
+    if (mainEl) {
+      mainEl.addEventListener('selectionchange', () => {
+        this.updateSelection();
+      });
+      mainEl.addEventListener('selectionchange', () => {
+        this.updateSelection();
+      });
+      mainEl.addEventListener('keydown', () => {
+        this.updateSelection();
+      });
+    }
   }
 }
