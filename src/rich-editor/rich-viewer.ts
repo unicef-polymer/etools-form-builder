@@ -50,18 +50,32 @@ export class RichViewer extends LitElement {
   }
 
   firstUpdated() {
-    document.execCommand('defaultParagraphSeparator', false, 'br');
     const mainEl = this.closest('main');
-    if (mainEl) {
-      mainEl.addEventListener('selectionchange', () => {
-        this.updateSelection();
-      });
-      mainEl.addEventListener('selectionchange', () => {
-        this.updateSelection();
-      });
-      mainEl.addEventListener('keydown', () => {
-        this.updateSelection();
-      });
+    if (!mainEl) {
+      return;
+    }
+    mainEl.addEventListener('selectionchange', () => {
+      this.updateSelection();
+    });
+    mainEl.addEventListener('keydown', () => {
+      this.updateSelection();
+    });
+  }
+
+  setCaretToEnd(el) {
+    if (!el) {
+      return;
+    }
+    el.focus();
+    if (window.getSelection && document.createRange) {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false); // Collapse to end
+      const sel = window.getSelection();
+      if (sel) {
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
     }
   }
 }
