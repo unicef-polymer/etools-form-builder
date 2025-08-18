@@ -3,6 +3,7 @@ import {property, customElement} from 'lit/decorators.js';
 import {fireEvent} from '../lib/utils/fire-custom-event';
 import './rich-toolbar';
 import './rich-viewer';
+import DOMPurify from 'dompurify';
 
 @customElement('rich-text')
 export class RichText extends LitElement {
@@ -61,6 +62,98 @@ export class RichText extends LitElement {
   @property({type: Object, hasChanged: () => true}) node: Element = document.createElement('div');
   @property({type: String}) value!: string | null | undefined;
 
+  clean: any = {
+    FORBID_TAGS: ['style', 'script'],
+    FORBID_ATTR: [
+      'class',
+      'onauxclick',
+      'onafterprint',
+      'onbeforematch',
+      'onbeforeprint',
+      'onbeforeunload',
+      'onbeforetoggle',
+      'onblur',
+      'oncancel',
+      'oncanplay',
+      'oncanplaythrough',
+      'onchange',
+      'onclick',
+      'onclose',
+      'oncontextlost',
+      'oncontextmenu',
+      'oncontextrestored',
+      'oncopy',
+      'oncuechange',
+      'oncut',
+      'ondblclick',
+      'ondrag',
+      'ondragend',
+      'ondragenter',
+      'ondragleave',
+      'ondragover',
+      'ondragstart',
+      'ondrop',
+      'ondurationchange',
+      'onemptied',
+      'onended',
+      'onerror',
+      'onfocus',
+      'onformdata',
+      'onhashchange',
+      'oninput',
+      'oninvalid',
+      'onkeydown',
+      'onkeypress',
+      'onkeyup',
+      'onlanguagechange',
+      'onload',
+      'onloadeddata',
+      'onloadedmetadata',
+      'onloadstart',
+      'onmessage',
+      'onmessageerror',
+      'onmousedown',
+      'onmouseenter',
+      'onmouseleave',
+      'onmousemove',
+      'onmouseout',
+      'onmouseover',
+      'onmouseup',
+      'onoffline',
+      'ononline',
+      'onpagehide',
+      'onpageshow',
+      'onpaste',
+      'onpause',
+      'onplay',
+      'onplaying',
+      'onpopstate',
+      'onprogress',
+      'onratechange',
+      'onreset',
+      'onresize',
+      'onrejectionhandled',
+      'onscroll',
+      'onscrollend',
+      'onsecuritypolicyviolation',
+      'onseeked',
+      'onseeking',
+      'onselect',
+      'onslotchange',
+      'onstalled',
+      'onstorage',
+      'onsubmit',
+      'onsuspend',
+      'ontimeupdate',
+      'ontoggle',
+      'onunhandledrejection',
+      'onunload',
+      'onvolumechange',
+      'onwaiting',
+      'onwheel'
+    ]
+  };
+
   render() {
     const {selection, readonly, node} = this;
     return html`<main>
@@ -85,7 +178,13 @@ export class RichText extends LitElement {
         @selection=${(e: Event) => {
           const event = e as CustomEvent;
           this.selection = event.detail.selection;
-          fireEvent(this, 'editor-changed', {value: event.detail.html});
+          let sanitizedHTML = event.detail.html || '';
+          // remove all mso- from styling
+          sanitizedHTML = sanitizedHTML.replace(/mso-[^:]+:[^;"]+;?/gi, '');
+          // remove all comments
+          sanitizedHTML = sanitizedHTML.replace(/<!--[\s\S]*?-->/g, '');
+          sanitizedHTML = DOMPurify.sanitize(sanitizedHTML, this.clean);
+          fireEvent(this, 'editor-changed', {value: sanitizedHTML});
         }}
         .node="${node}"
       >
