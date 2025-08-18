@@ -27,7 +27,8 @@ export enum FieldTypes {
   BOOL_TYPE = 'bool',
   SCALE_TYPE = 'likert_scale',
   NUMBER_INTEGER_TYPE = 'number-integer',
-  NUMBER_FLOAT_TYPE = 'number-float'
+  NUMBER_FLOAT_TYPE = 'number-float',
+  MULTIPLE_CHOICE_TYPE = 'multiple_choice'
 }
 
 export enum StructureTypes {
