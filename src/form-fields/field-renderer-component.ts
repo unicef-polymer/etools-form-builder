@@ -121,6 +121,22 @@ export class FieldRendererComponent extends LitElement {
             ${this.renderFieldLabel(label, help_text, isMandatory)}
           </scale-field>
         `;
+      case FieldTypes.MULTIPLE_CHOICE_TYPE:
+        return html`
+          <choice-field
+            .options="${this.options}"
+            ?is-readonly="${this.readonly}"
+            ?required="${required}"
+            .placeholder="${placeholder}"
+            .value="${this.value}"
+            .name="${name}"
+            .validators="${this.validations}"
+            .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
+          >
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
+          </choice-field>
+        `;
       case FieldTypes.FILE_TYPE:
         return html`
           <attachments-field
@@ -204,6 +220,22 @@ export class FieldRendererComponent extends LitElement {
           >
             ${this.renderFieldLabel(label, help_text, isMandatory)}
           </repeatable-scale-field>
+        `;
+      case FieldTypes.MULTIPLE_CHOICE_TYPE:
+        return html`
+          <repeatable-choice-field
+            class="${isWide ? 'wide' : ''}"
+            .options="${this.options}"
+            ?is-readonly="${this.readonly}"
+            ?required="${required}"
+            .placeholder="${placeholder}"
+            .value="${this.value}"
+            .validators="${this.validations}"
+            .errorMessage="${this.errorMessage}"
+            .defaultValue="${this.field?.default_value}"
+          >
+            ${this.renderFieldLabel(label, help_text, isMandatory)}
+          </repeatable-choice-field>
         `;
       case FieldTypes.FILE_TYPE:
         return html`

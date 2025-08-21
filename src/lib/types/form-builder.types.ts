@@ -31,7 +31,15 @@ export type BlueprintField = {
   name: string;
   repeatable: boolean;
   required: boolean;
-  input_type: 'text' | 'likert_scale' | 'bool' | 'number' | 'number-integer' | 'number-float' | 'file'; // add more
+  input_type:
+    | 'text'
+    | 'likert_scale'
+    | 'bool'
+    | 'number'
+    | 'number-integer'
+    | 'number-float'
+    | 'file'
+    | 'multiple_choice'; // add more
   label: string;
   validations: string[];
   help_text: string;
