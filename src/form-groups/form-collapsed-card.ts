@@ -16,6 +16,8 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 const PARTNER_KEY = 'partner';
 const OUTPUT_KEY = 'output';
 const INTERVENTION_KEY = 'intervention';
+const GPD_KEY = 'gpd';
+const EWP_ACTIVITY_KEY = 'ewp_activity';
 
 @customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
@@ -83,7 +85,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
     return html`
       <section class="elevation page-content card-container" elevation="1">
         <etools-fb-card
-          card-title="${this.retrieveTitle(this.parentGroupName) + this.groupStructure.title}"
+          card-title="${this.retrieveTitle(this.parentGroupName) + ': ' + this.groupStructure.title}"
           is-collapsible
           ?is-editable="${!this.readonly}"
           ?edit="${this.isEditMode}"
@@ -154,6 +156,10 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
         return `${getTranslation(this.language, 'CP_OUTPUT')}`;
       case INTERVENTION_KEY:
         return `${getTranslation(this.language, 'PD_SPD')}`;
+      case EWP_ACTIVITY_KEY:
+        return `${getTranslation(this.language, 'EWP_ACTIVITY')}`;
+      case GPD_KEY:
+        return `${getTranslation(this.language, 'GPD')}`;
       default:
         return '';
     }
