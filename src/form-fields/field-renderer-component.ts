@@ -8,6 +8,7 @@ import {FieldTypes, StructureTypes} from '../form-groups';
 import {FormBuilderCardStyles} from '../lib/styles/form-builder-card.styles';
 import '@unicef-polymer/etools-unicef/src/etools-icons/etools-icon';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
+import '@unicef-polymer/etools-unicef/src/etools-info-tooltip/etools-info-tooltip';
 import {getTranslation} from '../lib/utils/translate';
 
 @customElement('field-renderer')
@@ -50,7 +51,7 @@ export class FieldRendererComponent extends LitElement {
   }
 
   renderStandardField(
-    {input_type, label, help_text, required, placeholder, styling, name}: BlueprintField,
+    {input_type, label, help_text, required, placeholder, styling, name, tooltip}: BlueprintField,
     isMandatory = false,
     isAdditionalField = false
   ): TemplateResult {
@@ -70,7 +71,7 @@ export class FieldRendererComponent extends LitElement {
             .defaultValue="${this.field?.default_value}"
             .showRichEditor="${isAdditionalField}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </text-field>
         `;
       case FieldTypes.NUMBER_TYPE:
@@ -88,7 +89,7 @@ export class FieldRendererComponent extends LitElement {
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </number-field>
         `;
       case FieldTypes.BOOL_TYPE:
@@ -118,7 +119,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </scale-field>
         `;
       case FieldTypes.MULTIPLE_CHOICE_TYPE:
@@ -134,7 +135,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </choice-field>
         `;
       case FieldTypes.FILE_TYPE:
@@ -149,7 +150,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .computedPath="${this.computedPath}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </attachments-field>
         `;
       default:
@@ -167,7 +168,7 @@ export class FieldRendererComponent extends LitElement {
   }
 
   renderRepeatableField(
-    {input_type, label, help_text, required, placeholder, styling}: BlueprintField,
+    {input_type, label, help_text, required, placeholder, styling, tooltip}: BlueprintField,
     isMandatory = false
   ): TemplateResult {
     const isWide: boolean = styling.includes(StructureTypes.WIDE);
@@ -184,7 +185,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </repeatable-text-field>
         `;
       case FieldTypes.NUMBER_TYPE:
@@ -202,7 +203,7 @@ export class FieldRendererComponent extends LitElement {
             .isInteger="${Boolean(input_type === FieldTypes.NUMBER_INTEGER_TYPE)}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </repeatable-number-field>
         `;
       case FieldTypes.SCALE_TYPE:
@@ -218,7 +219,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </repeatable-scale-field>
         `;
       case FieldTypes.MULTIPLE_CHOICE_TYPE:
@@ -234,7 +235,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .defaultValue="${this.field?.default_value}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </repeatable-choice-field>
         `;
       case FieldTypes.FILE_TYPE:
@@ -248,7 +249,7 @@ export class FieldRendererComponent extends LitElement {
             .errorMessage="${this.errorMessage}"
             .computedPath="${this.computedPath}"
           >
-            ${this.renderFieldLabel(label, help_text, isMandatory)}
+            ${this.renderFieldLabel(label, help_text, isMandatory, tooltip)}
           </repeatable-attachments-field>
         `;
       default:
@@ -257,10 +258,20 @@ export class FieldRendererComponent extends LitElement {
     }
   }
 
-  renderFieldLabel(label: string, helperText: string, isMandatory = false): TemplateResult {
+  renderFieldLabel(label: string, helperText: string, isMandatory = false, tooltip?: string): TemplateResult {
     return html`
       <div class="layout vertical question-container">
-        <div class="question-text">${this.renderTooltip(isMandatory)}${label}</div>
+        <div class="question-text">
+          ${this.renderTooltip(isMandatory)}
+          ${tooltip
+            ? html`
+                <etools-info-tooltip hoist to="body" class="question-tooltip">
+                  <span slot="field">${label}</span>
+                  <span slot="message">${tooltip}</span>
+                </etools-info-tooltip>
+              `
+            : html`${label}`}
+        </div>
         <div class="question-details">${helperText}</div>
       </div>
     `;
@@ -296,6 +307,9 @@ export class FieldRendererComponent extends LitElement {
             border-width: 0 1px 1px 1px;
             border-color: var(--dark-divider-color);
           }
+        }
+        .question-tooltip {
+          align-items: start;
         }
         @media print {
           :host {

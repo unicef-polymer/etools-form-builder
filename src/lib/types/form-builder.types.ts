@@ -46,6 +46,7 @@ export type BlueprintField = {
   placeholder: string;
   default_value: null;
   options_key: null;
+  tooltip?: string;
 };
 
 export type Information = {
