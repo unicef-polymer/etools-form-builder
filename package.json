@@ -1,7 +1,7 @@
 {
   "name": "@unicef-polymer/etools-form-builder",
   "description": "Etools FM Form Builder components",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "type": "module",
   "contributors": [
     "eTools Team"
@@ -17,7 +17,7 @@
     "tsToJs": "rm -rf dist && tsc --skipLibCheck",
     "watch": "tsc --watch",
     "lint": "eslint",
-    "format": "eslint --ext .ts ./src/**/*.ts --fix --ignore-path .gitignore",
+    "format": "eslint --ext .ts ./src/**/*.ts --fix",
     "rd:init": "relative-deps init",
     "rd:add": "relative-deps add",
     "rd:reload": "relative-deps",
