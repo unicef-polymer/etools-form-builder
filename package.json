@@ -18,9 +18,6 @@
     "watch": "tsc --watch",
     "lint": "eslint",
     "format": "eslint --ext .ts ./src/**/*.ts --fix",
-    "rd:init": "relative-deps init",
-    "rd:add": "relative-deps add",
-    "rd:reload": "relative-deps",
     "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
@@ -29,18 +26,17 @@
     "dompurify": "^3.3.0",
     "lit": "^3.3.1",
     "ramda": "0.30.1",
-    "relative-deps": "^1.0.7",
-    "typescript": "^5.9.3"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@unicef-polymer/etools-unicef": ">=2.0.0"
+    "@unicef-polymer/etools-unicef": "workspace:*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.16.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "@unicef-polymer/etools-unicef": "^2.0.0",
+    "@unicef-polymer/etools-unicef": "workspace:*",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-html": "^8.1.2",
