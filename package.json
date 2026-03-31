@@ -16,8 +16,10 @@
   "scripts": {
     "tsToJs": "rm -rf dist && tsc --skipLibCheck",
     "watch": "tsc --watch",
-    "lint": "eslint",
-    "format": "eslint --ext .ts ./src/**/*.ts --fix",
+    "lint:eslint": "eslint --ext .ts src/**",
+    "format:eslint": "eslint --ext .ts ./src/**/*.ts --fix",
+    "lint": "npm run lint:eslint",
+    "format": "npm run format:eslint",
     "prepublishOnly": "npm run tsToJs"
   },
   "dependencies": {
