@@ -11,6 +11,7 @@ import {getTranslation} from '../../lib/utils/translate';
 export type FieldOption = {
   value: any;
   label: string;
+  disabled?: boolean;
 };
 
 @customElement('scale-field')
