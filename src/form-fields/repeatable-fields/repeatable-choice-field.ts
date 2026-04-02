@@ -26,7 +26,7 @@ export class RepeatableChoiceField extends RepeatableBaseField<(string | number)
                 class="checkbox"
                 value="${val}"
                 ?checked="${checked}"
-                ?disabled="${this.isReadonly}"
+                ?disabled="${this.isReadonly || this.getDisabled(option)}"
                 @sl-change="${(e: any) => this.onToggle(val, e.target.checked, index)}"
               >
                 ${this.getLabel(option)}
@@ -68,6 +68,10 @@ export class RepeatableChoiceField extends RepeatableBaseField<(string | number)
 
   protected getValue(option: FieldOption | string | number): unknown {
     return typeof option === 'object' ? option.value : option;
+  }
+
+  protected getDisabled(option: FieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.disabled : false;
   }
 
   protected customValidation(): string | null {

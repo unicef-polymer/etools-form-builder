@@ -9,6 +9,7 @@ import {getTranslation} from '../../lib/utils/translate';
 export type ChoiceFieldOption = {
   value: any;
   label: string;
+  disabled?: boolean;
 };
 
 @customElement('choice-field')
@@ -27,7 +28,7 @@ export class ChoiceField extends BaseField<(string | number)[] | null> {
                 class="checkbox"
                 value="${val}"
                 ?checked="${checked}"
-                ?disabled="${this.isReadonly}"
+                ?disabled="${this.isReadonly || this.getDisabled(option)}"
                 @sl-change="${(e: any) => this.onToggle(val, e.target.checked)}"
               >
                 ${this.getLabel(option)}
@@ -57,6 +58,10 @@ export class ChoiceField extends BaseField<(string | number)[] | null> {
 
   protected getValue(option: ChoiceFieldOption | string | number): unknown {
     return typeof option === 'object' ? option.value : option;
+  }
+
+  protected getDisabled(option: ChoiceFieldOption | string | number): unknown {
+    return typeof option === 'object' ? option.disabled : false;
   }
 
   protected onToggle(itemValue: string | number, checked: boolean): void {
