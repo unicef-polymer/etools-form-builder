@@ -16,8 +16,7 @@ import '@unicef-polymer/etools-unicef/src/etools-icon-button/etools-icon-button'
 const PARTNER_KEY = 'partner';
 const OUTPUT_KEY = 'output';
 const INTERVENTION_KEY = 'intervention';
-const GPD_KEY = 'gpd';
-const EWP_ACTIVITY_KEY = 'ewp_activity';
+const EWP_ACTIVITY_KEY = 'cp_output';
 
 @customElement('form-collapsed-card')
 export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilderCollapsedCard, IFormBuilderCard {
@@ -157,9 +156,7 @@ export class FormCollapsedCard extends FormAbstractGroup implements IFormBuilder
       case INTERVENTION_KEY:
         return `${getTranslation(this.language, 'PD_SPD')}`;
       case EWP_ACTIVITY_KEY:
-        return `${getTranslation(this.language, 'EWP_ACTIVITY')}`;
-      case GPD_KEY:
-        return `${getTranslation(this.language, 'GPD')}`;
+        return `${getTranslation(this.language, 'CP_OUTPUT')}`;
       default:
         return '';
     }
